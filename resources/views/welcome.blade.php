@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Sirkus-Media
                 </div>
 
                 <div class="links">
