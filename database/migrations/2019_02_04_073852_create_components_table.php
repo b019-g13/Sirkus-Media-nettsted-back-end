@@ -14,7 +14,11 @@ class CreateComponentsTable extends Migration
     public function up()
     {
         Schema::create('components', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id');
+            $table->string('name');
+            $table->string('slug');
+            $table->integer('order');
+            $table->uuid('parent_id');
             $table->timestamps();
         });
     }

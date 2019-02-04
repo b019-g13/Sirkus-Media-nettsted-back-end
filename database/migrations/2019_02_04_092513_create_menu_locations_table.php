@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePageComponentsTable extends Migration
+class CreateMenuLocationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePageComponentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('page_components', function (Blueprint $table) {
-            $table->uuid('page_id');
-            $table->uuid('component_id');
-            $table->timestamps();
+        Schema::create('menu_locations', function (Blueprint $table) {
+            $table->uuid('id');
+            $table->string('name');
+            $table->string('slug');
         });
     }
 
@@ -27,6 +27,6 @@ class CreatePageComponentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('page_components');
+        Schema::dropIfExists('menu_locations');
     }
 }

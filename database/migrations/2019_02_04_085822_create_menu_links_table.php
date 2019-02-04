@@ -14,8 +14,8 @@ class CreateMenuLinksTable extends Migration
     public function up()
     {
         Schema::create('menu_links', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->uuid('menu_id');
+            $table->uuid('link_id');
         });
     }
 

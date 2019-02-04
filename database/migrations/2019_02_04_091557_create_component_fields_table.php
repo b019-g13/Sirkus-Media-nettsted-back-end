@@ -14,7 +14,13 @@ class CreateComponentFieldsTable extends Migration
     public function up()
     {
         Schema::create('component_fields', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id');
+            $table->uuid('component_id');
+            $table->uuid('field_id');
+            $table->longText('value');
+            $table->uuid('link_id');
+            $table->uuid('image_id');
+            $table->integer('order');
             $table->timestamps();
         });
     }

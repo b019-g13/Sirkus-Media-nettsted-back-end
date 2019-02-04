@@ -14,8 +14,10 @@ class CreateImageSizesTable extends Migration
     public function up()
     {
         Schema::create('image_sizes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+            $table->uuid('id');
+            $table->string('name');
+            $table->integer('max_width');
+            $table->integer('max_height');
         });
     }
 
