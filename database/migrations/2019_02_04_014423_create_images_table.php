@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePagesTable extends Migration
+class CreateImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreatePagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('title');
-            $table->uuid('image_id');
+            $table->integer('image_size_id')->unsigned();
+            $table->foreign('image_size_id')->references('id')->on('image_sizes');
+            $table->string('attribute_alt');
+            $table->string('url');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreatePagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('images');
     }
 }

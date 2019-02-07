@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Component extends Model
 {
+    use Traits\UsesUuid;
+    
     // Kobling til pages
     public function pages(){
-        return $this->belomgsToMany('App\Page', 'page_id');
+        // return $this->belomgsToMany('App\Page', 'page_id');
     }
     // Kobling til component_fields
     public function fields(){

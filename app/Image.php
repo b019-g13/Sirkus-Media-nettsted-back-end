@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Image extends Model
 {
+    use Traits\UsesUuid;
+
     //Kobling til pages
-    public function page{
+    public function page(){
         $this->belongsTo('App\Page');
     }
 

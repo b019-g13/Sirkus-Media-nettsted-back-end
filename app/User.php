@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use Traits\UsesUuid;
+
     use Notifiable;
 
     /**
@@ -27,4 +29,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    // Har en user
+    public function image(){
+        $this->hasOne('App\Image', 'image_id');
+    }
+
 }

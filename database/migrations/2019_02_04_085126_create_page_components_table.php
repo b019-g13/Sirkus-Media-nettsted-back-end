@@ -15,7 +15,9 @@ class CreatePageComponentsTable extends Migration
     {
         Schema::create('page_components', function (Blueprint $table) {
             $table->uuid('page_id');
+            $table->foreign('page_id')->references('id')->on('pages');
             $table->uuid('component_id');
+            $table->foreign('component_id')->references('id')->on('components');
             $table->timestamps();
         });
     }

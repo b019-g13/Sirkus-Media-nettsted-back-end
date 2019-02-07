@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
+    use Traits\UsesUuid;
+   
     //Har flere links
     public function links(){
         $this->belongsToMany('App\Link', 'link_id');

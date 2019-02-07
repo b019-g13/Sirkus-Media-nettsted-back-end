@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMenuLocationsTable extends Migration
+class CreateMenuLinksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateMenuLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('menu_locations', function (Blueprint $table) {
-            $table->uuid('id');
-            $table->string('name');
-            $table->string('slug');
+        Schema::create('menu_links', function (Blueprint $table) {
+            $table->uuid('menu_id');
+            $table->foreign('menu_id')->references('id')->on('menus');
+            $table->uuid('link_id');
+            $table->foreign('link_id')->references('id')->on('links');
         });
     }
 
@@ -27,6 +28,6 @@ class CreateMenuLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menu_locations');
+        Schema::dropIfExists('menu_links');
     }
 }

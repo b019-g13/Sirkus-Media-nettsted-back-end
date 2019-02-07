@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
+    use Traits\UsesUuid;
+    
     // kobling til components
     public function components(){
         return $this->belongsToMany('App\Component', 'component_id');
