@@ -6,20 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model
 {
-    use Traits\UsesUuid;
-   
+   use Traits\UsesUuid;
+
     //Har flere links
-    public function menu_links(){
-      return  $this->belongsTo('App\MenuLink', 'menu_link_id');
-    }
+   public function menu_links()
+   {
+      return $this->hasMany('App\MenuLink');
+   }
 
     // Kan være i flere pages
-    public function pages(){
-       return $this->hasMany('App\Page', 'page_id');
-    }
+   public function page()
+   {
+      return $this->belongsTo('App\Page');
+   }
 
-    // 
-    public function menu_location(){
-       return $this->hasOne('App\MenuLocation');
-    }
+    //
+   public function menu_location()
+   {
+      return $this->belongsTo('App\MenuLocation');
+   }
 }
