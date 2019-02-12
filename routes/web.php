@@ -11,7 +11,7 @@
 |
 */
 
- use App\MenuLink;
+ use App\ImageSize;
 
 
 Route::get('/', function () {

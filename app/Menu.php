@@ -9,7 +9,7 @@ class Menu extends Model
     use Traits\UsesUuid;
    
     //Har flere links
-    public function menulinks(){
+    public function menu_links(){
       return  $this->belongsTo('App\MenuLink', 'menu_link_id');
     }
 

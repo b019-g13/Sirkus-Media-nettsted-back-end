@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->uuid('id')->primary();
             $table->integer('image_size_id')->unsigned();
             $table->foreign('image_size_id')->references('id')->on('image_sizes');
-            $table->string('attribute_alt');
+            $table->string('attribute_alt')->nullable();
             $table->string('url');
             $table->timestamps();
         });

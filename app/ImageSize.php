@@ -11,5 +11,6 @@ class ImageSize extends Model
      //Har en image
     public function image(){
         return $this->hasOne('App\Image');
+        
     }
 }

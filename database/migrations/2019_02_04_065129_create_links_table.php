@@ -17,7 +17,7 @@ class CreateLinksTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('value');
-            $table->uuid('page_id');
+            $table->uuid('page_id')->nullable();
             $table->foreign('page_id')->references('id')->on('pages');
             $table->timestamps();
         });

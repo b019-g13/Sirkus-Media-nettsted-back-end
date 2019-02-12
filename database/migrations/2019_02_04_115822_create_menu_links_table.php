@@ -15,9 +15,9 @@ class CreateMenuLinksTable extends Migration
     {
         Schema::create('menu_links', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('menu_id')->nullable();
+            $table->uuid('menu_id');
             $table->foreign('menu_id')->references('id')->on('menus');
-            $table->uuid('link_id')->nullable();
+            $table->uuid('link_id');
             $table->foreign('link_id')->references('id')->on('links');
             $table->timestamps();
         });

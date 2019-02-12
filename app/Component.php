@@ -9,7 +9,7 @@ class Component extends Model
     use Traits\UsesUuid;
     
     // Kobling til pages
-    public function pagecomponents(){
+    public function page_components(){
          return $this->hasMany('App\PageComponent', 'page_component_id');
     }
     // Kobling til component_fields

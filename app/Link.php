@@ -19,7 +19,7 @@ class Link extends Model
     }
 
     // Har flere menus
-    public function menulinks(){
+    public function menu_links(){
       return  $this->hasMany('App\MenuLink', 'menu_link_id');
     }
 }
