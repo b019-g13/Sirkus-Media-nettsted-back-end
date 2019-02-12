@@ -15,14 +15,14 @@ class CreateComponentFieldsTable extends Migration
     {
         Schema::create('component_fields', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('component_id');
+            $table->uuid('component_id')->nullable();
             $table->foreign('component_id')->references('id')->on('components');
-            $table->uuid('field_id');
+            $table->uuid('field_id')->nullable();
             $table->foreign('field_id')->references('id')->on('fields');
             $table->longText('value');
-            $table->uuid('link_id');
+            $table->uuid('link_id')->nullable();
             $table->foreign('link_id')->references('id')->on('links');
-            $table->uuid('image_id');
+            $table->uuid('image_id')->nullable();
             $table->foreign('image_id')->references('id')->on('images');
             $table->integer('order');
             $table->timestamps();

@@ -14,10 +14,12 @@ class CreateMenuLinksTable extends Migration
     public function up()
     {
         Schema::create('menu_links', function (Blueprint $table) {
-            $table->uuid('menu_id');
+            $table->uuid('id')->primary();
+            $table->uuid('menu_id')->nullable();
             $table->foreign('menu_id')->references('id')->on('menus');
-            $table->uuid('link_id');
+            $table->uuid('link_id')->nullable();
             $table->foreign('link_id')->references('id')->on('links');
+            $table->timestamps();
         });
     }
 

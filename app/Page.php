@@ -8,18 +8,18 @@ class Page extends Model
 {
     use Traits\UsesUuid;
     
-    // kobling til components
-    public function components(){
-        return $this->belongsToMany('App\Component', 'component_id');
+    // kobling til pagecomponents
+    public function pagecomponents(){
+        return $this->hasMany('App\PageComponent', 'page_component_id');
     }
     // Tilhører til en menu
     public function menu(){
-        $this->belongsTo('App\Menu');
+        return $this->belongsTo('App\Menu');
     }
 
     // Kobling til images
     public function images(){
-        $this->hasMany('App\Image', 'image_id');
+        return $this->hasMany('App\Image', 'image_id');
     }
 
     // Kobling til flere links

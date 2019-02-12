@@ -11,16 +11,17 @@
 |
 */
 
- use App\MenuLocation;
+ use App\MenuLink;
 
 
 Route::get('/', function () {
-    $mloc = new MenuLocation; 
-    $mloc->name ="Helloworld";
-    $mloc->slug = "gfhd";
-    $mloc->save();
-    dd($mloc);
-     return view('welcome');
+    $menulink = new MenuLink;
+    $menulink->link_id= null;
+    $menulink->menu_id=null;
+    $menulink->save();
+    dd($menulink);
+     
+    return view('welcome');
    
 
 });

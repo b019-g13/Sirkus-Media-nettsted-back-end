@@ -18,7 +18,7 @@ class CreateComponentsTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->integer('order');
-            $table->uuid('parent_id');
+            $table->uuid('parent_id')->nullable();
             $table->timestamps();
         });
         Schema::table('components', function(Blueprint $table){

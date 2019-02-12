@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('verified');
             $table->string('email_token');
             $table->uuid('image_id');
-            $table->foreign('image_id')->references('id')->on('images');
+            $table->foreign('image_id')->references('id')->on('images')->onUpdate('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
