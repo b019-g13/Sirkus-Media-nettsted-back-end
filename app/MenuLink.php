@@ -10,10 +10,10 @@ class MenuLink extends Model
     
     //
     public function menu(){
-        return $this->belongsTo('App\Menu', 'menu_id');
+        return $this->belongsTo('App\Menu');
     }
 
     public function link(){
-        return $this->hasMany('App\Link', 'link_id');
+        return $this->belongsTo('App\Link');
     }
 }

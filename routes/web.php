@@ -11,15 +11,15 @@
 |
 */
 
- use App\ImageSize;
 
+  use App\Link;
+  
 
 Route::get('/', function () {
-    $menulink = new MenuLink;
-    $menulink->link_id= null;
-    $menulink->menu_id=null;
-    $menulink->save();
-    dd($menulink);
+    
+    $fcom = Link::all()->first();
+    
+    dd($fcom->menu_link);
      
     return view('welcome');
    

@@ -14,12 +14,12 @@ class Page extends Model
     }
     // Tilhører til en menu
     public function menu(){
-        return $this->belongsTo('App\Menu');
+        return $this->hasOne('App\Menu');
     }
 
     // Kobling til images
-    public function images(){
-        return $this->hasMany('App\Image', 'image_id');
+    public function image(){
+        return $this->belongsTo('App\Image', 'image_id');
     }
 
     // Kobling til flere links

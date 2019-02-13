@@ -16,7 +16,7 @@ class CreatePagesTable extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title');
-            $table->uuid('image_id')->nullabel();
+            $table->uuid('image_id')->nullable();
             $table->foreign('image_id')->references('id')->on('images');
             $table->timestamps();
         });

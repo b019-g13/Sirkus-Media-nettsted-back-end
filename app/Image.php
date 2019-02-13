@@ -10,7 +10,7 @@ class Image extends Model
 
     //Kobling til pages
     public function page(){
-        return $this->belongsTo('App\Page');
+        return $this->hasOne('App\Page');
     }
 
     // kobling til user
@@ -20,7 +20,7 @@ class Image extends Model
     
     // Kobling til image_sizes
     public function image_size(){
-        return $this->hasOne('App\ImageSize', 'image_size_id');
+        return $this->belongsTo('App\ImageSize', 'image_size_id');
     }
 
     // Kobling til component_field

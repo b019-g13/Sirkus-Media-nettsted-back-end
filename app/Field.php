@@ -8,8 +8,9 @@ class Field extends Model
 {
     use Traits\UsesUuid;
 
-    //Kobling til flere components
-    public function components(){
-       return $this->belongsToMany('App\Component', 'component_id');
+    //Kobling til component_field
+    public function component_field()
+    {
+       return $this->hasOne('App\ComponentField');
     }
 }

@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     // Har en user
     public function image(){
-      return  $this->hasOne('App\Image', 'image_id');
+      return  $this->belongsTo('App\Image', 'image_id');
     }
 
 }
