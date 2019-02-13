@@ -13,7 +13,8 @@ class CreatePageComponentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('page_components', function (Blueprint $table) {
+        Schema::create('page_components', function (Blueprint $table) 
+        {
             $table->uuid('id')->primary();
             $table->uuid('page_id');
             $table->foreign('page_id')->references('id')->on('pages');

@@ -13,7 +13,8 @@ class CreatePagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('pages', function (Blueprint $table) 
+        {
             $table->uuid('id')->primary();
             $table->string('title');
             $table->uuid('image_id')->nullable();

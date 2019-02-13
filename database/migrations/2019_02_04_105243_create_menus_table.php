@@ -13,7 +13,8 @@ class CreateMenusTable extends Migration
      */
     public function up()
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('menus', function (Blueprint $table) 
+        {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->boolean('global'); 

@@ -13,7 +13,8 @@ class CreateComponentFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('component_fields', function (Blueprint $table) {
+        Schema::create('component_fields', function (Blueprint $table) 
+        {
             $table->uuid('id')->primary();
             $table->uuid('component_id');
             $table->foreign('component_id')->references('id')->on('components');

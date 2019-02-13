@@ -13,7 +13,8 @@ class CreateMenuLinksTable extends Migration
      */
     public function up()
     {
-        Schema::create('menu_links', function (Blueprint $table) {
+        Schema::create('menu_links', function (Blueprint $table) 
+        {
             $table->uuid('id')->primary();
             $table->uuid('menu_id');
             $table->foreign('menu_id')->references('id')->on('menus');
