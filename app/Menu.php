@@ -9,18 +9,17 @@ class Menu extends Model
    use Traits\UsesUuid;
 
     //Har flere links
-   public function menu_link()
+   public function menu_links()
    {
-      return $this->hasOne('App\MenuLink');
+      return $this->hasMany('App\MenuLink');
    }
 
-    // Kan være i flere pages
+    // Tilhører til side
    public function page()
    {
       return $this->belongsTo('App\Page');
    }
 
-    //
    public function menu_location()
    {
       return $this->belongsTo('App\MenuLocation');

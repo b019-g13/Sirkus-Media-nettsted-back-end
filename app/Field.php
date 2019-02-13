@@ -9,8 +9,8 @@ class Field extends Model
     use Traits\UsesUuid;
 
     //Kobling til component_field
-    public function component_field()
+    public function component_fields()
     {
-       return $this->hasOne('App\ComponentField');
+       return $this->hasMany('App\ComponentField');
     }
 }

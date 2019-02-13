@@ -31,7 +31,8 @@ class User extends Authenticatable
     ];
 
     // Har en user
-    public function image(){
+    public function image()
+    {
       return  $this->belongsTo('App\Image', 'image_id');
     }
 

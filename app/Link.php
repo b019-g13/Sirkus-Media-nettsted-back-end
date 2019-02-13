@@ -9,17 +9,20 @@ class Link extends Model
     use Traits\UsesUuid;
     
     //Har en link
-    public function component_field(){
+    public function component_field()
+    {
        return $this->hasOne('App\ComponentField');
     }
 
     // Tilhører til page
-    public function page(){
-      return  $this->belongsTo('App\Page', 'page_id');
+    public function page()
+    {
+      return  $this->belongsTo('App\Page');
     }
 
     // Har flere menus
-    public function menu_link(){
-      return  $this->hasOne('App\MenuLink');
+    public function menu_links()
+    {
+      return  $this->hasMany('App\MenuLink');
     }
 }

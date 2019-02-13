@@ -12,14 +12,15 @@
 */
 
 
-  use App\Link;
+  use App\Page;
   
 
-Route::get('/', function () {
+Route::get('/', function ()
+ {
     
-    $fcom = Link::all()->first();
+    $chil = Page::all()->first();
     
-    dd($fcom->menu_link);
+    dd($chil->page_components);
      
     return view('welcome');
    

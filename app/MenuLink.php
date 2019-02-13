@@ -9,11 +9,13 @@ class MenuLink extends Model
     use Traits\UsesUuid;
     
     //
-    public function menu(){
+    public function menu()
+    {
         return $this->belongsTo('App\Menu');
     }
 
-    public function link(){
+    public function link()
+    {
         return $this->belongsTo('App\Link');
     }
 }
