@@ -20,7 +20,7 @@ Route::get('/', function ()
     
     $chil = Page::all()->first();
     
-    dd($chil->page_components);
+    dd($chil->link);
      
     return view('welcome');
    
