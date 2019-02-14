@@ -25,8 +25,4 @@ class Page extends Model
         return $this->belongsTo('App\Image', 'image_id');
     }
 
-    public function link()
-    {
-        return  $this->hasOne('App\Link');
-    }
 }
