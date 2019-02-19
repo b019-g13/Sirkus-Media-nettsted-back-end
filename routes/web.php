@@ -15,12 +15,12 @@
   use App\Page;
   
 
-Route::get('/', function ()
+Route::get('/pages', function ()
  {
     
     $chil = Page::all()->first();
     
-    dd($chil->link);
+    dd($chil);
      
     return view('welcome');
    
