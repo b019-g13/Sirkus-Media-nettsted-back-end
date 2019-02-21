@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Component;
 use App\ComponentField;
 use App\Field;
@@ -16,7 +17,7 @@ use App\Page;
 use App\PageComponent;
 use App\User;
 
-class PagesController extends Controller
+class ComponentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -25,12 +26,8 @@ class PagesController extends Controller
      */
     public function index()
     {
-    
-        $pages = Page::select('pages.*', 'menus.name')
-            ->join('menus', 'menus.page_id', '=', 'pages.id')->get()->toArray();
-
-        return $pages;
-
+        $components = Component::paginate(30);
+        return  $components;
     }
 
     /**
@@ -40,7 +37,8 @@ class PagesController extends Controller
      */
     public function create()
     {
-        //
+        $components = Component::paginate(30);
+        return $components;
     }
 
     /**
@@ -60,10 +58,10 @@ class PagesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Page $page)
+    public function show(Component $component)
     {
-        // $page = Page::find($id);
-         return $page;
+        // $component = Component::find($id);
+        return  $component;
     }
 
     /**
