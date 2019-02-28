@@ -59,6 +59,8 @@ class MenuController extends Controller
      */
     public function show(Menu $menu)
     {
+        $menu->links;
+        $menu->menu_location;
         return $menu;
     }
 
