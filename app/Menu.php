@@ -9,11 +9,17 @@ class Menu extends Model
    use Traits\UsesUuid;
 
     //Har flere links
-   public function menu_links(){
-      return $this->hasMany('App\MenuLink');
+   public function links(){
+      return $this->hasManyThrough(     
+         'App\Link',
+         'App\MenuLink',
+         'menu_id',
+         'id',
+         'id',
+         'link_id'
+      );
    }
-
-    // Tilhører til side
+  
    public function page()
    {
       return $this->belongsTo('App\Page');
@@ -23,4 +29,5 @@ class Menu extends Model
    {
       return $this->belongsTo('App\MenuLocation');
    }
+
 }

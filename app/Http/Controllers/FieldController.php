@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Field;
 
-class PagesController extends Controller
+class FieldController extends Controller
 {
     /**
      * Display a listing of the resource.

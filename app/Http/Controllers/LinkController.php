@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Menu;
+Use App\Link;
 
-class MenuController extends Controller
+class LinkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $menus = Menu::paginate(30);
-        return $menus;
+        $links = Link::paginate(30);
+        return $links;
     }
 
     /**
@@ -45,11 +45,10 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Menu $menu)
+    public function show($id)
     {
-        $menu->links;
-        $menu->menu_location;
-        return $menu;
+        $link = Link::find($id);
+        return $link;
     }
 
     /**

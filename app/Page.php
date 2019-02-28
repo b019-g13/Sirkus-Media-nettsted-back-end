@@ -7,13 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 class Page extends Model
 {
     use Traits\UsesUuid;
-    
-    // kobling til pagecomponents
-    public function page_components()
+
+    // kobling til components
+    public function components()
     {
-        return $this->hasMany('App\PageComponent');
+        return $this->hasManyThrough(
+            'App\Component',
+            'App\PageComponent',
+            'page_id',        // page_components.page_id
+            'id',             // components.id
+            'id',             // page.id
+            'component_id'    // page_components.component_id
+        );
     }
-    // Tilhører til en menu
+    
+    //  har en menu
     public function menu()
     {
         return $this->hasOne('App\Menu');
@@ -24,5 +32,4 @@ class Page extends Model
     {
         return $this->belongsTo('App\Image', 'image_id');
     }
-
 }
