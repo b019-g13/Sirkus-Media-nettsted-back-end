@@ -3,21 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Component;
-use App\ComponentField;
-use App\Field;
 use App\Image;
-use App\ImgageSize;
-Use App\Link;
-use App\Menu;
-use App\MenuLink;
-use App\menuLocation;
-use App\Page;
-use App\PageComponent;
-use App\User;
 
-class ImagesController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
