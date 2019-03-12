@@ -3,19 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\Component;
-use App\ComponentField;
-use App\Field;
-use App\Image;
-use App\ImgageSize;
 Use App\Link;
-use App\Menu;
-use App\MenuLink;
-use App\menuLocation;
-use App\Page;
-use App\PageComponent;
-use App\User;
 
 class LinkController extends Controller
 {
@@ -27,7 +15,7 @@ class LinkController extends Controller
     public function index()
     {
         $links = Link::paginate(30);
-         return $links;
+        return $links;
     }
 
     /**
@@ -60,7 +48,7 @@ class LinkController extends Controller
     public function show($id)
     {
         $link = Link::find($id);
-         return $link;
+        return $link;
     }
 
     /**
