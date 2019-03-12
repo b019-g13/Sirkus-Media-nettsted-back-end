@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\PageRequest;
 
 use App\Page;
+use Auth;
+use Session;
 
 class PageController extends Controller
 {
@@ -13,6 +15,12 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+    public function __construct()
+    {     
+        $this->middleware('auth')->except('index','show');
+    }
+
     public function index()
     {
     
@@ -20,6 +28,7 @@ class PageController extends Controller
 
     }
 
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -27,7 +36,8 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        $pages = Page::All();
+        return $pages;
     }
 
     /**
@@ -36,9 +46,18 @@ class PageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PageRequest $request)
     {
-        //
+        $request->validate([
+            'title'=>'required|string',
+            'image_id'=> 'nullable|uuid'
+          ]);
+          $page = new Page([
+            'title' => $request->get('title'),
+            'image_id'=> $request->get('image_id'),
+          ]);
+          $page->save();
+          return redirect('/pages')->with('success', 'page is created');
     }
 
     /**
@@ -65,7 +84,8 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = Page::find($id);
+        return $page;
     }
 
     /**
@@ -77,7 +97,17 @@ class PageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title'=>'required|string',
+            'image_id'=> 'nullable|uuid',
+          ]);
+    
+          $page = Page::find($id);
+          $page->title = $request->get('title');
+          $page->image_id = $request->get('image_id');
+          $page->save();
+    
+          return redirect('/pages')->with('success', 'page is updated');
     }
 
     /**
@@ -88,6 +118,9 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $page = Page::find($id);
+        $page->delete();
+
+     return redirect('/pages')->with('success', 'page is deleted Successfully');
     }
 }
