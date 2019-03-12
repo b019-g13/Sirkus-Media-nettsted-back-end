@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\PageRequest;
+use Illuminate\Http\Request;
 
 use App\Page;
 use Auth;
@@ -46,7 +46,7 @@ class PageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PageRequest $request)
+    public function store(Request $request)
     {
         $request->validate([
             'title'=>'required|string',
