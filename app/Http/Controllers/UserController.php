@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 use App\User;
 
 class UserController extends Controller
