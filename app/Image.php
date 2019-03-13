@@ -15,7 +15,7 @@ class Image extends Model
     
     // Kobling til image_sizes
     public function image_size(){
-        return $this->belongsTo('App\ImageSize', 'image_size_id');
+        return $this->hasOne('App\ImageSize');
     }
 
 }

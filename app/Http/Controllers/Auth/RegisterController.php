@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Notifications\UserActivate;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Notifications\UserActivate;
 
 class RegisterController extends Controller
 {
@@ -53,9 +53,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => [ 'required','string', 'max:255' ],
-            'verified' => [ 'required','integer' ],
-            'image_id' => ['nullable', 'uuid'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
@@ -71,9 +69,6 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'verified' => $data['verified'],
-            'email_token' => $data['email_token'],
-            'image_id' => $data['image_id'],
             'password' => Hash::make($data['password']),
         ]);
         $user->notify(new UserActivate($user));
