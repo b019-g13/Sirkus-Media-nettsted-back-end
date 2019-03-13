@@ -13,13 +13,12 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) 
+        Schema::create('images', function (Blueprint $table)
         {
             $table->uuid('id')->primary();
             $table->integer('image_size_id')->unsigned();
             $table->foreign('image_size_id')->references('id')->on('image_sizes');
             $table->uuid('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->string('attribute_alt')->nullable();
             $table->string('url');
             $table->timestamps();
