@@ -51,13 +51,13 @@ class PageController extends Controller
         $request->validate([
             'title'=>'required|string',
             'image_id'=> 'nullable|uuid'
-          ]);
-          $page = new Page([
+        ]);
+        $page = new Page([
             'title' => $request->get('title'),
-            'image_id'=> $request->get('image_id'),
-          ]);
+            'image_id'=> $request->get('image_id')
+        ]);
           $page->save();
-          return redirect('/pages')->with('success', 'page is created');
+          return redirect('/pages')->with('success', 'page is created succefully');
     }
 
     /**
@@ -107,7 +107,7 @@ class PageController extends Controller
           $page->image_id = $request->get('image_id');
           $page->save();
     
-          return redirect('/pages')->with('success', 'page is updated');
+          return redirect('/pages')->with('Success', 'page is updated successfully');
     }
 
     /**
@@ -121,6 +121,6 @@ class PageController extends Controller
         $page = Page::find($id);
         $page->delete();
 
-     return redirect('/pages')->with('success', 'page is deleted Successfully');
+     return redirect('/pages')->with('success', 'page is deleted successfully');
     }
 }

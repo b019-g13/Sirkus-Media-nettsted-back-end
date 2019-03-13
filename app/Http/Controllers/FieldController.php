@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
+
 use App\Field;
 
 class FieldController extends Controller
@@ -12,9 +14,16 @@ class FieldController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {     
+       $this->middleware('auth:api')->except('index','show');
+    }
+
     public function index()
     {
-        //
+        $field = Field::paginate(30);
+        return $field;
     }
 
     /**
@@ -24,7 +33,8 @@ class FieldController extends Controller
      */
     public function create()
     {
-        //
+        $field = Field::All();
+        return $field;
     }
 
     /**
@@ -35,7 +45,17 @@ class FieldController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'slug' => 'required|string'   
+        ]);
+        
+        $field = new Field([
+            'name' => $request->get('name'),
+            'slug' => $request->get('slug')
+        ]);
+        $field->save();
+        return redirect('/fields')->with('Success', 'Field is created successfully');
     }
 
     /**
@@ -44,9 +64,10 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Field $field)
     {
-        //
+        $field->components;
+        return $field;
     }
 
     /**
@@ -57,7 +78,8 @@ class FieldController extends Controller
      */
     public function edit($id)
     {
-        //
+        $field = Field::find($id);
+        return $field;
     }
 
     /**
@@ -69,7 +91,16 @@ class FieldController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'slug' => 'required|string'   
+        ]);
+        
+        $field = Field::find($id);
+        $field->name = $request->get('name');
+        $field->slug = $request->get('slug');
+        $field->save();
+        return redirect('/fields')->with('Success', 'Field is updated successfully');
     }
 
     /**
@@ -80,6 +111,8 @@ class FieldController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $field = Field::find($id);
+        $field->save();
+        return redirect('/fields')->with('Success', 'Field is deleted successfully');
     }
 }
