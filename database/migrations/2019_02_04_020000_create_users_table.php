@@ -13,7 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) 
+        Schema::create('users', function (Blueprint $table)
         {
             $table->uuid('id')->primary();
             $table->string('name');
@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-        
+
         Schema::table('images', function (Blueprint $table)
         {
             $table->foreign('user_id')->references('id')->on('users');
