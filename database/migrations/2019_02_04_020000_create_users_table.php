@@ -19,11 +19,10 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->timestamp('email_verified_at');
+            $table->datetime('email_verified_at')->nullable()->default(null);
             $table->string('password');
-            $table->tinyInteger('verified');
-            $table->string('email_token');
-            $table->uuid('image_id')->nullabel();
+            $table->string('email_token')->nullable();
+            $table->uuid('image_id')->nullable();
             $table->foreign('image_id')->references('id')->on('images')->onUpdate('cascade');
             $table->rememberToken();
             $table->timestamps();

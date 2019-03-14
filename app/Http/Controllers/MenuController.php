@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Menu;
 
 class MenuController extends Controller
@@ -12,6 +13,11 @@ class MenuController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+       $this->middleware('auth:api')->except('index','show');
+    }
+
     public function index()
     {
         $menus = Menu::paginate(30);
@@ -25,7 +31,8 @@ class MenuController extends Controller
      */
     public function create()
     {
-        //
+        $menus = Menu::All();
+        return $menus;
     }
 
     /**
@@ -36,7 +43,21 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'global' => 'required|boolean',
+            'page_id' => 'nullable|uuid',
+            'menu_location_id' => 'required|integer'
+        ]);    
+        
+        $menu = new Menu([
+            'name' => $request->get('name'),
+            'global' => $request->get('global'),
+            'page_id' => $request->get('page_id'),
+            'menu_location_id' => $request->get('menu_location_id')
+        ]);
+            $menu->save();
+            return redirect('/menus')->with('Success', 'Menu is created successfully' );
     }
 
     /**
@@ -60,7 +81,8 @@ class MenuController extends Controller
      */
     public function edit($id)
     {
-        //
+        $menu = Menu::find($id);
+        return $menu;
     }
 
     /**
@@ -72,7 +94,20 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|string',
+            'global'=> 'required|boolean',
+            'page_id' => 'nullable|uuid',
+            'menu_location_id'=> 'required|integer'
+        ]);
+
+            $menu = Menu::find($id);
+            $menu->name = $request->get('name');
+            $menu->global = $request->get('global');
+            $menu->page_id = $request->get('page_id');
+            $menu->menu_location_id = $request->get('menu_location_id');
+            $menu->save();
+            return redirect('/menus')->with('Success', 'Menu is updated successfully');
     }
 
     /**
@@ -83,6 +118,8 @@ class MenuController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $menu = Menu::find($id);
+        $menu->delete();
+        return redirect('/menus')->with('Success', 'Menu is deleted successfully');
     }
 }

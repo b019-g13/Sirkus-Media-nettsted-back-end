@@ -16,7 +16,7 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table)
         {
             $table->uuid('id')->primary();
-            $table->integer('image_size_id')->unsigned();
+            $table->unsignedInteger('image_size_id');
             $table->foreign('image_size_id')->references('id')->on('image_sizes');
             $table->uuid('user_id');
             $table->string('attribute_alt')->nullable();

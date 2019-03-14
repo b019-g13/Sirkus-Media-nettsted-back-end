@@ -5,11 +5,12 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles; /* Lagt til */
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Traits\UsesUuid;
-
+    use HasRoles; /* Lagt til */
     use Notifiable;
 
     /**
@@ -18,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'phone', 'verified', 'email_token','image_id', 'password',
     ];
 
     /**
