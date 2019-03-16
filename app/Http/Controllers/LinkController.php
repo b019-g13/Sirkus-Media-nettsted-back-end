@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 Use App\Link;
+Use App\Page;
 
 class LinkController extends Controller
 {
@@ -16,13 +17,13 @@ class LinkController extends Controller
 
     public function __construct()
     {     
-       $this->middleware('auth:api')->except('index','show');
+       $this->middleware('auth');
     }
 
     public function index()
     {
         $links = Link::paginate(30);
-         return $links;
+         return view('links.index', compact('links'));
     }
 
     /**
@@ -33,7 +34,11 @@ class LinkController extends Controller
     public function create()
     {
         $links = Link::All();
-        return $links;
+        $pages = Page::All();
+        return view('links.create', compact(
+            'links', 
+            'pages'
+        ));
     }
 
     /**
@@ -47,7 +52,7 @@ class LinkController extends Controller
         $request->validate([
             'name'=>'required|string',
             'value'=> 'required|string',
-            'page_id'=> 'nullable|uuid'
+            'page_id'=> 'nullable'
         ]);
             $link = new Link([
             'name' => $request->get('name'),
@@ -55,7 +60,7 @@ class LinkController extends Controller
             'page_id' => $request->get('page_id')
             ]);
             $link->save(); 
-            return redirect('/links')->with('Success', 'Link is created');    
+            return redirect('/links')->with('success', 'Linken blir opprettet');    
     }
 
     /**
@@ -69,7 +74,7 @@ class LinkController extends Controller
         $link->menus;
         $link->component_fields;
         $link->page;
-         return $link;
+         return view('links.show', compact('link'));
     }
 
     /**
@@ -81,7 +86,8 @@ class LinkController extends Controller
     public function edit($id)
     {
         $link = Link::find($id);
-        return $link;
+        $pages = Page::All();
+        return view('links.edit', compact('link', 'pages'));
     }
 
     /**
@@ -96,7 +102,7 @@ class LinkController extends Controller
         $request->validate([
             'name' => 'required|string',
             'value' => 'required|string',
-            'page_id' => 'nullable|uuid'
+            'page_id' => 'nullable'
         ]);
         $link = Link::find($id);
         $link->name = $request->get('name');
@@ -104,7 +110,7 @@ class LinkController extends Controller
         $link->page_id = $request->get('page_id');
         $link->save();
         
-        return redirected('/links')->with('Success', 'Link is updated successfully');
+        return redirect('/links')->with('success', 'Linken er oppdatert');
     }
 
     /**
@@ -117,6 +123,6 @@ class LinkController extends Controller
     {
         $link = Link::find($id);
         $link->delete();
-        return redirect('/links')->with('Success', 'Link is deleted successfully');
+        return redirect('/links')->with('success', 'Linker er slettet');
     }
 }
