@@ -8,6 +8,10 @@ class Page extends Model
 {
     use Traits\UsesUuid;
 
+    protected $fillable = [
+        'title', 'image_id'
+    ];
+
     // kobling til components
     public function components()
     {
