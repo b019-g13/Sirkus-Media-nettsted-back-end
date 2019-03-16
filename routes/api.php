@@ -54,7 +54,7 @@ Route::get('/menu_locations/{menu_location}', 'MenuLocationController@show');
 Route::get('/components', 'ComponentController@index');
 Route::get('/components/{component}',  'ComponentController@show');
 Route::get('/components/create', 'ComponentController@create')->name('component.create');
-Route::post('/components/create', 'ComponentController@store')->name('component.store');
+Route::post('/components/store', 'ComponentController@store')->name('component.store');
 Route::get('/components/edit', 'ComponentController@edit')->name('component.edit');
 Route::put('/components/update', 'ComponentController@update')->name('component.update');
 Route::delete('/components/destroy', 'ComponentController@destroy')->name('component.destroy');
