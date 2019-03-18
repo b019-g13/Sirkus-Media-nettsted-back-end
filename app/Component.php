@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Link;
+use App\Image;
+
 class Component extends Model
 {
     use Traits\UsesUuid;
@@ -41,13 +44,19 @@ class Component extends Model
         $component_fields = $this->component_fields()->get();
 
         foreach ($component_fields as $component_field) {
+            $value = $component_field->value;
+
+            if ($component_field->link_id !== null) {
+                $value = $component_field->link;
+            } else if ($component_field->image_id !== null) {
+                $value = $component_field->image;
+            }
+
             $push = (object) [
                 "id" => $component_field->field->id,
                 "name" => $component_field->field->name,
                 "slug" => $component_field->field->slug,
-                "value" => $component_field->field->value,
-                "link" => $component_field->field->link,
-                "image"=> $component_field->field->image,
+                "value" => $value
             ];
 
             array_push($fields, $push);
