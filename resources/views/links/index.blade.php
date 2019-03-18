@@ -11,11 +11,7 @@
         </div>
     </div>
    
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
-    @endif
+    @include('messages.flash-message')
    
     <table class="table table-bordered">
         <tr>
