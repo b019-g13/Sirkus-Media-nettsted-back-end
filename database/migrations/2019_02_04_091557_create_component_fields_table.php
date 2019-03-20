@@ -21,9 +21,9 @@ class CreateComponentFieldsTable extends Migration
             $table->uuid('field_id');
             $table->foreign('field_id')->references('id')->on('fields');
             $table->longText('value');
-            $table->uuid('link_id');
+            $table->uuid('link_id')->nullable()->default(null);
             $table->foreign('link_id')->references('id')->on('links');
-            $table->uuid('image_id');
+            $table->uuid('image_id')->nullable()->default(null);
             $table->foreign('image_id')->references('id')->on('images');
             $table->integer('order');
             $table->timestamps();

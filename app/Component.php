@@ -11,6 +11,10 @@ class Component extends Model
 {
     use Traits\UsesUuid;
 
+    protected $fillable = [
+        'name', 'slug', 'order', 'parent_id'
+     ];
+
     protected $appends = [
         "fields"
     ];

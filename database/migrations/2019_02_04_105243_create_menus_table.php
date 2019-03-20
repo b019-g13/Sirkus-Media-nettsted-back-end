@@ -20,7 +20,7 @@ class CreateMenusTable extends Migration
             $table->boolean('global'); 
             $table->uuid('page_id')->nullable();
             $table->foreign('page_id')->references('id')->on('pages')->onupdate('cascade');
-            $table->integer('menu_location_id')->unsigned();
+            $table->integer('menu_location_id')->unsigned()->nullable();
             $table->foreign('menu_location_id')->references('id')->on('menu_locations')->onupdate('cascade');
             $table->timestamps();
 

@@ -17,13 +17,13 @@ class FieldController extends Controller
 
     public function __construct()
     {     
-       $this->middleware('auth:api')->except('index','show');
+       $this->middleware('auth');
     }
 
     public function index()
     {
-        $field = Field::paginate(30);
-        return $field;
+        $fields = Field::paginate(30);
+        return view('fields.index', compact('fields'));
     }
 
     /**
@@ -33,8 +33,8 @@ class FieldController extends Controller
      */
     public function create()
     {
-        $field = Field::All();
-        return $field;
+        $fields = Field::All();
+        return view('fields.create', compact('fields'));
     }
 
     /**
@@ -55,7 +55,7 @@ class FieldController extends Controller
             'slug' => $request->get('slug')
         ]);
         $field->save();
-        return redirect('/fields')->with('Success', 'Field is created successfully');
+        return redirect('/fields')->with('success', 'Field er opprettet');
     }
 
     /**
@@ -67,7 +67,7 @@ class FieldController extends Controller
     public function show(Field $field)
     {
         $field->components;
-        return $field;
+        return view('fields.show', compact('field'));
     }
 
     /**
@@ -79,7 +79,7 @@ class FieldController extends Controller
     public function edit($id)
     {
         $field = Field::find($id);
-        return $field;
+        return view('fields.edit', compact('field'));
     }
 
     /**
@@ -100,7 +100,7 @@ class FieldController extends Controller
         $field->name = $request->get('name');
         $field->slug = $request->get('slug');
         $field->save();
-        return redirect('/fields')->with('Success', 'Field is updated successfully');
+        return redirect('/fields')->with('success', 'Field er oppdatert');
     }
 
     /**
@@ -112,7 +112,7 @@ class FieldController extends Controller
     public function destroy($id)
     {
         $field = Field::find($id);
-        $field->save();
-        return redirect('/fields')->with('Success', 'Field is deleted successfully');
+        $field->delete();
+        return redirect('/fields')->with('success', 'Field er slettet');
     }
 }
