@@ -20,8 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Auth::routes();
 
 // Pages
-Route::get('/pages', 'PageController@index');
-Route::get('pages/{page}', 'PageController@show');
+Route::get('/pages', 'PageController@api_index');
+Route::get('pages/{page}', 'PageController@api_show');
 
 
 // Links

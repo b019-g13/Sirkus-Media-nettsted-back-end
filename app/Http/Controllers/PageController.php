@@ -16,10 +16,10 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function __construct()
-    {     
-        $this->middleware('auth');
+    {
+        $this->middleware('auth')->except('api_index', 'api_show');
     }
 
     public function index()
@@ -28,7 +28,12 @@ class PageController extends Controller
         return view('pages.index',compact('pages'));
     }
 
-    
+    public function api_index()
+    {
+        return Page::paginate(30);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -80,6 +85,18 @@ class PageController extends Controller
         return view('pages.show',compact('page'));
     }
 
+    public function api_show(Page $page)
+    {
+        $page->menu;
+        $components = $page->components;
+
+        foreach($components as $component){
+            $component->fields;
+        }
+
+        return $page;
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -109,12 +126,12 @@ class PageController extends Controller
             'title'=>'required|string',
             'image_id'=> 'nullable',
           ]);
-    
+
           $page = Page::find($id);
           $page->title = $request->get('title');
           $page->image_id = $request->get('image_id');
           $page->save();
-    
+
           return redirect('/pages')->with('success', 'Page er oppdatert');
     }
 
