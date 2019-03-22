@@ -10,8 +10,6 @@
             </div>
         </div>
     </div>
-   
-    @include('messages.input-any-error')
   
     <form action="{{ route('menu_locations.update', $menu_location->id) }}" method="POST">
         @csrf

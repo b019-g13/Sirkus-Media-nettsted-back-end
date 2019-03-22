@@ -11,8 +11,6 @@
     </div>
 </div>
 
- @include('messages.input-any-error')
-
 <form action="{{ route('menu_locations.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 

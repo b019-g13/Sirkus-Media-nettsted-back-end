@@ -11,8 +11,6 @@
         </div>
     </div>
    
-    @include('messages.flash-message')
-   
     <table class="table table-bordered">
         <tr>
             <th> Lokasjon ID</th>
