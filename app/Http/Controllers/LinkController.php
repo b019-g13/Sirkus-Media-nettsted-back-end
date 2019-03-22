@@ -50,8 +50,8 @@ class LinkController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required|string',
-            'value'=> 'required|string',
+            'name'=>'required|string|max:255',
+            'value'=> 'required|string|max:255',
             'page_id'=> 'nullable'
         ]);
             $link = new Link([
@@ -60,7 +60,7 @@ class LinkController extends Controller
             'page_id' => $request->get('page_id')
             ]);
             $link->save(); 
-            return redirect('/links')->with('success', 'Linken blir opprettet');    
+            return redirect()->route('links.index')->with('success', 'Linken blir opprettet');    
     }
 
     /**
@@ -100,8 +100,8 @@ class LinkController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string',
-            'value' => 'required|string',
+            'name' => 'required|string|max:255',
+            'value' => 'required|string|max:255',
             'page_id' => 'nullable'
         ]);
         $link = Link::find($id);
@@ -110,7 +110,7 @@ class LinkController extends Controller
         $link->page_id = $request->get('page_id');
         $link->save();
         
-        return redirect('/links')->with('success', 'Linken er oppdatert');
+        return redirect()->route('links.index')->with('success', 'Linken er oppdatert');
     }
 
     /**
@@ -123,6 +123,6 @@ class LinkController extends Controller
     {
         $link = Link::find($id);
         $link->delete();
-        return redirect('/links')->with('success', 'Linker er slettet');
+        return redirect()->route('links.index')->with('success', 'Linker er slettet');
     }
 }
