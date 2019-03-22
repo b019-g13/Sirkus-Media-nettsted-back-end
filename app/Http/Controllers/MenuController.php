@@ -52,7 +52,7 @@ class MenuController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'global' => 'required|boolean',
             'page_id' => 'nullable',
             'menu_location_id' => 'nullable|integer'
@@ -65,7 +65,7 @@ class MenuController extends Controller
             'menu_location_id' => $request->get('menu_location_id')
         ]);
             $menu->save();
-            return redirect('/menus')->with('success', 'Menu is created successfully' );
+            return redirect()->route('menus.index')->with('success', 'Menu er opprettet' );
     }
 
     /**
@@ -109,7 +109,7 @@ class MenuController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'global'=> 'required|boolean',
             'page_id' => 'nullable',
             'menu_location_id'=> 'nullable|integer'
@@ -121,7 +121,7 @@ class MenuController extends Controller
             $menu->page_id = $request->get('page_id');
             $menu->menu_location_id = $request->get('menu_location_id');
             $menu->save();
-            return redirect('/menus')->with('success', 'Menu is updated successfully');
+            return redirect()->route('menus.index')->with('success', 'Menu er oppdatert');
     }
 
     /**
@@ -134,6 +134,6 @@ class MenuController extends Controller
     {
         $menu = Menu::find($id);
         $menu->delete();
-        return redirect('/menus')->with('success', 'Menu is deleted successfully');
+        return redirect()->route('menus.index')->with('success', 'Menu er slettet');
     }
 }
