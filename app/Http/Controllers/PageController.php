@@ -53,7 +53,7 @@ class PageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'=>'required|string',
+            'title'=>'required|string|max:255',
             'image_id'=> 'nullable'
         ]);
         $page = new Page([
@@ -61,7 +61,7 @@ class PageController extends Controller
             'image_id'=> $request->get('image_id')
         ]);
           $page->save();
-          return redirect('/pages')->with('success', 'Page er opprettet');
+          return redirect()->route('pages.index')->with('success', 'Page er opprettet');
     }
 
     /**
@@ -106,7 +106,7 @@ class PageController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'title'=>'required|string',
+            'title'=>'required|string|max:255',
             'image_id'=> 'nullable',
           ]);
     
@@ -115,7 +115,7 @@ class PageController extends Controller
           $page->image_id = $request->get('image_id');
           $page->save();
     
-          return redirect('/pages')->with('success', 'Page er oppdatert');
+          return redirect()->route('pages.index')->with('success', 'Page er oppdatert');
     }
 
     /**
@@ -129,6 +129,6 @@ class PageController extends Controller
         $page = Page::find($id);
         $page->delete();
 
-     return redirect('/pages')->with('success', 'Page er slettet');
+     return redirect()->route('pages.index')->with('success', 'Page er slettet');
     }
 }
