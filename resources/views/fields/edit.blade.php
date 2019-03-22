@@ -10,18 +10,7 @@
             </div>
         </div>
     </div>
-   
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Ops!</strong> Sjekk om feltene er fylt <br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-  
+
     <form action="{{ route('fields.update', $field->id) }}" method="POST">
         @csrf
         @method('PUT')
@@ -31,17 +20,10 @@
                 <div class="form-group">
                     @csrf
                     <strong> Navn : </strong>
-                    <input type="text" name="name" value="{{ $field->name }}" class="form-control" placeholder="Navn">
+                    <input type="text" name="name" value="{{old('name', (isset($field->name)? $field->name : null))}}" required class="form-control" placeholder="Navn">
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    @csrf
-                    <strong> Slug : </strong>
-                    <input type="text" name="slug" value="{{ $field->slug }}" class="form-control" placeholder="Slug">
-                </div>
-            </div>
-
+            
             <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                 <button type="submit" class="btn btn-primary"> Oppdater </button>
             </div>

@@ -46,16 +46,15 @@ class FieldController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'slug' => 'required|string'   
+            'name' => 'required|string|max:255'
         ]);
         
         $field = new Field([
             'name' => $request->get('name'),
-            'slug' => $request->get('slug')
+            'slug'=> str_slug($request->get('name'))
         ]);
         $field->save();
-        return redirect('/fields')->with('success', 'Field er opprettet');
+        return redirect()->route('fields.index')->with('success', 'Field er opprettet');
     }
 
     /**
@@ -92,15 +91,14 @@ class FieldController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string',
-            'slug' => 'required|string'   
+            'name' => 'required|string|max:255'  
         ]);
         
         $field = Field::find($id);
         $field->name = $request->get('name');
-        $field->slug = $request->get('slug');
+        $field->slug = str_slug($request->get('name'));
         $field->save();
-        return redirect('/fields')->with('success', 'Field er oppdatert');
+        return redirect()->route('fields.index')->with('success', 'Field er oppdatert');
     }
 
     /**
@@ -113,6 +111,6 @@ class FieldController extends Controller
     {
         $field = Field::find($id);
         $field->delete();
-        return redirect('/fields')->with('success', 'Field er slettet');
+        return redirect()->route('fields.index')->with('success', 'Field er slettet');
     }
 }
