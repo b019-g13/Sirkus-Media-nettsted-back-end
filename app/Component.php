@@ -50,7 +50,6 @@ class Component extends Model
           $push = (object) [
                 "id" => $component_field->field->id,
                 "name" => $component_field->field->name,
-                "value" => $component_field->field->value,
                 "link" => $component_field->field->link,
                 "image"=> $component_field->field->image,
           ];
