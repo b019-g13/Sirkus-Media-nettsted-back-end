@@ -6,8 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Page;
 use App\Image;
-use Auth;
-use Session;
 
 class PageController extends Controller
 {
@@ -19,7 +17,7 @@ class PageController extends Controller
     
     public function __construct()
     {     
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['api_index' , 'api_show']);
     }
 
     public function index()
@@ -28,7 +26,21 @@ class PageController extends Controller
         return view('pages.index',compact('pages'));
     }
 
-    
+    public function api_index()
+    {
+        $pages = Page::paginate(30);
+        return $pages;
+    }
+
+    public function api_show(Page $page){
+        $page->menu;
+        $components = $page->components;
+        foreach($components as $component){
+            $component->fields;
+        }
+        return $page;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

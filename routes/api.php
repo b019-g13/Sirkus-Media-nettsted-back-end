@@ -12,18 +12,17 @@
 */
 
 // Pages
-Route::get('/pages', 'PageController@index');
-Route::get('pages/{page}', 'PageController@show');
+Route::get('pages', 'PageController@api_index');
+Route::get('pages/{page}', 'PageController@api_show');
 
 
 // Links
 Route::get('/links', 'LinkController@index');
 Route::get('/links/{link}', 'LinkController@show');
 
-
 // Menus
-Route::get('/menus', 'MenuController@index');
-Route::get('/menus/{menu}', 'MenuController@show');
+Route::get('/menus', 'MenuController@api_index');
+Route::get('/menus/{menu}', 'MenuController@api_show');
 
 // Menu_location
 Route::get('/menu_locations', 'MenuLocationController@index');

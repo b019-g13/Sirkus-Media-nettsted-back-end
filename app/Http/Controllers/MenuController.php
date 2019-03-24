@@ -17,13 +17,26 @@ class MenuController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('auth');
+       $this->middleware('auth')->except(['api_index', 'api_show']);
     }
 
     public function index()
     {
         $menus = Menu::paginate(30);
         return view('menus.index',compact('menus'));
+    }
+
+    public function api_index()
+    {
+        $menus = Menu::paginate(30);
+        return $menus;
+    }
+
+    public function api_show(Menu $menu)
+    {
+        $menu->links;
+        $menu->menu_location;
+        return $menu;
     }
 
     /**
