@@ -11,17 +11,6 @@
     </div>
 </div>
    
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Ops!</strong> Sjekk om fletene er oppfylt  <br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-   
 <form action="{{ route('menus.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
@@ -30,7 +19,7 @@
             <div class="form-group">
             @csrf
                 <strong> Navn: </strong>
-                <input type="text" name="name" class="form-control" placeholder="Navn">
+                <input type="text" name="name" value="{{old('name', (isset($menu->name)? $menu->name : null))}}" required class="form-control" placeholder="Navn">
             </div>
         </div>
         
@@ -61,7 +50,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong> Global :</strong>
-                <input type="text" name="global" class="form-control" placeholder="Global">
+                <input type="text" name="global" value="{{old('global', (isset($menu->global)? $menu->global : null))}}" required class="form-control" placeholder="Global">
             </div>
         </div>
 

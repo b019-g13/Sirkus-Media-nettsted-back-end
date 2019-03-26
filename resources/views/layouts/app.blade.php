@@ -33,7 +33,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li><a class="navbar-brand" href="{{ route('pages.index') }}"> Pages </a> </li>
+                        <li><a class="navbar-brand" href="{{ route('menus.index') }}"> Menus </a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -48,7 +49,7 @@
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
                             @endif
-                        @else
+                            @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -68,12 +69,16 @@
                             </li>
                         @endguest
                     </ul>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}">Register</a>
+                    @endif
                 </div>
             </div>
         </nav>
 
         <main class="py-4">
             @yield('content')
+            @include('messages.flash-message')
         </main>
     </div>
 </body>

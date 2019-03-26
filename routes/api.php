@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,14 +11,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Auth::routes();
-
 // Pages
-Route::get('/pages', 'PageController@api_index');
+Route::get('pages', 'PageController@api_index');
 Route::get('pages/{page}', 'PageController@api_show');
 
 
@@ -28,11 +20,13 @@ Route::get('pages/{page}', 'PageController@api_show');
 Route::get('/links', 'LinkController@index');
 Route::get('/links/{link}', 'LinkController@show');
 
-
 // Menus
-Route::get('/menus', 'MenuController@index');
-Route::get('/menus/{menu}', 'MenuController@show');
+Route::get('/menus', 'MenuController@api_index');
+Route::get('/menus/{menu}', 'MenuController@api_show');
 
+// Menu_location
+Route::get('/menu_locations', 'MenuLocationController@index');
+Route::get('/menu_locations/{menu_location}', 'MenuLocationController@show');
 
 // Components
 Route::get('/components', 'ComponentController@index');

@@ -11,17 +11,6 @@
     </div>
 </div>
    
-@if ($errors->any())
-    <div class="alert alert-danger">
-        <strong>Ops!</strong> Sjekk om fletene er oppfylt  <br><br>
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-   
 <form action="{{ route('links.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
@@ -30,7 +19,7 @@
             <div class="form-group">
             @csrf
                 <strong> Navn: </strong>
-                <input type="text" name="name" class="form-control" placeholder="Navn">
+                <input type="text" name="name" value="{{old('name', (isset($link->name)? $link->name : null))}}" required class="form-control" placeholder="Navn">
             </div>
         </div>
 
@@ -39,7 +28,7 @@
                 <div class="form-group">
                 @csrf
                 <strong> Verdi: </strong>
-                <input type="text" name="value" class="form-control" placeholder="Verdi">
+                <input type="text" name="value" value="{{old('value', (isset($link->value)? $link->value : null))}}" required class="form-control" placeholder="Verdi">
             </div>
         </div>
         

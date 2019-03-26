@@ -10,17 +10,6 @@
             </div>
         </div>
     </div>
-   
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Ops!</strong> Sjekk om feltene er fylt <br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
   
     <form action="{{ route('links.update', $link->id) }}" method="POST">
         @csrf
@@ -31,14 +20,14 @@
                 <div class="form-group">
                     @csrf
                     <strong> Navn: </strong>
-                    <input type="text" name="name" value="{{ $link->name }}" class="form-control" placeholder="Navn">
+                    <input type="text" name="name" value="{{old('name', (isset($link->name)? $link->name : null))}}" required class="form-control" placeholder="Navn">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     @csrf
                     <strong> Verdi: </strong>
-                    <input type="text" name="value" value="{{ $link->value }}" class="form-control" placeholder="Verdi">
+                    <input type="text" name="value" value="{{old('value', (isset($link->value)? $link->value : null))}}" required class="form-control" placeholder="Verdi">
                 </div>
             </div>
             

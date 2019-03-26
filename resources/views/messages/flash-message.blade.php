@@ -25,9 +25,13 @@
 </div>
 @endif
 
-
 @if ($errors->any())
 <div class="alert alert-danger">
-	Please check the form below for errors
+    <strong>Ops!</strong> Sjekk om feltene er oppfylt  <br><br>
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
 </div>
 @endif

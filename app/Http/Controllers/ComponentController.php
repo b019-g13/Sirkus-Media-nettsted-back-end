@@ -47,19 +47,18 @@ class ComponentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'slug' => 'required|string',
-            'order' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'order' => 'required|integer|min:0',
             'parent_id' => 'nullable'
         ]);
         $component = new Component([
             'name' => $request->get('name'),
-            'slug' => $request->get('slug'),
+            'slug' => str_slug($request->get('name')),
             'order' => $request->get('order'),
             'parent_id' => $request->get('parent_id'),
         ]);
         $component->save();
-        return redirect('/components')->with('success', 'Komponenten er opprettet');
+        return redirect()->route('components.index')->with('success', 'Komponenten er opprettet');
     }
 
     /**
@@ -101,18 +100,17 @@ class ComponentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string',
-            'slug' => 'required|string',
-            'order' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'order' => 'required|integer|min:0',
             'parent_id' => 'nullable'
         ]);
         $component = Component::find($id);
         $component->name = $request->get('name');
-        $component->slug = $request->get('slug');
+        $component->slug = str_slug($request->get('name'));
         $component->order = $request->get('order');
         $component->parent_id = $request->get('parent_id');
         $component->save();
-        return redirect('/components')->with('success', 'Komponenten er oppdatert');
+        return redirect()->route('components.index')->with('success', 'Komponenten er oppdatert');
     }
 
     /**
@@ -125,6 +123,6 @@ class ComponentController extends Controller
     {
         $component = Component::find($id);
         $component->delete();
-        return redirect('/components')->with('success', 'Komponenten er slettet');
+        return redirect()->route('components.index')->with('success', 'Komponenten er slettet');
     }
 }
