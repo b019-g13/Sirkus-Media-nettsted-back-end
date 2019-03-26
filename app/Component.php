@@ -6,10 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Link;
 use App\Image;
+use App\ComponentField;
 
 class Component extends Model
 {
     use Traits\UsesUuid;
+
+    protected $fillable = [
+        'name', 'slug', 'order', 'parent_id'
+     ];
 
     protected $appends = [
         "fields"
@@ -18,12 +23,18 @@ class Component extends Model
     // Kobling til page_components
     public function page_components()
     {
-         return $this->hasMany('App\PageComponent');
+        return $this->hasMany('App\PageComponent');
     }
+
     // Kobling til component_field
-    public function component_fields()
+    public function getComponentFieldsAttribute()
     {
-        return $this->hasMany('App\ComponentField');
+        $comp_fields = ComponentField::where([
+            'component_id' => $this->id,
+            'page_id' => $this->page_id
+        ])->get();
+
+        return $comp_fields;
     }
 
     // Kobling mellom children og components
@@ -38,12 +49,11 @@ class Component extends Model
     }
 
    public function getFieldsAttribute()
-   {
+    {
 
         $fields = [];
-        $component_fields = $this->component_fields()->get();
 
-        foreach ($component_fields as $component_field) {
+        foreach ($this->component_fields as $component_field) {
             $value = $component_field->value;
 
             if ($component_field->link_id !== null) {

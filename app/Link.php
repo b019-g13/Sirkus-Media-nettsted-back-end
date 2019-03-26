@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Link extends Model
 {
     use Traits\UsesUuid;
+
+    protected $fillable = [ 'name', 'value', 'page_id' ];
     
     //Har en link
     public function component_field()

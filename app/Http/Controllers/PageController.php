@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Page;
+use App\Image;
 use Auth;
 use Session;
 
@@ -15,20 +16,24 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function __construct()
-    {     
-        $this->middleware('auth')->except('index','show');
+    {
+        $this->middleware('auth')->except('api_index', 'api_show');
     }
 
     public function index()
     {
-    
-        return Page::paginate(30);
-
+        $pages = Page::paginate(30);
+        return view('pages.index',compact('pages'));
     }
 
-    
+    public function api_index()
+    {
+        return Page::paginate(30);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -37,7 +42,11 @@ class PageController extends Controller
     public function create()
     {
         $pages = Page::All();
-        return $pages;
+        $images = Image::All();
+        return view('pages.create', compact(
+            'pages',
+            'images'
+        ));
     }
 
     /**
@@ -50,14 +59,14 @@ class PageController extends Controller
     {
         $request->validate([
             'title'=>'required|string',
-            'image_id'=> 'nullable|uuid'
+            'image_id'=> 'nullable'
         ]);
         $page = new Page([
             'title' => $request->get('title'),
             'image_id'=> $request->get('image_id')
         ]);
           $page->save();
-          return redirect('/pages')->with('success', 'page is created succefully');
+          return redirect('/pages')->with('success', 'Page er opprettet');
     }
 
     /**
@@ -73,6 +82,18 @@ class PageController extends Controller
         foreach($components as $component){
             $component->fields;
         }
+        return view('pages.show',compact('page'));
+    }
+
+    public function api_show(Page $page)
+    {
+        $page->menu;
+        $components = $page->components;
+
+        foreach($components as $component){
+            $component->fields;
+        }
+
         return $page;
     }
 
@@ -85,7 +106,11 @@ class PageController extends Controller
     public function edit($id)
     {
         $page = Page::find($id);
-        return $page;
+        $images = Image::All();
+        return view('pages.edit', compact(
+            'page',
+            'images'
+        ));
     }
 
     /**
@@ -99,15 +124,15 @@ class PageController extends Controller
     {
         $request->validate([
             'title'=>'required|string',
-            'image_id'=> 'nullable|uuid',
+            'image_id'=> 'nullable',
           ]);
-    
+
           $page = Page::find($id);
           $page->title = $request->get('title');
           $page->image_id = $request->get('image_id');
           $page->save();
-    
-          return redirect('/pages')->with('Success', 'page is updated successfully');
+
+          return redirect('/pages')->with('success', 'Page er oppdatert');
     }
 
     /**
@@ -121,6 +146,6 @@ class PageController extends Controller
         $page = Page::find($id);
         $page->delete();
 
-     return redirect('/pages')->with('success', 'page is deleted successfully');
+     return redirect('/pages')->with('success', 'Page er slettet');
     }
 }

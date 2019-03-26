@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
    use Traits\UsesUuid;
-
+      protected $fillable = [
+         'name', 'global', 'page_id', 'menu_location_id'
+      ];
     //Har flere links
    public function links(){
       return $this->hasManyThrough(     

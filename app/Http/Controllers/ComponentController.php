@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-
 use App\Component;
 
 class ComponentController extends Controller
@@ -17,14 +16,15 @@ class ComponentController extends Controller
 
     public function __construct()
     {     
-       $this->middleware('auth:api')->except('index','show');
+       $this->middleware('auth');
     }
    
     
     public function index()
     {
         $components = Component::paginate(30);
-        return  $components;
+   
+        return view('components.index',compact('components'));
     }
 
     /**
@@ -35,7 +35,7 @@ class ComponentController extends Controller
     public function create()
     {
         $components = Component::All();
-        return $components;
+        return view('components.create',compact('components'));
     }
 
     /**
@@ -48,9 +48,9 @@ class ComponentController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'slug' => 'requered|string',
+            'slug' => 'required|string',
             'order' => 'required|integer',
-            'parent_id' => 'nullable|uuid'
+            'parent_id' => 'nullable'
         ]);
         $component = new Component([
             'name' => $request->get('name'),
@@ -59,7 +59,7 @@ class ComponentController extends Controller
             'parent_id' => $request->get('parent_id'),
         ]);
         $component->save();
-        return redirect('/components')->with('success', 'Component is created successfully');
+        return redirect('/components')->with('success', 'Komponenten er opprettet');
     }
 
     /**
@@ -71,7 +71,8 @@ class ComponentController extends Controller
     public function show(Component $component)
     {
         $component->fields;
-        return  $component;
+        $component;
+        return view('components.show', compact('component'));
     }
 
     /**
@@ -83,7 +84,11 @@ class ComponentController extends Controller
     public function edit($id)
     {
         $component = Component::find($id);
-        return $component;
+        $components = Component::All();
+        return view('components.edit',compact(
+            'component',
+            'components'
+        ));
     }
 
     /**
@@ -99,7 +104,7 @@ class ComponentController extends Controller
             'name' => 'required|string',
             'slug' => 'required|string',
             'order' => 'required|integer',
-            'parent_id' => 'nullable|uuid'
+            'parent_id' => 'nullable'
         ]);
         $component = Component::find($id);
         $component->name = $request->get('name');
@@ -107,7 +112,7 @@ class ComponentController extends Controller
         $component->order = $request->get('order');
         $component->parent_id = $request->get('parent_id');
         $component->save();
-        return redirect('/components')->with('success', 'Component is updated successfully');
+        return redirect('/components')->with('success', 'Komponenten er oppdatert');
     }
 
     /**
@@ -120,6 +125,6 @@ class ComponentController extends Controller
     {
         $component = Component::find($id);
         $component->delete();
-        return redirect('/components')->with('success', 'The component is deleted');
+        return redirect('/components')->with('success', 'Komponenten er slettet');
     }
 }

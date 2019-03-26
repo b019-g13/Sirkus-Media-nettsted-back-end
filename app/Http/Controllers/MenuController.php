@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Menu;
+use App\Page;
+use App\MenuLocation;
 
 class MenuController extends Controller
 {
@@ -15,13 +17,13 @@ class MenuController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('auth:api')->except('index','show');
+       $this->middleware('auth');
     }
 
     public function index()
     {
         $menus = Menu::paginate(30);
-        return $menus;
+        return view('menus.index',compact('menus'));
     }
 
     /**
@@ -32,7 +34,13 @@ class MenuController extends Controller
     public function create()
     {
         $menus = Menu::All();
-        return $menus;
+        $locations = MenuLocation::All();
+        $pages = Page::All();
+        return view('menus.create', compact(
+            'menus',
+            'pages',
+            'locations'
+        ));
     }
 
     /**
@@ -46,8 +54,8 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|string',
             'global' => 'required|boolean',
-            'page_id' => 'nullable|uuid',
-            'menu_location_id' => 'required|integer'
+            'page_id' => 'nullable',
+            'menu_location_id' => 'nullable|integer'
         ]);    
         
         $menu = new Menu([
@@ -57,7 +65,7 @@ class MenuController extends Controller
             'menu_location_id' => $request->get('menu_location_id')
         ]);
             $menu->save();
-            return redirect('/menus')->with('Success', 'Menu is created successfully' );
+            return redirect('/menus')->with('success', 'Menu is created successfully' );
     }
 
     /**
@@ -70,7 +78,7 @@ class MenuController extends Controller
     {
         $menu->links;
         $menu->menu_location;
-        return $menu;
+        return view('menus.show',compact('menu'));
     }
 
     /**
@@ -82,7 +90,13 @@ class MenuController extends Controller
     public function edit($id)
     {
         $menu = Menu::find($id);
-        return $menu;
+        $locations = MenuLocation::All();
+        $pages = Page::All();
+        return view('menus.edit', compact(
+            'menu',
+            'pages',
+            'locations'
+        ));
     }
 
     /**
@@ -97,8 +111,8 @@ class MenuController extends Controller
         $request->validate([
             'name' => 'required|string',
             'global'=> 'required|boolean',
-            'page_id' => 'nullable|uuid',
-            'menu_location_id'=> 'required|integer'
+            'page_id' => 'nullable',
+            'menu_location_id'=> 'nullable|integer'
         ]);
 
             $menu = Menu::find($id);
@@ -107,7 +121,7 @@ class MenuController extends Controller
             $menu->page_id = $request->get('page_id');
             $menu->menu_location_id = $request->get('menu_location_id');
             $menu->save();
-            return redirect('/menus')->with('Success', 'Menu is updated successfully');
+            return redirect('/menus')->with('success', 'Menu is updated successfully');
     }
 
     /**
@@ -120,6 +134,6 @@ class MenuController extends Controller
     {
         $menu = Menu::find($id);
         $menu->delete();
-        return redirect('/menus')->with('Success', 'Menu is deleted successfully');
+        return redirect('/menus')->with('success', 'Menu is deleted successfully');
     }
 }
