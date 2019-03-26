@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-Use App\Link;
-Use App\Page;
+use App\MenuLocation;
 
-class LinkController extends Controller
+class MenuLocationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,8 +21,8 @@ class LinkController extends Controller
 
     public function index()
     {
-        $links = Link::paginate(30);
-         return view('links.index', compact('links'));
+        $menu_locations = MenuLocation::paginate(30);
+        return view('menu_locations.index', compact('menu_locations'));
     }
 
     /**
@@ -33,12 +32,8 @@ class LinkController extends Controller
      */
     public function create()
     {
-        $links = Link::All();
-        $pages = Page::All();
-        return view('links.create', compact(
-            'links', 
-            'pages'
-        ));
+        $menu_locations = MenuLocation::All();
+        return view('menu_locations.create', compact('menu_locations'));
     }
 
     /**
@@ -50,17 +45,15 @@ class LinkController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'=>'required|string|max:255',
-            'value'=> 'required|string|max:255',
-            'page_id'=> 'nullable'
+            'name' => 'required|string|max:255'  
         ]);
-            $link = new Link([
+        
+        $menu_location = new MenuLocation([
             'name' => $request->get('name'),
-            'value' => $request->get('value'),
-            'page_id' => $request->get('page_id')
-            ]);
-            $link->save(); 
-            return redirect()->route('links.index')->with('success', 'Linken blir opprettet');    
+            'slug'=> str_slug($request->get('name'))
+        ]);
+        $menu_location->save();
+        return redirect()->route('menu_locations.index')->with('success', 'Menu_location er opprettet');
     }
 
     /**
@@ -69,12 +62,10 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Link $link)
+    public function show(MenuLocation $menu_location)
     {
-        $link->menus;
-        $link->component_fields;
-        $link->page;
-         return view('links.show', compact('link'));
+        $menu_location->menus;
+        return view('menu_locations.show', compact('menu_location'));
     }
 
     /**
@@ -85,9 +76,8 @@ class LinkController extends Controller
      */
     public function edit($id)
     {
-        $link = Link::find($id);
-        $pages = Page::All();
-        return view('links.edit', compact('link', 'pages'));
+        $menu_location = MenuLocation::find($id);
+        return view('menu_locations.edit', compact('menu_location'));
     }
 
     /**
@@ -100,17 +90,14 @@ class LinkController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
-            'page_id' => 'nullable'
+            'name' => 'required|string|max:255' 
         ]);
-        $link = Link::find($id);
-        $link->name = $request->get('name');
-        $link->value = $request->get('value');
-        $link->page_id = $request->get('page_id');
-        $link->save();
         
-        return redirect()->route('links.index')->with('success', 'Linken er oppdatert');
+        $menu_location = MenuLocation::find($id);
+        $menu_location->name = $request->get('name');
+        $menu_location->slug = str_slug($request->get('name'));
+        $menu_location->save();
+        return redirect()->route('menu_locations.index')->with('success', 'Menu_location er oppdatert');
     }
 
     /**
@@ -121,8 +108,8 @@ class LinkController extends Controller
      */
     public function destroy($id)
     {
-        $link = Link::find($id);
-        $link->delete();
-        return redirect()->route('links.index')->with('success', 'Linker er slettet');
+        $menu_location = MenuLocation::find($id);
+        $menu_location->delete();
+        return redirect()->route('menu_locations.index')->with('success', 'Menu_location er slettet');
     }
 }

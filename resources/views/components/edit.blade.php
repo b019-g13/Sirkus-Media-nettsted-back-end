@@ -10,17 +10,6 @@
             </div>
         </div>
     </div>
-   
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <strong>Ops!</strong> Sjekk om feltene er fylt <br><br>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
   
     <form action="{{ route('components.update', $component->id) }}" method="POST">
         @csrf
@@ -31,21 +20,15 @@
                 <div class="form-group">
                     @csrf
                     <strong> Navn: </strong>
-                    <input type="text" name="name" value="{{ $component->name }}" class="form-control" placeholder="Navn">
+                    <input type="text" name="name"  value="{{old('name', (isset($component->name)? $component->name : null))}}" required class="form-control" placeholder="Navn">
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    @csrf
-                    <strong> Slug: </strong>
-                    <input type="text" name="slug" value="{{ $component->slug }}" class="form-control" placeholder="Slug">
-                </div>
-            </div>
+            
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="form-group">
                     @csrf
                     <strong> Order: </strong>
-                    <input type="text" name="order" value="{{ $component->order }}" class="form-control" placeholder="Order">
+                    <input type="text" name="order" value="{{old('order', (isset($component->order)? $component->order : null))}}" required class="form-control" placeholder="Order">
                 </div>
             </div>
 

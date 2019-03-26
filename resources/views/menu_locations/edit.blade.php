@@ -3,15 +3,15 @@
     <div class="row">
         <div class="col-lg-12 margin-tb">
             <div class="pull-left">
-                <h2> Rediger field </h2>
+                <h2> Rediger lokasjon </h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('fields.index') }}"> Tilbake </a>
+                <a class="btn btn-primary" href="{{ route('menu_locations.index') }}"> Tilbake </a>
             </div>
         </div>
     </div>
-
-    <form action="{{ route('fields.update', $field->id) }}" method="POST">
+  
+    <form action="{{ route('menu_locations.update', $menu_location->id) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -20,7 +20,7 @@
                 <div class="form-group">
                     @csrf
                     <strong> Navn : </strong>
-                    <input type="text" name="name" value="{{old('name', (isset($field->name)? $field->name : null))}}" required class="form-control" placeholder="Navn">
+                    <input type="text" name="name" value="{{old('name', (isset($menu_location->name)? $menu_location->name : null))}}" required class="form-control" placeholder="Navn">
                 </div>
             </div>
             

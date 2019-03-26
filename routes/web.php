@@ -25,5 +25,6 @@ Route::resources([
      'components' => 'ComponentController',
      'links' => 'LinkController',
      'fields' => 'FieldController',
-     'menus' => 'MenuController'
+     'menus' => 'MenuController',
+     'menu_locations' => 'MenuLocationController'
      ]);

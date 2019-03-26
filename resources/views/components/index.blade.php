@@ -10,9 +10,7 @@
             </div>
         </div>
     </div>
-    
-    @include('messages.flash-message')
-   
+       
     <table class="table table-bordered">
         <tr>
             <th> Komponent ID</th>
