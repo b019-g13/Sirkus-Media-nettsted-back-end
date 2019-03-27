@@ -30,8 +30,7 @@ class Component extends Model
     public function getComponentFieldsAttribute()
     {
         $comp_fields = ComponentField::where([
-            'component_id' => $this->id,
-            'page_id' => $this->page_id
+            'component_id' => $this->id
         ])->get();
 
         return $comp_fields;

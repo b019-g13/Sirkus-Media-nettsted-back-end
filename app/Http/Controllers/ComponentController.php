@@ -40,16 +40,27 @@ class ComponentController extends Controller
     {
         $components = Component::All();
         $fields = Field::All();
+
         return view('components.create', compact('components', 'fields'));
     }
 
-    protected function store_validator(array $data)
+    // Validation to run before changing the request
+    protected function component_pre_validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable|uuid',
+            'fields' => 'nullable|string',
+        ]);
+    }
+
+    // Validation to run after changing the request
+    protected function component_post_validator(array $data)
     {
         $all_fields = Field::pluck('id')->toArray();
 
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'parent_id' => 'nullable',
+            'slug' => 'required|string|max:255',
             'fields' => 'nullable|array',
             'fields.*' => ['nullable', 'uuid', Rule::in($all_fields)]
         ]);
@@ -63,15 +74,21 @@ class ComponentController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->has('fields')) {
+        $this->component_pre_validator($request->all())->validate();
+
+        $request->merge(['slug' => str_slug($request->name)]);
+
+        if ($request->fields === null) {
+            $request->fields = [];
+        } else {
             $request->merge(['fields' => explode(',', $request->fields)]);
         }
 
-        $this->store_validator($request->all())->validate();
+        $this->component_post_validator($request->all())->validate();
 
         $component = new Component;
         $component->name = $request->name;
-        $component->slug = str_slug($request->name);
+        $component->slug = $request->slug;
         $component->parent_id = $request->parent_id;
         $component->save();
 
@@ -105,37 +122,53 @@ class ComponentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Component $component)
     {
-        $component = Component::find($id);
         $components = Component::All();
-        return view('components.edit',compact(
-            'component',
-            'components'
-        ));
+        $fields = Field::All();
+
+        return view('components.edit', compact('component', 'components', 'fields'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Component  $component
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Component $component)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'order' => 'required|integer|min:0',
-            'parent_id' => 'nullable'
-        ]);
-        $component = Component::find($id);
-        $component->name = $request->get('name');
-        $component->slug = str_slug($request->get('name'));
-        $component->order = $request->get('order');
-        $component->parent_id = $request->get('parent_id');
+        $this->component_pre_validator($request->all())->validate();
+
+        $request->merge(['slug' => str_slug($request->name)]);
+
+        if ($request->fields === null) {
+            $request->fields = [];
+        } else {
+            $request->merge(['fields' => explode(',', $request->fields)]);
+        }
+
+        $this->component_post_validator($request->all())->validate();
+
+        $component->name = $request->name;
+        $component->slug = $request->slug;
+        $component->parent_id = $request->parent_id;
         $component->save();
-        return redirect()->route('components.index')->with('success', 'Komponenten er oppdatert');
+
+        foreach ($component->component_fields as $component_field) {
+            $component_field->delete();
+        }
+
+        foreach ($request->fields as $field) {
+            $component_field = new ComponentField;
+            $component_field->component_id = $component->id;
+            $component_field->field_id = $field;
+            $component_field->order = 0;
+            $component_field->save();
+        }
+
+        return redirect()->route('components.index')->with('success', 'Komponenten ble oppdatert');
     }
 
     /**
