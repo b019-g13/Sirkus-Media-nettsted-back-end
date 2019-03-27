@@ -22,7 +22,7 @@ class CreateComponentsTable extends Migration
             $table->timestamps();
         });
         Schema::table('components', function(Blueprint $table){
-            $table->foreign('parent_id')->references('id')->on('components');
+            $table->foreign('parent_id')->references('id')->on('components')->onDelete('cascade');
         });
     }
 
