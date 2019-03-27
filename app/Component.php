@@ -13,7 +13,7 @@ class Component extends Model
     use Traits\UsesUuid;
 
     protected $fillable = [
-        'name', 'slug', 'order', 'parent_id'
+        'name', 'slug', 'parent_id'
      ];
 
     protected $appends = [
@@ -30,8 +30,7 @@ class Component extends Model
     public function getComponentFieldsAttribute()
     {
         $comp_fields = ComponentField::where([
-            'component_id' => $this->id,
-            'page_id' => $this->page_id
+            'component_id' => $this->id
         ])->get();
 
         return $comp_fields;
@@ -50,10 +49,9 @@ class Component extends Model
 
    public function getFieldsAttribute()
     {
-
         $fields = [];
 
-        foreach ($this->component_fields as $component_field) {
+        foreach ($this->component_fields->sortBy('order') as $component_field) {
             $value = $component_field->value;
 
             if ($component_field->link_id !== null) {
@@ -72,6 +70,6 @@ class Component extends Model
             array_push($fields, $push);
         }
 
-      return $fields;
-   }
+        return $fields;
+    }
 }
