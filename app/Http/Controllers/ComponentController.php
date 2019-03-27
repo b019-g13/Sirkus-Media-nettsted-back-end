@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 use App\Component;
+use App\ComponentField;
+use App\Field;
 
 class ComponentController extends Controller
 {
@@ -15,15 +19,15 @@ class ComponentController extends Controller
      */
 
     public function __construct()
-    {     
+    {
        $this->middleware('auth');
     }
-   
-    
+
+
     public function index()
     {
         $components = Component::paginate(30);
-   
+
         return view('components.index',compact('components'));
     }
 
@@ -35,7 +39,20 @@ class ComponentController extends Controller
     public function create()
     {
         $components = Component::All();
-        return view('components.create',compact('components'));
+        $fields = Field::All();
+        return view('components.create', compact('components', 'fields'));
+    }
+
+    protected function store_validator(array $data)
+    {
+        $all_fields = Field::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'parent_id' => 'nullable',
+            'fields' => 'nullable|array',
+            'fields.*' => ['nullable', 'uuid', Rule::in($all_fields)]
+        ]);
     }
 
     /**
@@ -46,19 +63,27 @@ class ComponentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'order' => 'required|integer|min:0',
-            'parent_id' => 'nullable'
-        ]);
-        $component = new Component([
-            'name' => $request->get('name'),
-            'slug' => str_slug($request->get('name')),
-            'order' => $request->get('order'),
-            'parent_id' => $request->get('parent_id'),
-        ]);
+        if ($request->has('fields')) {
+            $request->merge(['fields' => explode(',', $request->fields)]);
+        }
+
+        $this->store_validator($request->all())->validate();
+
+        $component = new Component;
+        $component->name = $request->name;
+        $component->slug = str_slug($request->name);
+        $component->parent_id = $request->parent_id;
         $component->save();
-        return redirect()->route('components.index')->with('success', 'Komponenten er opprettet');
+
+        foreach ($request->fields as $field) {
+            $component_field = new ComponentField;
+            $component_field->component_id = $component->id;
+            $component_field->field_id = $field;
+            $component_field->order = 0;
+            $component_field->save();
+        }
+
+        return redirect()->route('components.index')->with('success', 'Komponenten ble opprettet');
     }
 
     /**

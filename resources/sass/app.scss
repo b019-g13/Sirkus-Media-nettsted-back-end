@@ -10,3 +10,83 @@ body {
     line-height: $font-line-height-base;
     font-size: 1em;
 }
+
+.draggable {
+    user-select: none;
+
+    &:hover,
+    &:focus {
+        cursor: grab;
+        color: $blue;
+        background-color: #fff;
+    }
+}
+
+.draggable--is-dragging * {
+    cursor: grabbing;
+}
+
+.draggable-mirror {
+    color: #fff;
+    background-color: $blue;
+}
+
+.draggable-source--is-dragging,
+.draggable-source--is-dragging:hover,
+.draggable-source--is-dragging:focus {
+    cursor: grabbing;
+}
+
+.draggable-source--is-dragging {
+    color: $blue;
+    border: 0.2rem solid $blue;
+    background-color: #ffffff;
+    background-position: 0 0, 0.4rem 0.4rem;
+    background-size: 0.4rem 0.4rem;
+    background-image: radial-gradient(lighten($blue, 33%) 24%, transparent 25%);
+    animation: ghost 0.5s steps(7) infinite both;
+}
+
+@keyframes ghost {
+    0% {
+        background-position: 0 0, 0.4rem 0.4rem;
+    }
+    100% {
+        background-position: 0.4rem 0.4rem, 0.8rem 0.8rem;
+    }
+}
+
+#component-fields-drag {
+    display: grid;
+    grid-gap: 1em;
+    margin: 1em;
+    padding: 1em;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "heading heading"
+        "list list";
+    background-color: #fff;
+
+    .heading {
+        margin: 0;
+        grid-area: heading;
+        grid-column: span 1;
+    }
+
+    .component-fields {
+        padding: 1em;
+        margin: 0;
+        grid-area: list;
+        grid-column: span 1;
+        list-style-type: none;
+        border: 1px solid #000;
+
+        .component-field {
+            padding: 0.2em 0.4em;
+        }
+    }
+}
+
+.hide {
+    display: none !important;
+}
