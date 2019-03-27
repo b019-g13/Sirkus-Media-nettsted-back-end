@@ -5,13 +5,14 @@
 
     <div class="form-group">
         <label for="parent_id">Forelder</label>
-        <select id="parent_id" name="parent_id" required>
+        <select id="parent_id" name="parent_id">
             @php
                 $old_value = old('parent_id', isset($component->parent_id) ? $component->parent_id : null);
             @endphp
             @if ($old_value == null)
-                <option value="" hidden selected disabled>{{ __('Velg en') }}</option>
+                <option value="" hidden selected disabled>Velg en</option>
             @endif
+            <option value="">Ingen forelder</option>
             @foreach ($components as $parent_component)
                 @if ($old_value == $parent_component->id)
                     <option value="{{ $parent_component->id }}" selected>{{ $parent_component->name }}</option>

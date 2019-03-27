@@ -1,14 +1,56 @@
 // Variables
 @import "variables";
 
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
 html {
+    box-sizing: border-box;
     font-size: $font-size-base;
+    margin: 0;
+    padding: 0;
 }
 
 body {
     font-family: $font-family-sans-serif;
     line-height: $font-line-height-base;
+    background-color: $body-bg;
     font-size: 1em;
+}
+
+nav,
+main {
+    width: 800px;
+    margin: 0 auto;
+    padding: 1em 2em;
+    max-width: 100%;
+}
+
+nav .container,
+#navbarSupportedContent {
+    display: flex;
+    justify-content: space-between;
+    align-content: flex-start;
+    align-items: center;
+}
+
+main {
+    background-color: #fff;
+}
+
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+button {
+    cursor: pointer;
+
+    &:active {
+        cursor: pointer;
+    }
 }
 
 .draggable {
