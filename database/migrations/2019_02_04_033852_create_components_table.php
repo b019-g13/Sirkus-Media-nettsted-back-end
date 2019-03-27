@@ -13,12 +13,11 @@ class CreateComponentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('components', function (Blueprint $table) 
+        Schema::create('components', function (Blueprint $table)
         {
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('slug');
-            $table->integer('order');
             $table->uuid('parent_id')->nullable();
             $table->timestamps();
         });
