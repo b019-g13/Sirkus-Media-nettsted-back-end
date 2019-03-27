@@ -6,16 +6,18 @@
     // Adds fields in the "Component fields" list to the input
     form.onsubmit = evt => {
         evt.preventDefault();
-        let fields = "";
+        let fields = [];
 
         compFieldsWrapper
             .querySelectorAll(".component-fields-destination .component-field")
-            .forEach(field => {
-                fields += field.dataset.field_id + ",";
+            .forEach((field, i) => {
+                fields.push({
+                    id: field.dataset.field_id,
+                    order: i
+                });
             });
 
-        compFieldsInput.value = fields.substr(0, fields.length - 1);
-
+        compFieldsInput.value = JSON.stringify(fields);
         form.submit();
     };
 })();

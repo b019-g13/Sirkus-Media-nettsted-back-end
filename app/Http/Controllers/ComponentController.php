@@ -50,19 +50,21 @@ class ComponentController extends Controller
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'parent_id' => 'nullable|uuid',
-            'fields' => 'nullable|string',
+            'fields' => 'nullable|json',
         ]);
     }
 
     // Validation to run after changing the request
     protected function component_post_validator(array $data)
     {
-        $all_fields = Field::pluck('id')->toArray();
+        $available_fields = Field::pluck('id')->toArray();
 
         return Validator::make($data, [
             'slug' => 'required|string|max:255',
             'fields' => 'nullable|array',
-            'fields.*' => ['nullable', 'uuid', Rule::in($all_fields)]
+            'fields.*' => ['required_with:fields', 'array'],
+            'fields.*.id' => ['required_with:fields', 'uuid', Rule::in($available_fields)],
+            'fields.*.order' => 'required_with:fields|integer'
         ]);
     }
 
@@ -139,16 +141,10 @@ class ComponentController extends Controller
      */
     public function update(Request $request, Component $component)
     {
+
         $this->component_pre_validator($request->all())->validate();
-
         $request->merge(['slug' => str_slug($request->name)]);
-
-        if ($request->fields === null) {
-            $request->fields = [];
-        } else {
-            $request->merge(['fields' => explode(',', $request->fields)]);
-        }
-
+        $request->merge(['fields' => json_decode($request->fields, true)]);
         $this->component_post_validator($request->all())->validate();
 
         $component->name = $request->name;
@@ -163,12 +159,12 @@ class ComponentController extends Controller
         foreach ($request->fields as $field) {
             $component_field = new ComponentField;
             $component_field->component_id = $component->id;
-            $component_field->field_id = $field;
-            $component_field->order = 0;
+            $component_field->field_id = $field['id'];
+            $component_field->order = $field['order'];
             $component_field->save();
         }
 
-        return redirect()->route('components.index')->with('success', 'Komponenten ble oppdatert');
+        return redirect()->route('components.edit', $component)->with('success', 'Komponenten ble oppdatert');
     }
 
     /**
