@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use App\Notifications\UserActivate;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -21,7 +23,7 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
+    use HasRoles;
     use RegistersUsers;
 
     /**
@@ -39,6 +41,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('role:superadmin|admin');
     }
 
     /**
@@ -65,11 +68,20 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user= User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
+        
+        $role = Role::find($data['role_id']);
+        $user->assignRole($role->name);
+    }
+
+    public function showRegistrationForm()
+    {
+        $roles = Role::All();
+        return view('auth.register', compact('roles'));
     }
 }
