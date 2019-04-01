@@ -32,11 +32,12 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        <li><a class="navbar-brand" href="{{ route('pages.index') }}"> Pages </a> </li>
-                        <li><a class="navbar-brand" href="{{ route('menus.index') }}"> Menus </a></li>
-                    </ul>
-
+                    @if (Auth::check())
+                        <ul class="navbar-nav mr-auto">
+                            <li><a class="navbar-brand" href="{{ route('pages.index') }}"> Pages </a> </li>
+                            <li><a class="navbar-brand" href="{{ route('menus.index') }}"> Menus </a></li>
+                        </ul>
+                    @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -44,7 +45,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                            @if (Route::has('register'))
+                            @if (Auth::check())
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 </li>
@@ -69,8 +70,9 @@
                             </li>
                         @endguest
                     </ul>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}">Register</a>
+                    
+                    @if (Auth::check())
+                    <a href="{{ route('register') }}">Register</a>
                     @endif
                 </div>
             </div>
