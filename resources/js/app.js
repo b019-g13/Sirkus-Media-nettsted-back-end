@@ -3,10 +3,10 @@ import { Sortable } from "@shopify/draggable";
 
 (function() {
     const containers = document.querySelectorAll(
-        "#component-fields-drag .component-fields"
+        "#drag-area-wrapper .drag-area"
     );
 
-    const originalDragElementClasses = "draggable component-field";
+    const originalDragElementClasses = "draggable";
 
     if (containers.length === 0) {
         return false;

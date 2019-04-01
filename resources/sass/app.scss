@@ -98,7 +98,7 @@ button {
     }
 }
 
-#component-fields-drag {
+#drag-area-wrapper {
     display: grid;
     grid-gap: 1em;
     margin: 1em;
@@ -115,7 +115,7 @@ button {
         grid-column: span 1;
     }
 
-    .component-fields {
+    .drag-area {
         padding: 1em;
         margin: 0;
         grid-area: list;
@@ -123,7 +123,7 @@ button {
         list-style-type: none;
         border: 1px solid #000;
 
-        .component-field {
+        .draggable {
             padding: 0.2em 0.4em;
         }
     }
