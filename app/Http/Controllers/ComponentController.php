@@ -47,9 +47,11 @@ class ComponentController extends Controller
     // Validation to run before changing the request
     protected function component_pre_validator(array $data)
     {
+        $components = Component::pluck('id')->toArray();
+
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'parent_id' => 'nullable|uuid',
+            'parent_id' => ['nullable', 'uuid', Rule::in($components)],
             'fields' => 'nullable|json',
         ]);
     }
@@ -123,7 +125,7 @@ class ComponentController extends Controller
      */
     public function edit(Component $component)
     {
-        $components = Component::All();
+        $components = Component::All()->except($component->id);
         $fields = Field::All();
 
         return view('components.edit', compact('component', 'components', 'fields'));
