@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Role;
 
 use App\Page;
 use App\Image;
@@ -14,10 +15,12 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+    use HasRoles;
+
     public function __construct()
     {     
         $this->middleware('auth')->except(['api_index' , 'api_show']);
+        $this->middleware(['role:superadmin|admin|moderator']);
     }
 
     public function index()
@@ -50,9 +53,11 @@ class PageController extends Controller
     {
         $pages = Page::All();
         $images = Image::All();
+        $components = Component::All();
         return view('pages.create', compact(
             'pages',
-            'images'
+            'images',
+            'components'
         ));
     }
 
@@ -100,11 +105,16 @@ class PageController extends Controller
      */
     public function edit($id)
     {
+        if(!Gate::allows('web')){
+            abort(404, "Access denied");
+        }
         $page = Page::find($id);
         $images = Image::All();
+        $components = Component::All();
         return view('pages.edit', compact(
             'page',
-            'images'
+            'images',
+            'components'
         ));
     }
 
@@ -125,6 +135,7 @@ class PageController extends Controller
           $page = Page::find($id);
           $page->title = $request->get('title');
           $page->image_id = $request->get('image_id');
+          $page->component_id = $request->get('name');
           $page->save();
     
           return redirect()->route('pages.index')->with('success', 'Page er oppdatert');
@@ -144,3 +155,4 @@ class PageController extends Controller
      return redirect()->route('pages.index')->with('success', 'Page er slettet');
     }
 }
+ 

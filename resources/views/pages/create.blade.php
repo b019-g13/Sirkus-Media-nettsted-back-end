@@ -29,14 +29,14 @@
                 <select name="image_id"  class="form-control" >
                     <option></option>
                     @foreach($images as $image)
-                <option value="{{$image->id}}" {{old('image_id', $image->id)}}? selected> {{$image->url}} </option>
+                    <option value="{{$image->id}}" {{old('image_id', $image->id)}}? selected> {{$image->url}} </option>
                     @endforeach
                 </select>
 
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                <button type="submit" class="btn btn-primary"> Opprett </button>
+            <button type="submit" class="btn btn-primary"> Opprett </button>
         </div>
     </div>
    
