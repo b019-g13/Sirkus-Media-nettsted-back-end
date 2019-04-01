@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
 
 class MenuLocation extends Model
 {
     public $timestamps = false;
+    use HasRoles;
 
     protected $fillable = ['name', 'slug'];
     
