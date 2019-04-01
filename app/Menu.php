@@ -3,13 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
 
 class Menu extends Model
 {
    use Traits\UsesUuid;
-      protected $fillable = [
+   use HasRoles;
+
+   protected $fillable = [
          'name', 'global', 'page_id', 'menu_location_id'
-      ];
+   ];
+
     //Har flere links
    public function links(){
       return $this->hasManyThrough(     
