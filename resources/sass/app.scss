@@ -129,6 +129,47 @@ button {
     }
 }
 
+.draggable > .page-component {
+    padding: 1em;
+    border: 2px solid black;
+
+    .heading {
+        font-weight: 700;
+    }
+
+    .page-component {
+        padding-left: 0.5em;
+        border-left: 1px solid black;
+    }
+
+    > .heading {
+        font-size: 1.25em;
+    }
+
+    // > .page-component > .heading {
+    //     font-size: 1.5em;
+    // }
+
+    // > .page-component > .page-component > .heading {
+    //     font-size: 1.25em;
+    // }
+
+    .component-field {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
+}
+
+.drag-area.drag-area-source {
+    .heading {
+        font-weight: 400;
+    }
+
+    .component-field {
+        display: none;
+    }
+}
+
 .hide {
     display: none !important;
 }

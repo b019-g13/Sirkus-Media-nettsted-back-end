@@ -64,6 +64,7 @@ class Component extends Model
                 "id" => $component_field->field->id,
                 "name" => $component_field->field->name,
                 "slug" => $component_field->field->slug,
+                "type" => $component_field->field->field_type->slug,
                 "value" => $value
             ];
 
@@ -71,5 +72,48 @@ class Component extends Model
         }
 
         return $fields;
+    }
+
+    function getFieldsHTML()
+    {
+        $html_output = '';
+
+        foreach ($this->fields as $field) {
+            $html_output .= '<div class="component-field" data-field_id="' . $field->id . '">';
+            $html_output .= '<label>' . $field->name . '</label>';
+
+            if ($field->type == 'string' || $field->type == 'icon') {
+                $html_output .= '<input type="text">';
+            } else if ($field->type == 'hex_color') {
+                $html_output .= '<input type="color">';
+            } else if ($field->type == 'text') {
+                $html_output .= '<textarea></textarea>';
+            } else if ($field->type == 'image') {
+                $html_output .= '<input type="file">';
+            } else {
+                $html_output .= '<input type="text">';
+            }
+
+
+
+            $html_output .= '</div>';
+        }
+
+        return $html_output;
+    }
+
+    function getFieldsAndChildrenHTML()
+    {
+        $html_output = '<div class="page-component" data-component_id="' . $this->id . '">';
+        $html_output .= '<span class="heading">' . $this->name . '</span>';
+        $html_output .= $this->getFieldsHTML();
+
+        foreach ($this->children as $child_component) {
+            $html_output .= $child_component->getFieldsAndChildrenHTML();
+        }
+
+        $html_output .= '</div>';
+
+        return $html_output;
     }
 }
