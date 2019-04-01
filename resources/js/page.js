@@ -38,6 +38,7 @@
     }
 
     function getChildren(component) {
+        console.log(component);
         if (component == null) {
             return [];
         }
@@ -56,7 +57,7 @@
 
         component.removeAttribute("id");
 
-        let returnVal = {
+        let output = {
             id: component.dataset.component_id,
             fields: getFields(component),
             children: []
@@ -64,11 +65,11 @@
 
         if (componentChildren.length !== 0) {
             componentChildren.forEach(componentChild => {
-                returnVal.children.push(getChildren(componentChild));
+                output.children.push(getChildren(componentChild));
             });
         }
 
-        return returnVal;
+        return output;
     }
 
     // Adds Components in the "page components" list to the input
@@ -99,17 +100,15 @@
                     ),
                     children: getChildren(
                         document.querySelector(
-                            "#" +
-                                componentId +
-                                "> .page-component > .page-component"
+                            "#" + componentId + "> .page-component"
                         )
-                    )
+                    ).children
                 });
 
                 component.removeAttribute("id");
             });
 
-        console.log("value", pageComponentsInputValue);
+        console.log(pageComponentsInputValue);
         pageComponentsInput.value = JSON.stringify(pageComponentsInputValue);
         pageComponentsWrapper.appendChild(
             document.createTextNode(JSON.stringify(pageComponentsInputValue))
