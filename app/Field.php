@@ -3,10 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Traits\HasRoles;
 
 class Field extends Model
 {
     use Traits\UsesUuid;
+    use HasRoles;
 
     protected $fillable = ['name', 'slug'];
 
