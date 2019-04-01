@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
 
 use App\Page;
 use App\Image;
+use App\Field;
+use App\Component;
 
 class PageController extends Controller
 {
@@ -111,6 +115,31 @@ class PageController extends Controller
         ));
     }
 
+    protected function page_pre_validator(array $data)
+    {
+        return Validator::make($data, [
+            'title' => 'required|string|max:255',
+            'image_id' => 'nullable',
+            'components' => 'nullable|json'
+        ]);
+    }
+
+    protected function page_post_validator(array $data)
+    {
+        $field_ids = Field::pluck('id')->toArray();
+        $component_ids = Component::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'slug' => 'required|string|max:255',
+            'components' => 'nullable|array',
+            'components.*' => ['required_with:components', 'array'],
+            'components.*.id' => ['required_with:components', 'uuid', Rule::in($component_ids)],
+            'components.*.order' => 'required_with:components|integer',
+            'components.*.fields' => 'nullable|array',
+            'components.*.fields.*.id' => ['required_with:components.*.fields', 'uuid', Rule::in($field_ids)],
+            'components.*.children' => 'nullable|array'
+        ]);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -118,14 +147,14 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Page $page)
     {
-        $request->validate([
-            'title'=>'required|string|max:255',
-            'image_id'=> 'nullable',
-          ]);
+        $this->page_pre_validator($request->all())->validate();
+        $request->merge(['slug' => str_slug($request->title)]);
+        $request->merge(['components' => json_decode($request->components, true)]);
 
-          $page = Page::find($id);
+        $this->page_post_validator($request->all())->validate();
+
           $page->title = $request->get('title');
           $page->image_id = $request->get('image_id');
           $page->save();
