@@ -17,4 +17,9 @@ class Field extends Model
     {
        return $this->hasMany('App\ComponentField');
     }
+
+    public function field_type()
+    {
+       return $this->belongsTo('App\FieldType');
+    }
 }

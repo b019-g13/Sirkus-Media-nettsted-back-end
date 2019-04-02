@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFieldsTable extends Migration
+class CreateFieldTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('fields', function (Blueprint $table)
+        Schema::create('field_types', function (Blueprint $table)
         {
-            $table->uuid('id')->primary();
+            $table->smallIncrements('id');
             $table->string('name');
             $table->string('slug');
-            $table->smallInteger('field_type_id')->unsigned();
-            $table->foreign('field_type_id')->references('id')->on('field_types')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
@@ -31,6 +28,6 @@ class CreateFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fields');
+        Schema::dropIfExists('field_types');
     }
 }
