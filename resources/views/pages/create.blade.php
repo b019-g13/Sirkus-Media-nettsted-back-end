@@ -1,19 +1,12 @@
-
 @extends('layouts.app')
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2> Legg til ny Page</h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('pages.index') }}"> Tilbake </a>
-        </div>
-    </div>
-</div>
-   
-<form action="{{ route('pages.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
+    <h2>Legg til ny Page</h2>
+    <a href="{{ route('pages.index') }}">← Tilbake</a>
+
+    <form id="form-page" action="{{ route('pages.store') }}" method="POST">
+        @csrf
+
+        @include('pages.form-fields')
 
      <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
@@ -41,4 +34,8 @@
     </div>
    
 </form>
+        <button type="submit">Opprett</button>
+    </form>
+
+    <script src="{{ asset('js/page.js') }}"></script>
 @endsection
