@@ -8,8 +8,7 @@ use Spatie\Permission\Traits\HasRoles;
 class Field extends Model
 {
     use Traits\UsesUuid;
-    use HasRoles;
-
+ 
     protected $fillable = ['name', 'slug'];
 
     //Kobling til component_field
