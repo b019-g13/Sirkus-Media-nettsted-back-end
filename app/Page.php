@@ -9,7 +9,6 @@ use Spatie\Permission\Models\Role;
 class Page extends Model
 {
     use Traits\UsesUuid;
-    use HasRoles;
 
     protected $fillable = [
         'title', 'image_id'

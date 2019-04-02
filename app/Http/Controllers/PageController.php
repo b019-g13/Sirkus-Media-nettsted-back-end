@@ -21,16 +21,11 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    use HasRoles;
 
     public function __construct()
     {     
         $this->middleware('auth')->except(['api_index' , 'api_show']);
-        $this->middleware(['role:superadmin|admin|moderator']);
-
-    public function __construct()
-    {
-        $this->middleware('auth')->except('api_index', 'api_show');
+        $this->middleware(['role:superadmin|admin|moderator'])->except(['api_index' , 'api_show']);
     }
 
     public function index()
@@ -196,7 +191,7 @@ class PageController extends Controller
             'image_id'=> 'nullable',
           ]);
     
-          $page = Page::find($id);
+          $page = Page::find($page);
           $page->title = $request->get('title');
           $page->image_id = $request->get('image_id');
           $page->component_id = $request->get('name');
