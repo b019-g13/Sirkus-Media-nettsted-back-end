@@ -12,7 +12,6 @@ use App\ComponentField;
 class Component extends Model
 {
     use Traits\UsesUuid;
-    use HasRoles;
 
     protected $fillable = [
         'name', 'slug', 'parent_id'
