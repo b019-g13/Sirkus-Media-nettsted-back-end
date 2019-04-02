@@ -8,8 +8,6 @@ use Spatie\Permission\Traits\HasRoles;
 class Menu extends Model
 {
    use Traits\UsesUuid;
-   use HasRoles;
-
    protected $fillable = [
          'name', 'global', 'page_id', 'menu_location_id'
    ];
