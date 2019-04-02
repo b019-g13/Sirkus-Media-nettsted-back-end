@@ -17,7 +17,7 @@ class MenuLocationController extends Controller
     public function __construct()
     {     
        $this->middleware('auth');
-       $this->middleware('role:superadmin');
+       $this->middleware('role:superadmin')->except(['api_index', 'api_show']);
     }
 
     public function index()
