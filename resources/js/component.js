@@ -1,7 +1,7 @@
 (function() {
     const form = document.querySelector("#form-components");
-    const compFieldsWrapper = document.querySelector("#component-fields-drag");
-    const compFieldsInput = document.querySelector("#component-fields-input");
+    const compFieldsWrapper = document.querySelector("#drag-area-wrapper");
+    const compFieldsInput = document.querySelector("#drag-area-input");
 
     // Adds fields in the "Component fields" list to the input
     form.onsubmit = evt => {
@@ -9,7 +9,7 @@
         let fields = [];
 
         compFieldsWrapper
-            .querySelectorAll(".component-fields-destination .component-field")
+            .querySelectorAll(".drag-area-destination .draggable")
             .forEach((field, i) => {
                 fields.push({
                     id: field.dataset.field_id,

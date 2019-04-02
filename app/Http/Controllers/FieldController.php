@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 use App\Field;
+use App\FieldType;
 
 class FieldController extends Controller
 {
@@ -16,7 +18,7 @@ class FieldController extends Controller
      */
 
     public function __construct()
-    {     
+    {
        $this->middleware('auth');
     }
 
@@ -33,8 +35,23 @@ class FieldController extends Controller
      */
     public function create()
     {
-        $fields = Field::All();
-        return view('fields.create', compact('fields'));
+        $field_types = FieldType::All();
+        return view('fields.create', compact('field_types'));
+    }
+
+    protected function field_pre_validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'field_type_id' => ['required', 'integer', 'max:65535', Rule::in(FieldType::pluck('id')->toArray())]
+        ]);
+    }
+
+    protected function field_post_validator(array $data)
+    {
+        return Validator::make($data, [
+            'slug' => 'required|string|max:255'
+        ]);
     }
 
     /**
@@ -45,15 +62,16 @@ class FieldController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255'
-        ]);
-        
-        $field = new Field([
-            'name' => $request->get('name'),
-            'slug'=> str_slug($request->get('name'))
-        ]);
+        $this->field_pre_validator($request->all())->validate();
+        $request->merge(['slug' => str_slug($request->name)]);
+        $this->field_post_validator($request->all())->validate();
+
+        $field = new Field;
+        $field->name = $request->name;
+        $field->slug = $request->slug;
+        $field->field_type_id = $request->field_type_id;
         $field->save();
+
         return redirect()->route('fields.index')->with('success', 'Field er opprettet');
     }
 
@@ -75,10 +93,10 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Field $field)
     {
-        $field = Field::find($id);
-        return view('fields.edit', compact('field'));
+        $field_types = FieldType::All();
+        return view('fields.edit', compact('field', 'field_types'));
     }
 
     /**
@@ -88,16 +106,17 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Field $field)
     {
-        $request->validate([
-            'name' => 'required|string|max:255'  
-        ]);
-        
-        $field = Field::find($id);
-        $field->name = $request->get('name');
-        $field->slug = str_slug($request->get('name'));
+        $this->field_pre_validator($request->all())->validate();
+        $request->merge(['slug' => str_slug($request->name)]);
+        $this->field_post_validator($request->all())->validate();
+
+        $field->name = $request->name;
+        $field->slug = $request->slug;
+        $field->field_type_id = $request->field_type_id;
         $field->save();
+
         return redirect()->route('fields.index')->with('success', 'Field er oppdatert');
     }
 

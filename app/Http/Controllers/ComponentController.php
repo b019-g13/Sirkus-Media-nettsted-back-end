@@ -47,9 +47,11 @@ class ComponentController extends Controller
     // Validation to run before changing the request
     protected function component_pre_validator(array $data)
     {
+        $components = Component::pluck('id')->toArray();
+
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'parent_id' => 'nullable|uuid',
+            'parent_id' => ['nullable', 'uuid', Rule::in($components)],
             'fields' => 'nullable|json',
         ]);
     }
@@ -77,15 +79,8 @@ class ComponentController extends Controller
     public function store(Request $request)
     {
         $this->component_pre_validator($request->all())->validate();
-
         $request->merge(['slug' => str_slug($request->name)]);
-
-        if ($request->fields === null) {
-            $request->fields = [];
-        } else {
-            $request->merge(['fields' => explode(',', $request->fields)]);
-        }
-
+        $request->merge(['fields' => json_decode($request->fields, true)]);
         $this->component_post_validator($request->all())->validate();
 
         $component = new Component;
@@ -94,11 +89,15 @@ class ComponentController extends Controller
         $component->parent_id = $request->parent_id;
         $component->save();
 
+        foreach ($component->component_fields as $component_field) {
+            $component_field->delete();
+        }
+
         foreach ($request->fields as $field) {
             $component_field = new ComponentField;
             $component_field->component_id = $component->id;
-            $component_field->field_id = $field;
-            $component_field->order = 0;
+            $component_field->field_id = $field['id'];
+            $component_field->order = $field['order'];
             $component_field->save();
         }
 
@@ -126,7 +125,7 @@ class ComponentController extends Controller
      */
     public function edit(Component $component)
     {
-        $components = Component::All();
+        $components = Component::All()->except($component->id);
         $fields = Field::All();
 
         return view('components.edit', compact('component', 'components', 'fields'));

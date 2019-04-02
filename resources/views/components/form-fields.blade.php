@@ -26,21 +26,21 @@
     <section>
         <h3>Legg til felter for komponenten</h3>
 
-        <div id="component-fields-drag">
+        <div id="drag-area-wrapper">
             <p class="heading">Tilgjengelig felter</p>
-            <ul class="component-fields component-fields-source">
+            <ul class="drag-area drag-area-source">
                 @foreach ($fields as $field)
-                    <li class="draggable component-field" data-field_id="{{ $field->id }}">
+                    <li class="draggable" data-field_id="{{ $field->id }}">
                         <span>{{ $field->name }}</span>
                     </li>
                 @endforeach
             </ul>
 
             <p class="heading">Komponentens felter</p>
-            <ul class="component-fields component-fields-destination">
+            <ul class="drag-area drag-area-destination">
                 @if (isset($component->fields))
                     @foreach ($component->fields as $field)
-                        <li class="draggable component-field" data-field_id="{{ $field->id }}">
+                        <li class="draggable" data-field_id="{{ $field->id }}">
                             <span>{{ $field->name }}</span>
                         </li>
                     @endforeach
@@ -48,5 +48,5 @@
             </ul>
         </div>
 
-        <input id="component-fields-input" name="fields" type="hidden">
+        <input id="drag-area-input" name="fields" type="hidden">
     </section>

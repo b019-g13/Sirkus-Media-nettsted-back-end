@@ -29,6 +29,12 @@ class CreatePageComponentsTable extends Migration
             $table->foreign('image_id')->references('id')->on('images')->onDelete('set null');
             $table->timestamps();
         });
+
+        Schema::table('page_components', function (Blueprint $table)
+        {
+            $table->uuid('parent_id');
+            $table->foreign('parent_id')->references('id')->on('page_components')->onDelete('cascade');
+        });
     }
 
     /**
