@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Notifications\UserActivate;
-use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
@@ -73,9 +73,25 @@ class RegisterController extends Controller
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
-        
+
         $role = Role::find($data['role_id']);
         $user->assignRole($role->name);
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
     }
 
     public function showRegistrationForm()
