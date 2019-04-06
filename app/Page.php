@@ -91,8 +91,6 @@ class Page extends Model
             unset($page_component->id);
             unset($page_component->parent_id);
             unset($page_component->page_id);
-            unset($page_component->created_at);
-            unset($page_component->updated_at);
             unset($page_component->image_id);
             unset($page_component->link_id);
             unset($page_component->component_id);

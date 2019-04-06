@@ -13,6 +13,8 @@ class PageComponent extends Model
 {
     use Traits\UsesUuid;
 
+    public $timestamps = false;
+
     // tilhører til component
     public function component()
     {
