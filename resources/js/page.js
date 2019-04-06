@@ -19,7 +19,7 @@
         component.removeAttribute("id");
 
         let fields = [];
-        componentFields.forEach(field => {
+        componentFields.forEach((field, i) => {
             let inputField = field.querySelector("input");
 
             if (inputField == null) {
@@ -30,6 +30,7 @@
 
             fields.push({
                 id: field.dataset.field_id,
+                order: i,
                 value: value
             });
         });
@@ -37,7 +38,7 @@
         return fields;
     }
 
-    function getChildren(component) {
+    function getChildren(component, order) {
         console.log(component);
         if (component == null) {
             return [];
@@ -59,13 +60,14 @@
 
         let output = {
             id: component.dataset.component_id,
+            order: order,
             fields: getFields(component),
             children: []
         };
 
         if (componentChildren.length !== 0) {
-            componentChildren.forEach(componentChild => {
-                output.children.push(getChildren(componentChild));
+            componentChildren.forEach((componentChild, i) => {
+                output.children.push(getChildren(componentChild, i));
             });
         }
 
@@ -101,7 +103,7 @@
                     children: getChildren(
                         document.querySelector(
                             "#" + componentId + "> .page-component"
-                        )
+                        ), i
                     ).children
                 });
 

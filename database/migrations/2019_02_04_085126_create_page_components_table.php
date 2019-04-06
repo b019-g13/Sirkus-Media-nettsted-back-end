@@ -16,6 +16,7 @@ class CreatePageComponentsTable extends Migration
         Schema::create('page_components', function (Blueprint $table)
         {
             $table->uuid('id')->primary();
+            $table->integer('order')->default(0);
             $table->uuid('page_id');
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
             $table->uuid('component_id');
@@ -32,7 +33,7 @@ class CreatePageComponentsTable extends Migration
 
         Schema::table('page_components', function (Blueprint $table)
         {
-            $table->uuid('parent_id');
+            $table->uuid('parent_id')->nullable()->default(null);
             $table->foreign('parent_id')->references('id')->on('page_components')->onDelete('cascade');
         });
     }

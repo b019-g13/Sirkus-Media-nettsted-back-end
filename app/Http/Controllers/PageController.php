@@ -66,21 +66,14 @@ class PageController extends Controller
 
     protected function page_post_validator(array $data)
     {
-        $field_ids = Field::pluck('id')->toArray();
-        $component_ids = Component::pluck('id')->toArray();
-
         return Validator::make($data, [
             'slug' => 'required|string|max:255',
             'components' => 'nullable|array',
-            'components.*' => ['required_with:components', 'array'],
-            'components.*.id' => ['required_with:components', 'uuid', Rule::in($component_ids)],
-            'components.*.order' => 'required_with:components|integer',
-            'components.*.fields' => 'nullable|array',
-            'components.*.fields.*.id' => ['required_with:components.*.fields', 'uuid', Rule::in($field_ids)],
-            'components.*.children' => 'nullable|array',
-            'components.*.children.*.id' => ['required_with:components.*.children', 'uuid', Rule::in($component_ids)]
+            'components.*' => ['required_with:components', 'array']
         ]);
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -100,7 +93,7 @@ class PageController extends Controller
         $page->image_id = $request->get('image_id');
         $page->save();
 
-        foreach ($page->components as $components) {
+        foreach ($page->page_components as $components) {
             $components->delete();
         }
 
@@ -135,7 +128,10 @@ class PageController extends Controller
         foreach($components as $component){
             $component->fields;
         }
-        return view('pages.show',compact('page'));
+
+        return $page;
+
+        return view('pages.show', compact('page'));
     }
 
     public function api_show(Page $page)
@@ -183,39 +179,22 @@ class PageController extends Controller
         $request->merge(['components' => json_decode($request->components, true)]);
         $this->page_post_validator($request->all())->validate();
 
-        // $new_comps = $request->components;
-        // // $new_comps[0]['fields'][0]['id'] = null;
-        // $request->merge(['components' => $new_comps]);
-
-        // dump($request->all());
-        // $errors = $this->page_post_validator($request->all())->errors();
-        // foreach ($errors->getMessages() as $value) {
-        //     dump($value);
-        // }
-        // dd('');
-
-        $page->title = $request->get('title');
-        $page->image_id = $request->get('image_id');
+        $page->title = $request->title;
+        $page->image_id = $request->image_id;
         $page->save();
 
-        foreach ($page->components as $components) {
-            $components->delete();
+        // Delete all existing components
+        foreach ($page->page_components as $component) {
+            $component->delete();
         }
+
+        dump( 'req comps', $request->components );
 
         foreach ($request->components as $component) {
-            $component = (object) $component;
-
-            foreach ($component->fields as $field) {
-                $field = (object) $field;
-
-                $page_component = new PageComponent;
-                $page_component->page_id = $page->id;
-                $page_component->component_id = $component->id;
-                $page_component->field_id = $field->id;
-                $page_component->value = $field->value;
-                $page_component->save();
-            }
+            $page->recursivelyCreatePageComponents($component);
         }
+
+        dd('done');
 
         return redirect()->route('pages.index')->with('success', 'Page er oppdatert');
     }
