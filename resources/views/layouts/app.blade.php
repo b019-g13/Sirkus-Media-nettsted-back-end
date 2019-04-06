@@ -36,6 +36,13 @@
                         <li><a class="navbar-brand" href="{{ route('pages.index') }}"> Pages </a> </li>
                         <li><a class="navbar-brand" href="{{ route('menus.index') }}"> Menus </a></li>
                     </ul>
+                    @role('superadmin')
+                        <ul class="navbar-nav mr-auto">
+                            <li><a class="navbar-brand" href="{{ route('components.index') }}">Components</a> </li>
+                            <li><a class="navbar-brand" href="{{ route('fields.index') }}">Fields</a></li>
+                            <li><a class="navbar-brand" href="{{ route('menu_locations.index') }}">Menu locations</a></li>
+                        </ul>
+                    @endrole
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
