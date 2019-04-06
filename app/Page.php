@@ -135,6 +135,7 @@ class Page extends Model
 
         // Create the fields
         foreach ($component->fields as $field) {
+            PageComponent::field_validator($field)->validate();
             $field = (object) $field;
 
             $page_component = new PageComponent;

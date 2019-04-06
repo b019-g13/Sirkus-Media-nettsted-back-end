@@ -37,21 +37,30 @@ class PageComponent extends Model
 
     public static function component_validator(array $data)
     {
-        $field_ids = Field::pluck('id')->toArray();
         $component_ids = Component::pluck('id')->toArray();
 
         return Validator::make($data, [
             'id' => ['required', 'uuid', Rule::in($component_ids)],
             'order' => 'required|integer',
             'fields' => 'present|array',
-            'fields.*.id' => ['required_with:fields', 'uuid', Rule::in($field_ids)],
-            'fields.*.order' => 'required_with:fields|integer',
-            // 'fields.*.value' => ['required_with:fields'],
+            'fields.*' => ['required_with:fields', 'array'],
             'children' => 'present|array',
             'children.*' => ['required_with:children', 'array']
         ]);
     }
 
+    public static function field_validator(array $data)
+    {
+        $field_ids = Field::pluck('id')->toArray();
+        $field_type_slugs = FieldType::pluck('slug')->toArray();
+
+        return Validator::make($data, [
+            'id' => ['required', 'uuid', Rule::in($field_ids)],
+            'order' => 'required|integer',
+            'type' => ['required', 'string', Rule::in($field_type_slugs)],
+            'value' => ['present']
+        ]);
+    }
 
     public function getFieldsAndChildrenHTML()
     {

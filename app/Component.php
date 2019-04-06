@@ -71,7 +71,8 @@ class Component extends Model
         $html_output = '';
 
         foreach ($fields as $field) {
-            $html_output .= '<div class="component-field" data-field_id="' . $field->field_id . '">';
+            $html_output .= '<div class="component-field component-field-type-' . $field->type
+                         . '" data-field_id="' . $field->field_id . '" data-field_type="' . $field->type . '">';
             $html_output .= '<label>' . $field->name . '</label>';
 
             if ($field->type == 'string' || $field->type == 'icon') {

@@ -30,6 +30,7 @@
 
             fields.push({
                 id: field.dataset.field_id,
+                type: field.dataset.field_type,
                 order: i,
                 value: value
             });
