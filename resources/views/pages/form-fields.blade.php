@@ -38,9 +38,9 @@
             <p class="heading">Sidens komponenter</p>
             <ul class="drag-area drag-area-destination">
                 @if (isset($page->components))
-                    @foreach ($page->components as $component)
-                        <li class="draggable" data-component_id="{{ $component->id }}">
-                            {!! $component->getFieldsAndChildrenHTML() !!}
+                    @foreach ($page->components as $page_component)
+                        <li class="draggable" data-component_id="{{ $page_component->component_id }}">
+                            {!! $page_component->getFieldsAndChildrenHTML() !!}
                         </li>
                     @endforeach
                 @endif
