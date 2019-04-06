@@ -3,8 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Permission\Models\Role;
 
 use App\Field;
 use App\Component;
