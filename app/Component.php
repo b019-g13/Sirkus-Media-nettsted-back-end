@@ -48,25 +48,17 @@ class Component extends Model
         return $this->hasMany('App\Component', 'parent_id');
     }
 
-   public function getFieldsAttribute()
+    public function getFieldsAttribute()
     {
         $fields = [];
 
         foreach ($this->component_fields->sortBy('order') as $component_field) {
-            $value = $component_field->value;
-
-            if ($component_field->link_id !== null) {
-                $value = $component_field->link;
-            } else if ($component_field->image_id !== null) {
-                $value = $component_field->image;
-            }
-
             $push = (object) [
-                "id" => $component_field->field->id,
+                "field_id" => $component_field->field->id,
                 "name" => $component_field->field->name,
                 "slug" => $component_field->field->slug,
                 "type" => $component_field->field->field_type->slug,
-                "value" => $value
+                "value" => null
             ];
 
             array_push($fields, $push);
@@ -75,27 +67,26 @@ class Component extends Model
         return $fields;
     }
 
-    function getFieldsHTML()
+    public static function generateFieldsHTML($fields)
     {
         $html_output = '';
 
-        foreach ($this->fields as $field) {
-            $html_output .= '<div class="component-field" data-field_id="' . $field->id . '">';
+        foreach ($fields as $field) {
+            $html_output .= '<div class="component-field component-field-type-' . $field->type
+                         . '" data-field_id="' . $field->field_id . '" data-field_type="' . $field->type . '">';
             $html_output .= '<label>' . $field->name . '</label>';
 
             if ($field->type == 'string' || $field->type == 'icon') {
-                $html_output .= '<input type="text">';
+                $html_output .= '<input type="text" value="' . $field->value . '">';
             } else if ($field->type == 'hex_color') {
-                $html_output .= '<input type="color">';
+                $html_output .= '<input type="color" value="' . $field->value . '">';
             } else if ($field->type == 'text') {
-                $html_output .= '<textarea></textarea>';
+                $html_output .= '<textarea>' . $field->value . '</textarea>';
             } else if ($field->type == 'image') {
-                $html_output .= '<input type="file">';
+                $html_output .= '<input type="file" value="' . $field->value . '">';
             } else {
-                $html_output .= '<input type="text">';
+                $html_output .= '<input type="text" value="' . $field->value . '">';
             }
-
-
 
             $html_output .= '</div>';
         }
@@ -103,7 +94,12 @@ class Component extends Model
         return $html_output;
     }
 
-    function getFieldsAndChildrenHTML()
+    public function getFieldsHTML()
+    {
+        return self::generateFieldsHTML($this->fields);
+    }
+
+    public function getFieldsAndChildrenHTML()
     {
         $html_output = '<div class="page-component" data-component_id="' . $this->id . '">';
         $html_output .= '<span class="heading">' . $this->name . '</span>';
