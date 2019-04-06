@@ -179,8 +179,6 @@ class PageController extends Controller
             $page->recursivelyCreatePageComponents($component);
         }
 
-        dd($request->components);
-
         return redirect()->route('pages.edit', $page)->with('success', 'Page er oppdatert');
     }
 
