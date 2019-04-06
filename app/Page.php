@@ -118,9 +118,7 @@ class Page extends Model
 
     public function recursivelyCreatePageComponents($component, $parent_component = null)
     {
-        PageComponent::page_component_validator($component)->validate();
-        // dump($component);
-        // dump(PageComponent::page_component_validator($component)->errors());
+        PageComponent::component_validator($component)->validate();
         $component = (object) $component;
 
         // Create a wrapper component

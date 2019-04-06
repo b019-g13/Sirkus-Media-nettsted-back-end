@@ -36,7 +36,6 @@ class PageController extends Controller
         return Page::paginate(30);
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -93,26 +92,12 @@ class PageController extends Controller
         $page->image_id = $request->get('image_id');
         $page->save();
 
-        foreach ($page->page_components as $components) {
-            $components->delete();
-        }
-
+        // Setup components
         foreach ($request->components as $component) {
-            $component = (object) $component;
-
-            foreach ($component->fields as $field) {
-                $field = (object) $field;
-
-                $page_component = new PageComponent;
-                $page_component->page_id = $page->id;
-                $page_component->component_id = $component->id;
-                $page_component->field_id = $field->id;
-                $page_component->value = $field->value;
-                $page_component->save();
-            }
+            $page->recursivelyCreatePageComponents($component);
         }
 
-        return redirect()->route('pages.index')->with('success', 'Page er opprettet');
+        return redirect()->route('pages.edit', $page)->with('success', 'Page er opprettet');
     }
 
     /**
@@ -174,6 +159,7 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
+
         $this->page_pre_validator($request->all())->validate();
         $request->merge(['slug' => str_slug($request->title)]);
         $request->merge(['components' => json_decode($request->components, true)]);
@@ -184,19 +170,18 @@ class PageController extends Controller
         $page->save();
 
         // Delete all existing components
-        foreach ($page->page_components as $component) {
-            $component->delete();
+        foreach ($page->page_components as $page_component) {
+            $page_component->delete();
         }
 
-        dump( 'req comps', $request->components );
-
+        // Setup components
         foreach ($request->components as $component) {
             $page->recursivelyCreatePageComponents($component);
         }
 
-        dd('done');
+        dd($request->components);
 
-        return redirect()->route('pages.index')->with('success', 'Page er oppdatert');
+        return redirect()->route('pages.edit', $page)->with('success', 'Page er oppdatert');
     }
 
     /**

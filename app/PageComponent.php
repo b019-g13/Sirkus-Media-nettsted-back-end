@@ -35,7 +35,7 @@ class PageComponent extends Model
         return $this->hasOne('App\Link', 'id', 'link_id');
     }
 
-    public static function page_component_validator(array $data)
+    public static function component_validator(array $data)
     {
         $field_ids = Field::pluck('id')->toArray();
         $component_ids = Component::pluck('id')->toArray();
@@ -66,8 +66,6 @@ class PageComponent extends Model
         }
 
         $html_output .= '</div>';
-
-        return $html_output;
 
         return $html_output;
     }
