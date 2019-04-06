@@ -72,8 +72,6 @@ class PageController extends Controller
         ]);
     }
 
-
-
     /**
      * Store a newly created resource in storage.
      *
@@ -114,21 +112,20 @@ class PageController extends Controller
             $component->fields;
         }
 
-        return $page;
-
         return view('pages.show', compact('page'));
     }
 
     public function api_show(Page $page)
     {
-        $page->menu;
-        $components = $page->components;
+        $api_page = new \stdClass;
+        $api_page->id = $page->id;
+        $api_page->title = $page->title;
+        $api_page->image_id = $page->image_id;
 
-        foreach($components as $component){
-            $component->fields;
-        }
+        $api_page->menu = $page->menu;
+        $api_page->components = $page->components_cleaned;
 
-        return $page;
+        return response()->json($api_page);
     }
 
     /**
