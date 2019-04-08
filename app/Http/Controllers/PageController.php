@@ -45,7 +45,6 @@ class PageController extends Controller
     {
         $pages = Page::All();
         $images = Image::All();
-        $components = Component::All();
         $components = Component::whereNull('parent_id')->get();
 
         return view('pages.create', compact(
@@ -140,12 +139,8 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        if(!Gate::allows('web')){
-            abort(404, "Access denied");
-        }
         $page = Page::find($id);
         $images = Image::All();
-        $components = Component::All();
         $components = Component::whereNull('parent_id')->get();
 
         return view('pages.edit', compact(
