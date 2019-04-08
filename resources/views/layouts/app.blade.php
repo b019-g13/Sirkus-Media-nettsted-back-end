@@ -32,12 +32,12 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    @if (Auth::check())
+                    @auth
                         <ul class="navbar-nav mr-auto">
-                            <li><a class="navbar-brand" href="{{ route('pages.index') }}"> Pages </a> </li>
-                            <li><a class="navbar-brand" href="{{ route('menus.index') }}"> Menus </a></li>
+                            <li><a class="navbar-brand" href="{{ route('pages.index') }}">Pages</a></li>
+                            <li><a class="navbar-brand" href="{{ route('menus.index') }}">Menus</a></li>
                         </ul>
-                    @endif
+                    @endauth
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
@@ -71,9 +71,9 @@
                         @endguest
                     </ul>
                     
-                    @if (Auth::check())
+                    @auth
                     <a href="{{ route('register') }}">Register</a>
-                    @endif
+                    @endauth
                 </div>
             </div>
         </nav>
