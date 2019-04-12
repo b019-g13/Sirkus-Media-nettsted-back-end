@@ -33,10 +33,8 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     @auth
-                        <ul class="navbar-nav mr-auto">
-                            <li><a class="navbar-brand" href="{{ route('pages.index') }}">Pages</a></li>
-                            <li><a class="navbar-brand" href="{{ route('menus.index') }}">Menus</a></li>
-                        </ul>
+                        <a class="navbar-brand" href="{{ route('pages.index') }}">Pages</a>
+                        <a class="navbar-brand" href="{{ route('menus.index') }}">Menus</a>
                     @endauth
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -45,11 +43,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                            @auth
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endauth
                             @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
