@@ -70,6 +70,10 @@ class Component extends Model
     {
         $html_output = '';
 
+        if (empty($fields)) {
+            return $html_output;
+        }
+
         foreach ($fields as $field) {
             $html_output .= '<div class="component-field component-field-type-' . $field->type
                          . '" data-field_id="' . $field->field_id . '" data-field_type="' . $field->type . '">';

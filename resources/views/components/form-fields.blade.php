@@ -40,7 +40,7 @@
             <ul class="drag-area drag-area-destination">
                 @if (isset($component->fields))
                     @foreach ($component->fields as $field)
-                        <li class="draggable" data-field_id="{{ $field->id }}">
+                        <li class="draggable" data-field_id="{{ $field->field_id }}">
                             <span>{{ $field->name }}</span>
                         </li>
                     @endforeach
