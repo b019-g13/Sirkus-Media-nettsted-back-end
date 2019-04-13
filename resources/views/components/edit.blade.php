@@ -13,9 +13,12 @@
         @include('components.form-fields')
 
         <div class="form-group">
-            <button type="submit">Oppdater</button>
+            <button type="submit">
+                <span>Oppdater</span>
+                @icon('save')
+            </button>
         </div>
     </form>
 
-    <script src="{{ asset('js/component.js') }}"></script>
+    <script src="{{ asset('js/component.js') }}" defer></script>
 @endsection
