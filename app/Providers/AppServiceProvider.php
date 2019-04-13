@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 use \Blade;
 use \DOMDocument;
 
@@ -17,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        $locale = config('app.locale');
+        Carbon::setLocale($locale);
+
         // Setup @icon
         $this->bootBladeIconDirective();
     }
