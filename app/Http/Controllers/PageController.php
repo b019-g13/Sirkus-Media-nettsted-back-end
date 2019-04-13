@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
-
-use App\Page;
-use App\Image;
-use App\Field;
 use App\Component;
-use App\PageComponent;
+use App\Image;
+use App\Page;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PageController extends Controller
 {
@@ -28,7 +24,7 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::paginate(30);
-        return view('pages.index',compact('pages'));
+        return view('pages.index', compact('pages'));
     }
 
     public function api_index()
@@ -59,7 +55,7 @@ class PageController extends Controller
         return Validator::make($data, [
             'title' => 'required|string|max:255',
             'image_id' => 'nullable',
-            'components' => 'nullable|json'
+            'components' => 'nullable|json',
         ]);
     }
 
@@ -68,7 +64,7 @@ class PageController extends Controller
         return Validator::make($data, [
             'slug' => 'required|string|max:255',
             'components' => 'nullable|array',
-            'components.*' => ['required_with:components', 'array']
+            'components.*' => ['required_with:components', 'array'],
         ]);
     }
 
@@ -91,8 +87,10 @@ class PageController extends Controller
         $page->save();
 
         // Setup components
-        foreach ($request->components as $component) {
-            $page->recursivelyCreatePageComponents($component);
+        if (!empty($request->components)) {
+            foreach ($request->components as $component) {
+                $page->recursivelyCreatePageComponents($component);
+            }
         }
 
         return redirect()->route('pages.edit', $page)->with('success', 'Page er opprettet');
@@ -108,7 +106,7 @@ class PageController extends Controller
     {
         $page->menu;
         $components = $page->components;
-        foreach($components as $component){
+        foreach ($components as $component) {
             $component->fields;
         }
 
@@ -166,14 +164,16 @@ class PageController extends Controller
         $page->image_id = $request->image_id;
         $page->save();
 
-        // Delete all existing components
-        foreach ($page->page_components as $page_component) {
-            $page_component->delete();
-        }
+        if (!empty($request->components)) {
+            // Delete all existing components
+            foreach ($page->page_components as $page_component) {
+                $page_component->delete();
+            }
 
-        // Setup components
-        foreach ($request->components as $component) {
-            $page->recursivelyCreatePageComponents($component);
+            // Setup components
+            foreach ($request->components as $component) {
+                $page->recursivelyCreatePageComponents($component);
+            }
         }
 
         return redirect()->route('pages.edit', $page)->with('success', 'Page er oppdatert');
@@ -190,6 +190,6 @@ class PageController extends Controller
         $page = Page::find($id);
         $page->delete();
 
-     return redirect()->route('pages.index')->with('success', 'Page er slettet');
+        return redirect()->route('pages.index')->with('success', 'Page er slettet');
     }
 }

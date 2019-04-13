@@ -2,22 +2,19 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-use App\Link;
-use App\Image;
 use App\ComponentField;
+use Illuminate\Database\Eloquent\Model;
 
 class Component extends Model
 {
     use Traits\UsesUuid;
 
     protected $fillable = [
-        'name', 'slug', 'parent_id'
-     ];
+        'name', 'slug', 'parent_id',
+    ];
 
     protected $appends = [
-        "fields"
+        "fields",
     ];
 
     // Kobling til page_components
@@ -30,7 +27,7 @@ class Component extends Model
     public function getComponentFieldsAttribute()
     {
         $comp_fields = ComponentField::where([
-            'component_id' => $this->id
+            'component_id' => $this->id,
         ])->get();
 
         return $comp_fields;
@@ -57,7 +54,7 @@ class Component extends Model
                 "name" => $component_field->field->name,
                 "slug" => $component_field->field->slug,
                 "type" => $component_field->field->field_type->slug,
-                "value" => null
+                "value" => null,
             ];
 
             array_push($fields, $push);
@@ -76,19 +73,19 @@ class Component extends Model
 
         foreach ($fields as $field) {
             $html_output .= '<div class="component-field component-field-type-' . $field->type
-                         . '" data-field_id="' . $field->field_id . '" data-field_type="' . $field->type . '">';
+            . '" data-field_id="' . $field->field_id . '" data-field_type="' . $field->type . '">';
             $html_output .= '<label>' . $field->name . '</label>';
 
             if ($field->type == 'string' || $field->type == 'icon') {
-                $html_output .= '<input type="text" value="' . $field->value . '">';
+                $html_output .= '<input class="cf-input" type="text" value="' . $field->value . '">';
             } else if ($field->type == 'hex_color') {
-                $html_output .= '<input type="color" value="' . $field->value . '">';
+                $html_output .= '<input class="cf-input" type="color" value="' . $field->value . '">';
             } else if ($field->type == 'text') {
-                $html_output .= '<textarea>' . $field->value . '</textarea>';
+                $html_output .= '<textarea class="cf-input">' . $field->value . '</textarea>';
             } else if ($field->type == 'image') {
-                $html_output .= '<input type="file" value="' . $field->value . '">';
+                $html_output .= '<div class="cf-media-picker" data-value="' . $field->value . '"><input class="cf-input" type="text"></div>';
             } else {
-                $html_output .= '<input type="text" value="' . $field->value . '">';
+                $html_output .= '<input class="cf-input" type="text" value="' . $field->value . '">';
             }
 
             $html_output .= '</div>';

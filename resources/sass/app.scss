@@ -21,7 +21,13 @@ body {
     font-size: 1em;
 }
 
-nav,
+img {
+    height: auto;
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+body > nav,
 main {
     width: 800px;
     margin: 0 auto;
@@ -29,7 +35,7 @@ main {
     max-width: 100%;
 }
 
-nav .container,
+body > nav .container,
 #navbarSupportedContent {
     display: flex;
     justify-content: space-between;
@@ -173,3 +179,5 @@ button {
 .hide {
     display: none !important;
 }
+
+@import "media-picker";
