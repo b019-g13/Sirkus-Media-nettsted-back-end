@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Notifications\UserActivate;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class RegisterController extends Controller
 {
@@ -21,7 +23,6 @@ class RegisterController extends Controller
     | provide this functionality without requiring any additional code.
     |
     */
-
     use RegistersUsers;
 
     /**
@@ -39,6 +40,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('role:superadmin|admin');
     }
 
     /**
@@ -65,11 +67,36 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user= User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $role = Role::find($data['role_id']);
+        $user->assignRole($role->name);
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
+    }
+
+    public function showRegistrationForm()
+    {
+        $roles = Role::All();
+        return view('auth.register', compact('roles'));
     }
 }

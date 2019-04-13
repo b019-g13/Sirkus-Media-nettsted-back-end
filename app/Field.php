@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Field extends Model
 {
     use Traits\UsesUuid;
-
+ 
     protected $fillable = ['name', 'slug'];
 
     //Kobling til component_field

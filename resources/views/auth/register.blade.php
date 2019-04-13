@@ -75,6 +75,28 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="role_id" class="col-md-4 col-form-label text-md-right"> Role </label>
+                            <div class="col-md-6">
+                                <select name="role_id" id="role_id">
+                                     @php
+                                        $old_value = old('role_id', isset($role->role_id) ? $role->name : null);
+                                    @endphp
+                                    @if ($old_value == null)
+                                        <option value="" hidden selected disabled>Velg en</option>
+                                    @endif
+                                    <option value="">Ingen forelder</option>
+                                    @foreach ($roles as $role)
+                                        @if ($old_value == $role->id)
+                                            <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
+                                        @else
+                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>            
+                            </div>
+                        </div>
+                        
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
