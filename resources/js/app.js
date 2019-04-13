@@ -33,8 +33,10 @@ if (token) {
     const originalDragElementClasses = "draggable";
 
     if (containers.length === 0) {
+        console.log('draggable fail', containers);
         return false;
     }
+
 
     const sortable = new Sortable(containers, {
         draggable: ".draggable"
