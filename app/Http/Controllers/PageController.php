@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
@@ -21,8 +20,9 @@ class PageController extends Controller
      */
 
     public function __construct()
-    {
-        $this->middleware('auth')->except('api_index', 'api_show');
+    {     
+        $this->middleware('auth')->except(['api_index' , 'api_show']);
+        $this->middleware(['role:superadmin|admin|moderator'])->except(['api_index' , 'api_show']);
     }
 
     public function index()
@@ -156,7 +156,6 @@ class PageController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-
         $this->page_pre_validator($request->all())->validate();
         $request->merge(['slug' => str_slug($request->title)]);
         $request->merge(['components' => json_decode($request->components, true)]);
@@ -193,3 +192,4 @@ class PageController extends Controller
      return redirect()->route('pages.index')->with('success', 'Page er slettet');
     }
 }
+ 
