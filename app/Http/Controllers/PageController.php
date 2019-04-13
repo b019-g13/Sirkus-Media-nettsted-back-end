@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Component;
+use App\Image;
+use App\Page;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,9 +17,9 @@ class PageController extends Controller
      */
 
     public function __construct()
-    {     
-        $this->middleware('auth')->except(['api_index' , 'api_show']);
-        $this->middleware(['role:superadmin|admin|moderator'])->except(['api_index' , 'api_show']);
+    {
+        $this->middleware('auth')->except(['api_index', 'api_show']);
+        $this->middleware(['role:superadmin|admin|moderator'])->except(['api_index', 'api_show']);
     }
 
     public function index()
@@ -189,4 +193,3 @@ class PageController extends Controller
         return redirect()->route('pages.index')->with('success', 'Page er slettet');
     }
 }
- 

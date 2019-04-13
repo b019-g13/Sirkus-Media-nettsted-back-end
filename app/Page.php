@@ -2,18 +2,17 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-use App\Field;
 use App\Component;
+use App\Field;
 use App\PageComponent;
+use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
     use Traits\UsesUuid;
 
     protected $fillable = [
-        'title', 'image_id'
+        'title', 'image_id',
     ];
 
     protected function setupComponent(PageComponent $page_component, bool $manipulate_data = false)
@@ -32,7 +31,7 @@ class Page extends Model
             // Get child components
             $component_children = PageComponent::where([
                 'page_id' => $this->id,
-                'parent_id' => $page_component->id
+                'parent_id' => $page_component->id,
             ])->whereNull('field_id')->orderBy('order')->get();
 
             // Setup child components
@@ -47,7 +46,7 @@ class Page extends Model
             // Get component fields
             $component_fields = PageComponent::where([
                 'page_id' => $this->id,
-                'parent_id' => $page_component->id
+                'parent_id' => $page_component->id,
             ])->whereNotNull('field_id')->orderBy('order')->get();
 
             // Setup component fields
@@ -67,6 +66,8 @@ class Page extends Model
             // We found a field, that means this PageComponent is just a field
             $page_component->slug = $field->slug;
 
+            // $page_component->value = 'hello';
+
             if (empty($page_component->value)) {
                 if ($page_component->link_id !== null) {
                     $page_component->value = $page_component->link;
@@ -74,7 +75,6 @@ class Page extends Model
                     $page_component->value = $page_component->image;
                 }
             }
-
 
             if (!$manipulate_data) {
                 $page_component->name = $field->name;
@@ -100,7 +100,7 @@ class Page extends Model
     {
         $page_components = PageComponent::where([
             'page_id' => $this->id,
-            'parent_id' => null
+            'parent_id' => null,
         ])->orderBy('order')->get();
 
         foreach ($page_components as $page_component) {
@@ -110,12 +110,11 @@ class Page extends Model
         return $page_components;
     }
 
-
     public function getComponentsCleanedAttribute()
     {
         $page_components = PageComponent::where([
             'page_id' => $this->id,
-            'parent_id' => null
+            'parent_id' => null,
         ])->orderBy('order')->get();
 
         foreach ($page_components as $page_component) {
@@ -151,9 +150,16 @@ class Page extends Model
             $page_component->page_id = $this->id;
             $page_component->component_id = $component->id;
             $page_component->field_id = $field->id;
-            $page_component->value = $field->value;
             $page_component->parent_id = $wrapper_component->id;
             $page_component->order = $field->order;
+
+            if ($field->type === 'image' && !empty($field->value)) {
+                $page_component->image_id = $field->value;
+            } else if ($field->type === 'url_internal' && !empty($field->value)) {
+                $page_component->link_id = $field->value;
+            } else {
+                $page_component->value = $field->value;
+            }
 
             $page_component->save();
         }

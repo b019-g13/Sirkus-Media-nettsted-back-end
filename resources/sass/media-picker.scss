@@ -1,18 +1,37 @@
 .component-field .cf-media-picker {
-    cursor: pointer;
-    padding: 1em 2em;
-    background-color: red;
+    // cursor: pointer;
+    // padding: 1em 2em;
+    // background-color: red;
 
-    &:focus,
-    &:hover {
-        background-color: blue;
+    // &:focus,
+    // &:hover {
+    //     background-color: blue;
+    // }
+
+    // &:active {
+    //     background-color: green;
+    // }
+
+    .cf-input {
+        display: none;
     }
 
-    &:active {
-        background-color: green;
+    img {
+        display: block;
+        width: 200px;
+        max-width: 100%;
+    }
+
+    .mp-trigger-delete {
+        display: none;
+    }
+
+    &.has-preview {
+        .mp-trigger-delete {
+            display: block;
+        }
     }
 }
-
 
 #media-picker {
     display: none;
@@ -126,12 +145,20 @@
         -moz-appearance: none;
     }
 
+    .media-picker-medium-input:focus + .media-picker-medium {
+        border-color: #999;
+        background-color: #999;
+    }
+
     .media-picker-medium:focus,
     .media-picker-medium:hover,
-    .media-picker-medium-input:focus + .media-picker-medium,
     .media-picker-medium-input:checked + .media-picker-medium {
         border-color: blue;
         background-color: blue;
+    }
+
+    #media-picker-upload-preview {
+        display: none;
     }
 }
 
@@ -168,6 +195,14 @@
 
             @media screen and (min-width: $size_medium) {
                 padding: 1em 2em;
+            }
+
+            .icon {
+                &.spinner {
+                    width: 2em;
+                    height: 2em;
+                    display: none;
+                }
             }
 
             &:first-child {

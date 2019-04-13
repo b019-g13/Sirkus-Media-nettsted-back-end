@@ -2,12 +2,11 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
-
-use App\Field;
 use App\Component;
+use App\Field;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PageComponent extends Model
 {
@@ -47,7 +46,7 @@ class PageComponent extends Model
             'fields' => 'present|array',
             'fields.*' => ['required_with:fields', 'array'],
             'children' => 'present|array',
-            'children.*' => ['required_with:children', 'array']
+            'children.*' => ['required_with:children', 'array'],
         ]);
     }
 
@@ -60,12 +59,17 @@ class PageComponent extends Model
             'id' => ['required', 'uuid', Rule::in($field_ids)],
             'order' => 'required|integer',
             'type' => ['required', 'string', Rule::in($field_type_slugs)],
-            'value' => ['present']
+            'value' => ['present'],
         ]);
     }
 
     public function getFieldsAndChildrenHTML()
     {
+        // $field = $component_field->field;
+        // $field_type = $field->field_type->slug;
+        // if ($field_type === 'string') {
+        // }
+
         $html_output = '<div class="page-component" data-component_id="' . $this->component_id . '">';
         $html_output .= '<span class="heading">' . $this->name . '</span>';
         $html_output .= Component::generateFieldsHTML($this->fields);

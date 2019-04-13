@@ -49,11 +49,14 @@ class Component extends Model
         $fields = [];
 
         foreach ($this->component_fields->sortBy('order') as $component_field) {
+            $field = $component_field->field;
+            $field_type = $field->field_type->slug;
+
             $push = (object) [
-                "field_id" => $component_field->field->id,
-                "name" => $component_field->field->name,
-                "slug" => $component_field->field->slug,
-                "type" => $component_field->field->field_type->slug,
+                "field_id" => $field->id,
+                "name" => $field->name,
+                "slug" => $field->slug,
+                "type" => $field_type,
                 "value" => null,
             ];
 
@@ -83,7 +86,19 @@ class Component extends Model
             } else if ($field->type == 'text') {
                 $html_output .= '<textarea class="cf-input">' . $field->value . '</textarea>';
             } else if ($field->type == 'image') {
-                $html_output .= '<div class="cf-media-picker" data-value="' . $field->value . '" tabindex="0"><input class="cf-input" type="text"></div>';
+                $id = null;
+                $url = null;
+
+                if (!empty($field->value)) {
+                    $id = $field->value->id;
+                    $url = asset('storage/' . $field->value->url);
+                }
+
+                $html_output .= '<div class="cf-media-picker" data-value="' . $url . '">';
+                $html_output .= '<button class="mp-trigger-open" type="button">Velg bilde</button>';
+                $html_output .= '<button class="mp-trigger-delete" type="button">Fjern bilde</button>';
+                $html_output .= '<input class="cf-input" value="' . $id . '" type="text">';
+                $html_output .= '</div>';
             } else {
                 $html_output .= '<input class="cf-input" type="text" value="' . $field->value . '">';
             }
