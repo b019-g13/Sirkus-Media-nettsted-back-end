@@ -13,7 +13,10 @@
         @include('components.form-fields')
 
         <div class="form-group">
-            <button type="submit">Oppdater</button>
+            <button type="submit">
+                <span>Oppdater</span>
+                @icon('save')
+            </button>
         </div>
     </form>
 

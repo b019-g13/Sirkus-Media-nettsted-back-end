@@ -6,6 +6,7 @@ mix.js("resources/js/component.js", "public/js").version();
 mix.js("resources/js/media-picker.js", "public/js").version();
 mix.sass("resources/sass/app.scss", "public/css").version();
 mix.copy("resources/images", "public/images").version();
+mix.copy("resources/icons", "public/icons").version();
 
 mix.browserSync({
     proxy: "localhost:8000",

@@ -13,23 +13,21 @@
    
     <table class="table table-bordered">
         <tr>
-            <th> Page ID</th>
-            <th> Tittel </th>
-            <th> Bilde </th>
+            <th>Tittel</th>
+            <th>Sist redigert</th>
             <th width="280px"> Handling </th>
         </tr>
         @foreach ($pages as $page)
         <tr>
-            <td>{{ $page->id }}</td>
             <td>{{ $page->title }}</td>
-            <td>{{ $page->image_id }}</td>
+            <td>{{ $page->updated_at->diffForHumans() }}</td>
             <td>
-                <form action="{{ route('pages.destroy',$page->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('pages.destroy', $page->id) }}" method="POST" enctype="multipart/form-data">
                      @csrf
 
-                    <a class="btn btn-info" href="{{ route('pages.show',$page->id) }}"> Vis </a>
+                    <a class="btn btn-info" href="{{ route('pages.show', $page->id) }}">Vis</a>
     
-                    <a class="btn btn-primary" href="{{ route('pages.edit',$page->id) }}"> Rediger </a>
+                    <a class="btn btn-primary" href="{{ route('pages.edit', $page->id) }}">Rediger</a>
    
                     @method('DELETE')
       
