@@ -12,5 +12,5 @@
         <button type="submit">Oppdater</button>
     </form>
 
-    <script src="{{ asset('js/page.js') }}"></script>
+    <script src="{{ asset('js/page.js') }}" defer></script>
 @endsection

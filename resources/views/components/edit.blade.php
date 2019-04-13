@@ -17,5 +17,5 @@
         </div>
     </form>
 
-    <script src="{{ asset('js/component.js') }}"></script>
+    <script src="{{ asset('js/component.js') }}" defer></script>
 @endsection

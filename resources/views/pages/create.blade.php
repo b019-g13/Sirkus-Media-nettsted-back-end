@@ -11,5 +11,5 @@
         <button type="submit">Opprett</button>
     </form>
 
-    <script src="{{ asset('js/page.js') }}"></script>
+    <script src="{{ asset('js/page.js') }}" defer></script>
 @endsection
