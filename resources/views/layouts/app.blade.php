@@ -33,8 +33,17 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     @auth
-                        <a class="navbar-brand" href="{{ route('pages.index') }}">Pages</a>
-                        <a class="navbar-brand" href="{{ route('menus.index') }}">Menus</a>
+                      <ul class="navbar-nav mr-auto">
+                          <li><a class="navbar-brand" href="{{ route('pages.index') }}"> Pages </a> </li>
+                          <li><a class="navbar-brand" href="{{ route('menus.index') }}"> Menus </a></li>
+                      </ul>
+                      @role('superadmin')
+                          <ul class="navbar-nav mr-auto">
+                              <li><a class="navbar-brand" href="{{ route('components.index') }}">Components</a> </li>
+                              <li><a class="navbar-brand" href="{{ route('fields.index') }}">Fields</a></li>
+                              <li><a class="navbar-brand" href="{{ route('menu_locations.index') }}">Menu locations</a></li>
+                          </ul>
+                      @endrole
                     @endauth
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -43,7 +52,8 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                             </li>
-                            @else
+                        @endguest
+                        @auth
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -61,19 +71,18 @@
                                     </form>
                                 </div>
                             </li>
-                        @endguest
+                            <li class="nav-item">
+                                <a href="{{ route('register') }}">Register</a>
+                            </li>
+                        @endauth
                     </ul>
-                    
-                    @auth
-                    <a href="{{ route('register') }}">Register</a>
-                    @endauth
                 </div>
             </div>
         </nav>
 
         <main class="py-4">
-            @yield('content')
             @include('messages.flash-message')
+            @yield('content')
         </main>
     </div>
 </body>

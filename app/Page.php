@@ -16,10 +16,6 @@ class Page extends Model
         'title', 'image_id'
     ];
 
-    protected $appends = [
-        'components'
-    ];
-
     protected function setupComponent(PageComponent $page_component, bool $manipulate_data = false)
     {
         $component = Component::find($page_component->component_id);
@@ -44,7 +40,7 @@ class Page extends Model
                 $page_component->children = $component_children;
 
                 foreach ($component_children as $component_child) {
-                    $component_child = $this->setupComponent($component_child);
+                    $component_child = $this->setupComponent($component_child, $manipulate_data);
                 }
             }
 
@@ -59,7 +55,7 @@ class Page extends Model
                 $page_component->fields = $component_fields;
 
                 foreach ($component_fields as $component_field) {
-                    $component_field = $this->setupComponent($component_field);
+                    $component_field = $this->setupComponent($component_field, $manipulate_data);
                 }
             }
 
@@ -109,6 +105,21 @@ class Page extends Model
 
         foreach ($page_components as $page_component) {
             $page_component = $this->setupComponent($page_component, false);
+        }
+
+        return $page_components;
+    }
+
+
+    public function getComponentsCleanedAttribute()
+    {
+        $page_components = PageComponent::where([
+            'page_id' => $this->id,
+            'parent_id' => null
+        ])->orderBy('order')->get();
+
+        foreach ($page_components as $page_component) {
+            $page_component = $this->setupComponent($page_component, true);
         }
 
         return $page_components;
