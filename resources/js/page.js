@@ -1,32 +1,30 @@
 require("./media-picker");
 
 function cfSetupMediaPickers(form) {
-    const mediaPickers = form.querySelectorAll(".cf-media-picker");
+    const cfMediaPickers = form.querySelectorAll(".cf-media-picker");
 
     console.log("setup media picker");
 
-    const mediaPickerView = axios
-        .get("/media-picker")
-        .then(function(response) {
-            // handle success
-            console.log(response);
-            document.body.insertAdjacentHTML("beforeend", response.data);
-            window.setupMediaPicker();
-            window.mediaPicker.show();
-        })
-        .catch(function(error) {
-            // handle error
-            console.log(error);
-        })
-        .then(function() {
-            // always executed
-            console.log("setup media picker - executed");
+    let myMediaPicker = new mediaPicker({
+        aSingleOption: true
+    });
+
+    window.addEventListener("media-picker-ready", () => {
+        // myMediaPicker.functions.show();
+
+        cfMediaPickers.forEach(cfMediaPicker => {
+            console.log(cfMediaPicker);
+
+            cfMediaPicker.addEventListener(
+                "click",
+                myMediaPicker.functions.show
+            );
+
+            cfMediaPicker.addEventListener(
+                "keyup",
+                myMediaPicker.functions.showWithEnterOrSpace
+            );
         });
-
-    console.log(mediaPickerView);
-
-    mediaPickers.forEach(mediaPicker => {
-        cfSetupMediaPicker(mediaPicker);
     });
 }
 
@@ -79,7 +77,7 @@ function cfSetupMediaPickers(form) {
         pageComponentsWrapper.appendChild(
             document.createTextNode(JSON.stringify(pageComponentsInputValue))
         );
-        // form.submit();
+        form.submit();
     };
 })();
 

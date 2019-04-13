@@ -1,3 +1,19 @@
+.component-field .cf-media-picker {
+    cursor: pointer;
+    padding: 1em 2em;
+    background-color: red;
+
+    &:focus,
+    &:hover {
+        background-color: blue;
+    }
+
+    &:active {
+        background-color: green;
+    }
+}
+
+
 #media-picker {
     display: none;
     grid-template-rows: 0 90vh 10vh;

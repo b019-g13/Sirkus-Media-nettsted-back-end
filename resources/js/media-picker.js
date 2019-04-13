@@ -1,73 +1,165 @@
-window.setupMediaPicker = function() {
-    let mp = {
-        element: document.querySelector("#media-picker"),
-        visibility: "hidden",
-        activeMedium: null,
-        elements: {}
-    };
+// polyfill for custom events for IE
+(function() {
+    if (typeof window.CustomEvent === "function") return false;
 
-    if (mp.element == null) {
-        return false;
+    function CustomEvent(event, params) {
+        params = params || {
+            bubbles: false,
+            cancelable: false,
+            detail: undefined
+        };
+        var evt = document.createEvent("CustomEvent");
+        evt.initCustomEvent(
+            event,
+            params.bubbles,
+            params.cancelable,
+            params.detail
+        );
+        return evt;
     }
 
-    mp.elements.media = mp.element.querySelectorAll(
-        ".media-picker-medium-input"
-    );
+    CustomEvent.prototype = window.Event.prototype;
 
-    mp.elements.media.forEach(medium => {
-        if (medium.checked) {
-            mp.activeMedium = medium;
+    window.CustomEvent = CustomEvent;
+})();
+
+window.mediaPicker = function(options) {
+    // Inside different scopes using 'this' wont give you the class,
+    // so we make a variable for it so that we can always reach it.
+    // const _this = this;
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+    this.name = "mediaPicker";
+    this.visibility = "hidden";
+    this.element = null;
+    this.elements = {
+        activeMedium: null
+    };
+    this.functions = {};
+    this.events = {};
+
+    this.events.ready = new CustomEvent("media-picker-ready");
+
+    // Get the options passed to us, if there were any
+    options == null ? (this.options = {}) : (this.options = options);
+
+    // Set default values for those options that weren't set
+    if (this.options.aSingleOption == null) this.options.aSingleOption = true;
+
+    this.functions.loadViewIntoDocument = () => {
+        axios
+            .get("/media-picker")
+            .then(response => {
+                // handle success
+                console.log(response);
+                document.body.insertAdjacentHTML("beforeend", response.data);
+
+                this.element = document.querySelector("#media-picker");
+                // window.setupMediaPicker();
+                // window.mediaPicker.show();
+            })
+            .catch(error => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+                console.log("setup media picker - executed");
+
+                console.log("bye bye", this.element);
+
+                this.functions.setupUploadButton();
+                this.functions.setupCloseButtons();
+                this.functions.setupMediaChangeEvent();
+
+                dispatchEvent(this.events.ready); // Everything should be ready
+            });
+    };
+
+    this.functions.mediaChange = () => {
+        console.log("change", this);
+        this.elements.activeMedium = this;
+    };
+
+    this.functions.setupMediaChangeEvent = () => {
+        this.elements.media = this.element.querySelectorAll(
+            ".media-picker-medium-input"
+        );
+        this.elements.media.forEach(medium => {
+            if (medium.checked) {
+                this.elements.activeMedium = medium;
+            }
+            console.log(medium);
+            medium.addEventListener("change", this.functions.mediaChange);
+        });
+        console.log(this.elements.activeMedium);
+    };
+
+    this.functions.showWithEnterOrSpace = evt => {
+        if (evt.key === "Enter" || evt.key === " ") {
+            this.functions.show();
         }
-
-        console.log(medium);
-        medium.addEventListener("change", mediaChange);
-    });
-
-    console.log(mp.activeMedium);
-
-    mp.show = function() {
-        mp.element.classList.remove("hide");
-        mp.element.classList.add("show");
-
-        mp.visibility = "showing";
     };
 
-    mp.hide = function() {
-        mp.element.classList.remove("show");
-        mp.element.classList.add("hide");
+    this.functions.show = () => {
+        this.element.classList.remove("hide");
+        this.element.classList.add("show");
 
-        mp.visibility = "hidden";
+        this.events.escapeKeyUp = window.addEventListener(
+            "keyup",
+            this.functions.hideWithEsc
+        );
+
+        this.visibility = "showing";
     };
 
-    mp.toggle = function() {
-        if (mp.visibility === "hidden") {
-            mp.show();
+    this.functions.hideWithEsc = evt => {
+        if (evt.key === "Escape") {
+            this.functions.hide();
+        }
+    };
+
+    this.functions.hide = () => {
+        this.element.classList.remove("show");
+        this.element.classList.add("hide");
+
+        window.removeEventListener("keyup", this.functions.hideWithEsc);
+
+        this.visibility = "hidden";
+    };
+
+    this.functions.toggle = () => {
+        if (this.visibility === "hidden") {
+            this.functions.show();
         } else {
-            mp.hide();
+            this.functions.hide();
         }
     };
 
-    mp.setup_upload_button = function() {
-        mp.elements.uploadInput = mp.element.querySelector(
+    this.functions.setupCloseButtons = () => {
+        this.elements.closeButtons = this.element.querySelectorAll(
+            ".media-picker-button-close"
+        );
+        this.elements.closeButtons.forEach(closeButton => {
+            closeButton.addEventListener("click", this.functions.hide);
+        });
+    };
+    this.functions.setupUploadButton = () => {
+        this.elements.uploadInput = this.element.querySelector(
             "#media-picker-upload-input"
         );
-        mp.elements.uploadTrigger = mp.element.querySelector(
+        this.elements.uploadTrigger = this.element.querySelector(
             "#media-picker-upload-trigger"
         );
 
-        mp.elements.uploadTrigger.addEventListener("click", function() {
-            mp.elements.uploadInput.click();
+        this.elements.uploadTrigger.addEventListener("click", () => {
+            this.elements.uploadInput.click();
         });
     };
 
-    mp.upload_image = function() {};
+    this.functions.uploadImage = function() {};
 
-    mp.setup_upload_button();
-
-    function mediaChange() {
-        console.log("change", mp);
-        mp.activeMedium = this;
-    }
-
-    window.mediaPicker = mp;
+    this.functions.loadViewIntoDocument();
 };

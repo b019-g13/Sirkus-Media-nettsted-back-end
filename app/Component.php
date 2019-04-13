@@ -83,7 +83,7 @@ class Component extends Model
             } else if ($field->type == 'text') {
                 $html_output .= '<textarea class="cf-input">' . $field->value . '</textarea>';
             } else if ($field->type == 'image') {
-                $html_output .= '<div class="cf-media-picker" data-value="' . $field->value . '"><input class="cf-input" type="text"></div>';
+                $html_output .= '<div class="cf-media-picker" data-value="' . $field->value . '" tabindex="0"><input class="cf-input" type="text"></div>';
             } else {
                 $html_output .= '<input class="cf-input" type="text" value="' . $field->value . '">';
             }
