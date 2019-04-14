@@ -161,6 +161,7 @@ function setupMediaPickers(form) {
                 component.removeAttribute("id");
             });
 
+        pageComponentsInput.value = JSON.stringify(pageComponentsInputValue);
         form.submit();
     };
 })();
