@@ -118,7 +118,6 @@ window.mediaPicker = function() {
     };
 
     this.functions.loadMedia = () => {
-        console.log("loading media");
         const mediaElements = this.element.querySelectorAll(
             ".media-picker-medium img"
         );
