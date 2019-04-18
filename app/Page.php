@@ -6,6 +6,7 @@ use App\Component;
 use App\Field;
 use App\PageComponent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Page extends Model
 {
@@ -13,6 +14,10 @@ class Page extends Model
 
     protected $fillable = [
         'title', 'image_id',
+    ];
+
+    public $appends = [
+        'slug',
     ];
 
     protected function setupComponent(PageComponent $page_component, bool $manipulate_data = false)
@@ -175,6 +180,11 @@ class Page extends Model
         foreach ($component->children as $child_component) {
             $this->recursivelyCreatePageComponents($child_component, $wrapper_component);
         }
+    }
+
+    public function getSlugAttribute()
+    {
+        return Str::slug($this->title);
     }
 
     public function page_components()
