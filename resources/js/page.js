@@ -1,10 +1,5 @@
 require("./media-picker");
 
-function cfSetupMediaPicker(wrapper) {
-    const outputElement = wrapper.querySelector(".cf-input");
-    // outputElement.value = "Funker 👌👌👌";
-}
-
 function getFields(component) {
     let componentId = component.getAttribute("id");
     if (componentId == null) {
