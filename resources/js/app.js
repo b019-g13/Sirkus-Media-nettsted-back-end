@@ -26,45 +26,60 @@ if (token) {
 
 // Setup draggable
 (function() {
-    const containers = document.querySelectorAll(
-        "#drag-area-wrapper .drag-area"
-    );
+    const eventDragNewItem = new CustomEvent("draggable-drag-new-item");
+    const dragAreasWrapper = document.querySelector("#drag-area-wrapper");
 
-    const originalDragElementClasses = "draggable";
-
-    if (containers.length === 0) {
-        console.log('draggable fail', containers);
+    // No drag area wrapper on this page
+    if (dragAreasWrapper == null) {
         return false;
     }
 
+    let dragAreaContainers = dragAreasWrapper.querySelectorAll(".drag-area");
 
-    const sortable = new Sortable(containers, {
+    // No drag areas on this page
+    if (dragAreaContainers == null) {
+        return false;
+    }
+
+    let availableItemsContainer = dragAreasWrapper.querySelector(
+        ".drag-area-source"
+    );
+    let activeItemsContainers = dragAreasWrapper.querySelectorAll(
+        ".drag-area-destination"
+    );
+
+    // No drag area source or destinations on this page
+    if (availableItemsContainer == null || activeItemsContainers == null) {
+        return false;
+    }
+
+    let sortable = new Sortable(dragAreaContainers, {
         draggable: ".draggable"
     });
-
-    let sourceList = sortable.containers[0];
-    let destinationList = sortable.containers[1];
 
     sortable.on("sortable:stop", evt => {
         // Make copy of node we dropped into destination list
         if (
-            evt.oldContainer === sourceList &&
-            evt.newContainer === destinationList
+            evt.oldContainer === availableItemsContainer &&
+            Array.prototype.indexOf.call(
+                activeItemsContainers,
+                evt.newContainer
+            ) >= 0
         ) {
-            let activeDragElementOriginal = evt.dragEvent.source.cloneNode(
-                true
-            );
-            let activeDragElementCopy = evt.dragEvent.originalSource;
+            let activeDragElementCopy = evt.dragEvent.source.cloneNode(true);
+            let activeDragElementOriginal = evt.dragEvent.originalSource;
 
             evt.oldContainer.insertBefore(
-                activeDragElementOriginal,
+                activeDragElementCopy,
                 evt.dragEvent.originalSource
             );
 
-            activeDragElementOriginal.classList = originalDragElementClasses;
+            activeDragElementCopy.classList = "draggable";
             activeDragElementOriginal.style.display = "";
 
-            const inputs = activeDragElementCopy.querySelectorAll("input");
+            const inputs = activeDragElementCopy.querySelectorAll(
+                "input, textarea"
+            );
 
             if (inputs != null) {
                 inputs.forEach(input => {
@@ -77,9 +92,16 @@ if (token) {
                     }
                 });
             }
+
+            setTimeout(() => {
+                dispatchEvent(eventDragNewItem);
+            }, 200);
         } else if (
-            evt.newContainer === sourceList &&
-            evt.oldContainer === destinationList
+            evt.newContainer === availableItemsContainer &&
+            Array.prototype.indexOf.call(
+                activeItemsContainers,
+                evt.oldContainer
+            ) >= 0
         ) {
             // Hide the node we dropped into source list (Can't be removed...)
             evt.dragEvent.originalSource.classList.add("hide");

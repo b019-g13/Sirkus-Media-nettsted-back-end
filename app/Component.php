@@ -128,9 +128,20 @@ class Component extends Model
         $html_output .= '<span class="heading">' . $this->name . '</span>';
         $html_output .= $this->getFieldsHTML();
 
-        foreach ($this->children as $child_component) {
-            $html_output .= $child_component->getFieldsAndChildrenHTML();
+        if (!empty($this->children)) {
+            $html_output .= '<ul class="drag-area drag-area-destination">';
+            foreach ($this->children as $child_component) {
+                $html_output .= '<li class="draggable">';
+                $html_output .= $child_component->getFieldsAndChildrenHTML();
+                $html_output .= '</li>';
+            }
+            $html_output .= '</ul>';
         }
+
+        $html_output .= '<div class="page-component-actions">';
+        $html_output .= '<button class="page-component-duplicate" type="button">+</button>';
+        $html_output .= '<button class="page-component-remove" type="button">-</button>';
+        $html_output .= '</div>';
 
         $html_output .= '</div>';
 

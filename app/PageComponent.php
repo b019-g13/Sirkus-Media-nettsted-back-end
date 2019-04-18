@@ -91,19 +91,20 @@ class PageComponent extends Model
         $html_output .= '<span class="heading">' . $this->name . '</span>';
         $html_output .= Component::generateFieldsHTML($this->fields);
 
+        $html_output .= '<ul class="drag-area drag-area-destination drag-area-edit">';
         if (isset($this->children)) {
             foreach ($this->children as $child_component) {
+                $html_output .= '<li class="draggable">';
                 $html_output .= $child_component->getFieldsAndChildrenHTML();
+                $html_output .= '</li>';
             }
         }
+        $html_output .= '</ul>';
 
-        if ($this->is_child()) {
-            $html_output .= $this->order;
-            $html_output .= '<div class="page-component-actions">';
-            $html_output .= '<button class="page-component-duplicate" type="button">Legg til</button>';
-            $html_output .= '<button class="page-component-remove" type="button">Fjern</button>';
-            $html_output .= '</div>';
-        }
+        $html_output .= '<div class="page-component-actions">';
+        $html_output .= '<button class="page-component-duplicate" type="button">+</button>';
+        $html_output .= '<button class="page-component-remove" type="button">-</button>';
+        $html_output .= '</div>';
 
         $html_output .= '</div>';
 
