@@ -27,7 +27,7 @@ function getFields(component) {
             const value = inputField.value;
 
             fields.push({
-                id: field.dataset.field_id,
+                component_field_id: field.dataset.component_field_id,
                 type: field.dataset.field_type,
                 order: i,
                 value: value

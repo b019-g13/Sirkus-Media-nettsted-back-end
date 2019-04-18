@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Component;
-use App\Field;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -18,6 +17,18 @@ class PageComponent extends Model
     public function component()
     {
         return $this->belongsTo('App\Component', 'component_id');
+    }
+
+    public function getFieldAttribute()
+    {
+        $component_field = ComponentField::find($this->component_field_id);
+        $field = null;
+
+        if ($component_field !== null) {
+            $field = Field::find($component_field->id);
+        }
+
+        return $field;
     }
 
     // Dette tilhører til page
@@ -52,11 +63,11 @@ class PageComponent extends Model
 
     public static function field_validator(array $data)
     {
-        $field_ids = Field::pluck('id')->toArray();
+        $component_fields_ids = ComponentField::pluck('id')->toArray();
         $field_type_slugs = FieldType::pluck('slug')->toArray();
 
         return Validator::make($data, [
-            'id' => ['required', 'uuid', Rule::in($field_ids)],
+            'component_field_id' => ['required', 'uuid', Rule::in($component_fields_ids)],
             'order' => 'required|integer',
             'type' => ['required', 'string', Rule::in($field_type_slugs)],
             'value' => ['present'],

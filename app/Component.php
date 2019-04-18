@@ -52,9 +52,17 @@ class Component extends Model
             $field = $component_field->field;
             $field_type = $field->field_type->slug;
 
+            $nickname = $component_field->nickname;
+
+            if (empty($component_field->nickname)) {
+                $nickname = $field->name;
+            }
+
             $push = (object) [
+                "component_field_id" => $component_field->id,
                 "field_id" => $field->id,
                 "name" => $field->name,
+                "nickname" => $nickname,
                 "slug" => $field->slug,
                 "type" => $field_type,
                 "value" => null,
@@ -76,8 +84,8 @@ class Component extends Model
 
         foreach ($fields as $field) {
             $html_output .= '<div class="component-field component-field-type-' . $field->type
-            . '" data-field_id="' . $field->field_id . '" data-field_type="' . $field->type . '">';
-            $html_output .= '<label>' . $field->name . '</label>';
+            . '" data-component_field_id="' . $field->component_field_id . '" data-field_type="' . $field->type . '">';
+            $html_output .= '<label>' . $field->nickname . '</label>';
 
             if ($field->type == 'string' || $field->type == 'icon') {
                 $html_output .= '<input class="cf-input" type="text" value="' . $field->value . '">';
