@@ -56,24 +56,34 @@ class MediaPickerController extends Controller
             // $image->size_name = 'full';
             $image->user_id = $user->id;
             $image->attribute_alt = $user->name . ' media';
-            $image->url = 'media/full/' . str_random(20) . '.jpg';
+
+            $ext = $uploaded_file->getClientOriginalExtension();
+
+            $image->url = 'media/full/' . str_random(20) . '.' . $ext;
             $image->privacy = 0;
             $image->image_size_id = ImageSize::first()->id;
 
-            // Resize image
-            $edited_image = ImageEditor::make($uploaded_file);
-            $edited_image->fit(512, 512, function ($constraint) {
-                $constraint->upsize();
-            });
-            $edited_image->orientate();
+            if ($ext === 'svg') {
+                // Upload image
+                Storage::disk('public')->put($image->url, $uploaded_file->get());
+            } else {
 
-            // Upload image, convert it to jpg, and compress it slightly
-            // Storage::put($image->url, $edited_image->stream('jpg', 90)->__toString());
-            Storage::disk('public')->put($image->url, $edited_image->stream('jpg', 90)->__toString());
+                // Resize image
+                $edited_image = ImageEditor::make($uploaded_file);
 
-            // Set image sizes
-            // $image->size_width = $edited_image->width();
-            // $image->size_height = $edited_image->height();
+                $edited_image->orientate();
+
+                $edited_image->resize(1920, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                $edited_image->resize(null, 1080, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+
+                // Upload image
+                Storage::disk('public')->put($image->url, $edited_image->stream($ext, 90)->__toString());
+            }
             $image->save();
 
             return $image;

@@ -242,6 +242,7 @@ window.mediaPicker = function() {
                 ext == "png" ||
                 ext == "jpeg" ||
                 ext == "jpg" ||
+                ext == "svg" ||
                 ext == "webp" ||
                 ext == "heic" ||
                 ext == "heif")

@@ -9,7 +9,8 @@ CMS for Sirkus Media's website
 3. Fill in your information in .env
 4. `php artisan migrate --seed`
 5. `php artisan key:generate`
-6. `npm install`
+6. `php artisan storage:link`
+7. `npm install`
 
 ## Develop
 
