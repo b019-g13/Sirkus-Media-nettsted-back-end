@@ -103,6 +103,15 @@
         display: grid;
         grid-template-columns: 1fr 2fr;
     }
+
+    > .page-component > .page-component-actions {
+        display: none;
+    }
+
+    > .page-component:last-child > .page-component-actions {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
 .drag-area.drag-area-source {

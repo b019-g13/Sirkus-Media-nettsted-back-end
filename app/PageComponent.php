@@ -47,6 +47,12 @@ class PageComponent extends Model
         return $this->hasOne('App\Link', 'id', 'link_id');
     }
 
+    // Check if this page component is a child component
+    public function is_child()
+    {
+        return ($this->parent_id !== null);
+    }
+
     public static function component_validator(array $data)
     {
         $component_ids = Component::pluck('id')->toArray();
@@ -89,6 +95,14 @@ class PageComponent extends Model
             foreach ($this->children as $child_component) {
                 $html_output .= $child_component->getFieldsAndChildrenHTML();
             }
+        }
+
+        if ($this->is_child()) {
+            $html_output .= $this->order;
+            $html_output .= '<div class="page-component-actions">';
+            $html_output .= '<button class="page-component-duplicate" type="button">Legg til</button>';
+            $html_output .= '<button class="page-component-remove" type="button">Fjern</button>';
+            $html_output .= '</div>';
         }
 
         $html_output .= '</div>';

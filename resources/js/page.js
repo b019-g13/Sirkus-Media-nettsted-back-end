@@ -117,12 +117,60 @@ function setupMediaPickers(form) {
     });
 }
 
+function setupChildAdder(component_original) {
+    // Make a clone of the component and append it
+    const component_clone = component_original.cloneNode(true);
+    component_original.parentNode.appendChild(component_clone);
+
+    // Setup the cloned duplicator button
+    const button_clone_duplicate = component_clone.querySelector(
+        ".page-component-duplicate"
+    );
+    button_clone_duplicate.addEventListener("click", () => {
+        setupChildAdder(component_clone);
+    });
+
+    // Setup the cloned remover button
+    const button_clone_remove = component_clone.querySelector(
+        ".page-component-remove"
+    );
+    button_clone_remove.addEventListener("click", () => {
+        setupChildRemover(component_clone);
+    });
+}
+
+function setupChildRemovers(form) {
+    const buttons = form.querySelectorAll(".page-component-remove");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            setupChildRemover(button.parentNode.parentNode);
+        });
+    });
+}
+
+function setupChildRemover(component) {
+    component.parentNode.removeChild(component);
+}
+
+function setupChildAdders(form) {
+    const buttons = form.querySelectorAll(".page-component-duplicate");
+
+    buttons.forEach(button => {
+        button.addEventListener("click", () => {
+            setupChildAdder(button.parentNode.parentNode);
+        });
+    });
+}
+
 (function() {
     const form = document.querySelector("#form-page");
     const pageComponentsWrapper = document.querySelector("#drag-area-wrapper");
     const pageComponentsInput = document.querySelector("#drag-area-input");
 
     setupMediaPickers(form);
+    setupChildAdders(form);
+    setupChildRemovers(form);
 
     // Adds Components in the "page components" list to the input
     form.onsubmit = evt => {
