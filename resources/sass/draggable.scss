@@ -13,33 +13,85 @@
     cursor: grabbing;
 }
 
-.draggable-mirror {
-    color: #fff;
-    background-color: $blue;
-}
-
 .draggable-source--is-dragging,
 .draggable-source--is-dragging:hover,
 .draggable-source--is-dragging:focus {
     cursor: grabbing;
 }
 
-.draggable-source--is-dragging {
-    color: $blue;
-    border: 0.2rem solid $blue;
-    background-color: #ffffff;
+.draggable-container--over,
+.draggable-container--over .drag-area {
     background-position: 0 0, 0.4rem 0.4rem;
     background-size: 0.4rem 0.4rem;
+    background-color: #fff;
     background-image: radial-gradient(lighten($blue, 33%) 24%, transparent 25%);
-    animation: ghost 0.5s steps(7) infinite both;
+    animation: ghost 500ms steps(5) infinite both;
 }
 
 @keyframes ghost {
     0% {
-        background-position: 0 0, 0.4rem 0.4rem;
+        background-position: 0.4rem 0.4rem, 0.8rem 0.8rem;
     }
     100% {
-        background-position: 0.4rem 0.4rem, 0.8rem 0.8rem;
+        background-position: 0 0, 0.4rem 0.4rem;
+    }
+}
+
+.draggable-source--is-dragging {
+    color: $blue;
+    border: 0.2rem solid $blue;
+    background-color: #fff;
+    animation: blink 2s infinite both;
+
+    .drag-area {
+        background-color: #fff;
+        background-image: none;
+        animation: none;
+    }
+}
+
+@keyframes blink {
+    0% {
+        color: $blue;
+        background-color: #fff;
+    }
+
+    50% {
+        color: #fff;
+        background-color: $blue;
+    }
+
+    100% {
+        color: $blue;
+        background-color: #fff;
+    }
+}
+
+.draggable-mirror {
+    position: relative;
+    background-color: #fff;
+    max-height: 50vh;
+    overflow: hidden;
+
+    .drag-area {
+        background-color: #fff;
+        background-image: none;
+        animation: none;
+    }
+
+    &:after {
+        content: " ";
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0) 50%,
+            white 100%
+        );
+        height: 100%;
+        width: 100%;
     }
 }
 
@@ -74,43 +126,94 @@
     }
 }
 
-.draggable > .page-component {
+#drag-area-wrapper > .drag-area > .draggable > .page-component {
     padding: 1em;
-    border: 2px solid black;
+    color: #333;
+    border: 2px solid #999;
+    background-color: white;
+
+    &:hover {
+        border: 2px solid #000;
+    }
 
     .heading {
         font-weight: 700;
     }
 
     .page-component {
+        color: #333;
         padding-left: 0.5em;
-        border-left: 1px solid black;
+        border-left: 2px solid #999;
+        background-color: white;
+
+        &:hover {
+            border-left: 2px solid #000;
+        }
     }
 
     > .heading {
         font-size: 1.25em;
     }
 
-    // > .page-component > .heading {
-    //     font-size: 1.5em;
-    // }
-
-    // > .page-component > .page-component > .heading {
-    //     font-size: 1.25em;
-    // }
-
     .component-field {
         display: grid;
         grid-template-columns: 1fr 2fr;
     }
-}
 
-.drag-area.drag-area-source {
-    .heading {
-        font-weight: 400;
+    > .page-component-actions {
+        display: none;
     }
 
-    .component-field {
+    .drag-area > .draggable {
+        > .page-component > .page-component-actions {
+            display: none;
+
+            button {
+                display: none;
+            }
+        }
+
+        &:last-child {
+            > .page-component > .page-component-actions {
+                display: flex;
+                justify-content: space-between;
+
+                button {
+                    display: block;
+                    opacity: 0.5;
+
+                    &.ready {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+#drag-area-wrapper > .drag-area-source {
+    input {
         display: none;
+    }
+
+    > .draggable > .page-component {
+        .heading {
+            font-weight: 400;
+        }
+
+        .component-field,
+        .drag-area {
+            display: none;
+        }
+    }
+}
+
+#drag-area-wrapper .drag-area-destination {
+    > .draggable > .page-component {
+        margin-bottom: 1em;
+    }
+
+    .drag-area {
+        border: none;
     }
 }

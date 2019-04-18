@@ -13,6 +13,7 @@
             .forEach((field, i) => {
                 fields.push({
                     id: field.dataset.field_id,
+                    nickname: field.querySelector("input").value,
                     order: i
                 });
             });

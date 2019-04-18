@@ -1,10 +1,5 @@
 require("./media-picker");
 
-function cfSetupMediaPicker(wrapper) {
-    const outputElement = wrapper.querySelector(".cf-input");
-    // outputElement.value = "Funker 👌👌👌";
-}
-
 function getFields(component) {
     let componentId = component.getAttribute("id");
     if (componentId == null) {
@@ -27,7 +22,7 @@ function getFields(component) {
             const value = inputField.value;
 
             fields.push({
-                id: field.dataset.field_id,
+                component_field_id: field.dataset.component_field_id,
                 type: field.dataset.field_type,
                 order: i,
                 value: value
@@ -40,35 +35,38 @@ function getFields(component) {
     return fields;
 }
 
-function getChildren(component, order) {
-    if (component == null) {
-        return [];
+function getChildren(parent, order) {
+    let output = [];
+
+    if (parent == null) {
+        return output;
     }
 
-    let componentId = component.getAttribute("id");
-    if (componentId == null) {
-        componentId =
+    let parentId = parent.getAttribute("id");
+    if (parentId == null) {
+        parentId =
             "page-component-draggable-loop-current-child-" +
-            component.dataset.component_id;
-        component.setAttribute("id", componentId);
+            parent.dataset.component_id;
+        parent.setAttribute("id", parentId);
     }
 
     const componentChildren = document.querySelectorAll(
-        "#" + componentId + " > .page-component"
+        "#" +
+            parentId +
+            " > .page-component > .drag-area > .draggable > .page-component"
     );
 
-    component.removeAttribute("id");
-
-    let output = {
-        id: component.dataset.component_id,
-        order: order,
-        fields: getFields(component),
-        children: []
-    };
+    parent.removeAttribute("id");
 
     if (componentChildren.length !== 0) {
         componentChildren.forEach((componentChild, i) => {
-            output.children.push(getChildren(componentChild, i));
+            output.push({
+                id: componentChild.dataset.component_id,
+                parent_id: parent.dataset.component_id,
+                order: order,
+                fields: getFields(componentChild),
+                children: getChildren(componentChild.parentNode, i)
+            });
         });
     }
 
@@ -117,20 +115,94 @@ function setupMediaPickers(form) {
     });
 }
 
+function setupChildAdders(wrapper) {
+    const buttons = wrapper.querySelectorAll(".page-component-duplicate");
+    const checkClass = "button-has-been-setup-child-adder";
+
+    buttons.forEach(button => {
+        if (!button.classList.contains(checkClass)) {
+            button.classList.add(checkClass);
+            button.classList.add("ready");
+
+            button.addEventListener("click", () => {
+                setupChildAdder(button.parentNode.parentNode.parentNode);
+            });
+        }
+    });
+}
+
+function setupChildAdder(component_original) {
+    // Make a clone of the component and append it
+    const component_clone = component_original.cloneNode(true);
+    component_original.parentNode.appendChild(component_clone);
+
+    // Setup the cloned duplicator button
+    const button_clone_duplicate = component_clone.querySelector(
+        ".page-component-duplicate"
+    );
+    button_clone_duplicate.classList.add("button-has-been-setup-child-adder");
+    button_clone_duplicate.addEventListener("click", () => {
+        setupChildAdder(component_clone);
+    });
+
+    // Setup the cloned remover button
+    const button_clone_remove = component_clone.querySelector(
+        ".page-component-remove"
+    );
+    button_clone_remove.addEventListener("click", () => {
+        setupChildRemover(component_clone);
+    });
+}
+
+function setupChildRemovers(wrapper) {
+    const buttons = wrapper.querySelectorAll(".page-component-remove");
+    const checkClass = "has-been-setup-child-remove";
+
+    buttons.forEach(button => {
+        if (!button.classList.contains(checkClass)) {
+            button.classList.add(checkClass);
+            button.classList.add("ready");
+
+            button.addEventListener("click", () => {
+                setupChildRemover(button.parentNode.parentNode.parentNode);
+            });
+        }
+    });
+}
+
+function setupChildRemover(component) {
+    component.parentNode.removeChild(component);
+}
+
 (function() {
     const form = document.querySelector("#form-page");
     const pageComponentsWrapper = document.querySelector("#drag-area-wrapper");
     const pageComponentsInput = document.querySelector("#drag-area-input");
+    let pageComponentsDestination = document.querySelector(
+        "#drag-area-wrapper > .drag-area-destination"
+    );
 
     setupMediaPickers(form);
+    setupChildAdders(pageComponentsDestination);
+    setupChildRemovers(pageComponentsDestination);
+
+    // When the draggable event fires, lets set up the duplicate and remove buttons
+    window.addEventListener("draggable-drag-new-item", () => {
+        setupChildAdders(pageComponentsDestination);
+        setupChildRemovers(pageComponentsDestination);
+    });
 
     // Adds Components in the "page components" list to the input
     form.onsubmit = evt => {
         evt.preventDefault();
         let pageComponentsInputValue = [];
 
-        pageComponentsWrapper
-            .querySelectorAll(".drag-area-destination .draggable")
+        document
+            .querySelectorAll(
+                "#" +
+                    pageComponentsWrapper.getAttribute("id") +
+                    " > .drag-area-destination > .draggable"
+            )
             .forEach((component, i) => {
                 let componentId = component.getAttribute("id");
                 if (componentId == null) {
@@ -140,8 +212,11 @@ function setupMediaPickers(form) {
                 }
 
                 pageComponentsInputValue.push({
-                    id: component.dataset.component_id,
+                    id: document.querySelector(
+                        "#" + componentId + "> .page-component"
+                    ).dataset.component_id,
                     order: i,
+                    parent_id: null,
                     name: document.querySelector(
                         "#" + componentId + "> .page-component > .heading"
                     ).innerHTML,
@@ -150,12 +225,7 @@ function setupMediaPickers(form) {
                             "#" + componentId + "> .page-component"
                         )
                     ),
-                    children: getChildren(
-                        document.querySelector(
-                            "#" + componentId + "> .page-component"
-                        ),
-                        i
-                    ).children
+                    children: getChildren(component, i)
                 });
 
                 component.removeAttribute("id");

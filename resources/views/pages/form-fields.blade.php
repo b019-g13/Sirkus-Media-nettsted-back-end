@@ -29,7 +29,7 @@
             <p class="heading">Tilgjengelig komponenter</p>
             <ul class="drag-area drag-area-source">
                 @foreach ($components as $component)
-                    <li class="draggable" data-component_id="{{ $component->id }}">
+                    <li class="draggable">
                         {!! $component->getFieldsAndChildrenHTML() !!}
                     </li>
                 @endforeach
@@ -39,7 +39,7 @@
             <ul class="drag-area drag-area-destination">
                 @if (isset($page->components))
                     @foreach ($page->components as $page_component)
-                        <li class="draggable" data-component_id="{{ $page_component->component_id }}">
+                        <li class="draggable" >
                             {!! $page_component->getFieldsAndChildrenHTML() !!}
                         </li>
                     @endforeach

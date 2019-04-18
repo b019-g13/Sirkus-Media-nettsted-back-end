@@ -119,6 +119,7 @@ class PageController extends Controller
         $api_page = new \stdClass;
         $api_page->id = $page->id;
         $api_page->title = $page->title;
+        $api_page->slug = $page->slug;
         $api_page->image_id = $page->image_id;
 
         $api_page->menu = $page->menu;
