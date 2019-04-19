@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\MenuLocation;
+use Illuminate\Http\Request;
 
 class MenuLocationController extends Controller
 {
@@ -15,9 +14,10 @@ class MenuLocationController extends Controller
      */
 
     public function __construct()
-    {     
-       $this->middleware('auth');
-       $this->middleware('role:superadmin');
+    {
+        $this->middleware('auth');
+        $this->middleware('verified');
+        $this->middleware('role:superadmin');
     }
 
     public function index()
@@ -46,12 +46,12 @@ class MenuLocationController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255'  
+            'name' => 'required|string|max:255',
         ]);
-        
+
         $menu_location = new MenuLocation([
             'name' => $request->get('name'),
-            'slug'=> str_slug($request->get('name'))
+            'slug' => str_slug($request->get('name')),
         ]);
         $menu_location->save();
         return redirect()->route('menu_locations.index')->with('success', 'Menu_location er opprettet');
@@ -91,9 +91,9 @@ class MenuLocationController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255' 
+            'name' => 'required|string|max:255',
         ]);
-        
+
         $menu_location = MenuLocation::find($id);
         $menu_location->name = $request->get('name');
         $menu_location->slug = str_slug($request->get('name'));

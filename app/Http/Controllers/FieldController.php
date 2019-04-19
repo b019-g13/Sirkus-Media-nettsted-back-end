@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Field;
+use App\FieldType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
-use App\Field;
-use App\FieldType;
 
 class FieldController extends Controller
 {
@@ -19,8 +18,9 @@ class FieldController extends Controller
 
     public function __construct()
     {
-       $this->middleware('auth');
-       $this->middleware('role:superadmin');
+        $this->middleware('auth');
+        $this->middleware('verified');
+        $this->middleware('role:superadmin');
     }
 
     public function index()
@@ -44,14 +44,14 @@ class FieldController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'field_type_id' => ['required', 'integer', 'max:65535', Rule::in(FieldType::pluck('id')->toArray())]
+            'field_type_id' => ['required', 'integer', 'max:65535', Rule::in(FieldType::pluck('id')->toArray())],
         ]);
     }
 
     protected function field_post_validator(array $data)
     {
         return Validator::make($data, [
-            'slug' => 'required|string|max:255'
+            'slug' => 'required|string|max:255',
         ]);
     }
 

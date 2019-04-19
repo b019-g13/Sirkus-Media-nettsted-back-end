@@ -19,6 +19,7 @@ class PageController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['api_index', 'api_show']);
+        $this->middleware('verified')->except(['api_index', 'api_show']);
         $this->middleware(['role:superadmin|admin|moderator'])->except(['api_index', 'api_show']);
     }
 

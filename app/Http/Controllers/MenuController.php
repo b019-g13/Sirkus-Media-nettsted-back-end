@@ -21,6 +21,7 @@ class MenuController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['api_index', 'api_show']);
+        $this->middleware('verified')->except(['api_index', 'api_show']);
         $this->middleware('role:admin|superadmin|moderator')->except(['api_index', 'api_show']);
     }
 
