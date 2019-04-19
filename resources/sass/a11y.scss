@@ -30,6 +30,7 @@
 a {
     &:focus {
         outline: 3px dashed $color_selection_bg;
+        outline: 3px dashed currentColor;
         outline-offset: 0.2rem;
     }
 }
