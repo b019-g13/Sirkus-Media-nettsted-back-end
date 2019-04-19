@@ -6,7 +6,7 @@
         <span>Tilbake</span>
     </a>
 
-    <form action="{{ route('menus.update', $menu->id) }}" method="POST">
+    <form id="form-menu" action="{{ route('menus.update', $menu) }}" method="POST">
         @csrf
         @method('patch')
 
@@ -17,4 +17,6 @@
             @icon('save')
         </button>
     </form>
+
+    <script src="{{ asset('js/menu.js') }}" defer></script>
 @endsection

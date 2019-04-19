@@ -61,3 +61,33 @@
         @endforeach
     </select>
 </div>
+
+<section>
+    <h3>Legg til linker i menyen</h3>
+
+    <div id="drag-area-wrapper">
+        <p class="heading">Tilgjengelig linker</p>
+        <ul class="drag-area drag-area-source">
+            @foreach ($links as $link)
+                <li class="draggable" data-link_id="{{ $link->id }}">
+                    <span>{{ $link->name }}</span>
+                    {{-- <input type="text" placeholder="Kallenavn"> --}}
+                </li>
+            @endforeach
+        </ul>
+
+        <p class="heading">Menyens linker</p>
+        <ul class="drag-area drag-area-destination">
+            @if (isset($menu->links))
+                @foreach ($menu->links as $link)
+                    <li class="draggable" data-link_id="{{ $link->id }}">
+                        <span>{{ $link->name }}</span>
+                        {{-- <input type="text" placeholder="Kallenavn" value="{{ $link->nickname }}"> --}}
+                    </li>
+                @endforeach
+            @endif
+        </ul>
+    </div>
+
+    <input id="drag-area-input" name="links" type="hidden">
+</section>
