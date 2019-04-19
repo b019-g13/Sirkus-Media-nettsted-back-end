@@ -22,3 +22,25 @@ $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+$color_lightest: #f8fafc;
+$color_lighter: #eee;
+$color_light: #ccc;
+$color_dark: #bbb;
+$color_darker: #383a3c;
+$color_darkest: #000;
+
+$color_success: $green;
+$color_success_light: lighten($color_success, 40%);
+$color_success_dark: darken($color_success, 33%);
+$color_selection_fg: #fff;
+$color_selection_bg: $cyan;
+
+$color_input_bg: #fff;
+$color_input_fg: $color_darker;
+$color_input_border: $color_light;
+$color_input_active_bg: #fff;
+$color_input_active_fg: #000;
+$color_input_active_border: #000;
+
+$transition_timing_ease_in_out: cubic-bezier(0.77, 0, 0.18, 1);
