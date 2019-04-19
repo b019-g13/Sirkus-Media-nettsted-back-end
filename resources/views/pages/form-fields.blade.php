@@ -1,25 +1,6 @@
     <div class="form-group">
-        <input type="text" name="title" value="{{ old('title', (isset($page->title) ? $page->title : null)) }}" required>
-    </div>
-
-    <div class="form-group">
-        <label for="image_id">Forelder</label>
-        <select id="image_id" name="image_id">
-            @php
-                $old_value = old('image_id', isset($component->image_id) ? $component->image_id : null);
-            @endphp
-            @if ($old_value == null)
-                <option value="" hidden selected disabled>Velg en</option>
-            @endif
-            <option value="">Ingen forelder</option>
-            @foreach ($images as $image)
-                @if ($old_value == $image->id)
-                    <option value="{{ $image->id }}" selected>{{ $image->url }}</option>
-                @else
-                    <option value="{{ $image->id }}">{{ $image->url }}</option>
-                @endif
-            @endforeach
-        </select>
+        <label for="form-page-title">Tittel</label>
+        <input id="form-page-title" type="text" name="title" value="{{ old('title', (isset($page->title) ? $page->title : null)) }}" required>
     </div>
 
     <section>
