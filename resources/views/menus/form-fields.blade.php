@@ -68,12 +68,25 @@
     <div id="drag-area-wrapper">
         <p class="heading">Tilgjengelig linker</p>
         <ul class="drag-area drag-area-source">
+            <li class="action">
+                <button type="button" class="button-blank modal-trigger" data-modal="mymodelyes">
+                    <span>Opprett ny</span>
+                    @icon('plus-square')
+                </button>
+            </li>
             @foreach ($links as $link)
                 <li class="draggable" data-link_id="{{ $link->id }}">
                     <span>{{ $link->name }}</span>
-                    {{-- <input type="text" placeholder="Kallenavn"> --}}
                 </li>
             @endforeach
+            @if ($links->count() > 10)
+                <li class="action">
+                    <button type="button" class="button-blank modal-trigger" data-modal="mymodelyes">
+                        <span>Opprett ny</span>
+                        @icon('plus-square')
+                    </button>
+                </li>
+            @endif
         </ul>
 
         <p class="heading">Menyens linker</p>
@@ -82,7 +95,6 @@
                 @foreach ($menu->links as $link)
                     <li class="draggable" data-link_id="{{ $link->id }}">
                         <span>{{ $link->name }}</span>
-                        {{-- <input type="text" placeholder="Kallenavn" value="{{ $link->nickname }}"> --}}
                     </li>
                 @endforeach
             @endif

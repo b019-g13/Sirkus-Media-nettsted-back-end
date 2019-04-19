@@ -1,13 +1,19 @@
 <div class="form-group">
-    <strong> Navn: </strong>
-    <input type="text" name="name" value="{{old('name', (isset($link->name)? $link->name : null))}}" required class="form-control" placeholder="Navn">
+    <label for="form-link-name">Navn</label>
+    <input id="form-link-name" type="text" name="name" value="{{ old('name', (isset($link->name) ? $link->name : null)) }}" required>
 </div>
-<div class="col-xs-12 col-sm-12 col-md-12">
-    <div class="form-group">
-    <strong> Verdi: </strong>
-    <input type="text" name="value" value="{{old('value', (isset($link->value)? $link->value : null))}}" required class="form-control" placeholder="Verdi">
+
+<div class="form-group form-group-switch form-group-switch-yn">
+    <input id="form-link-internal" type="checkbox" checked>
+    <label for="form-link-internal">Intern link?</label>
 </div>
-<div class="form-group">
+
+<div class="form-group form-group-conditional" data-condition-switch="form-link-internal">
+    <label for="form-link-value">Ekstern link</label>
+    <input id="form-link-value" type="text" name="value" value="{{ old('value', (isset($link->value) ? $link->value : null)) }}">
+</div>
+
+<div class="form-group form-group-conditional form-group-conditional-reverse" data-condition-switch="form-link-internal">
     <strong> Velg page:</strong>
     <select name="page_id"  class="form-control" >
         <option></option>

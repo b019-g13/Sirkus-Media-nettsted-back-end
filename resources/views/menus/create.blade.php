@@ -17,5 +17,7 @@
         </button>
     </form>
 
+    @include('links.create-modal')
+
     <script src="{{ asset('js/menu.js') }}" defer></script>
 @endsection
