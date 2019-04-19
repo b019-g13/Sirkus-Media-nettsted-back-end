@@ -155,3 +155,86 @@ if (token) {
         });
     }
 })();
+
+(function() {
+    let lastFocusedElement = document.body;
+    const modalTriggers = document.querySelectorAll(".modal-trigger");
+    const modalCloserCheckClass = "modal-closer-is-setup";
+    const modalSubmitterCheckClass = "modal-submitter-is-setup";
+
+    if (modalTriggers == null) {
+        return false;
+    }
+
+    // Setup modal openers
+    modalTriggers.forEach(modalTrigger => {
+        const modalId = modalTrigger.dataset.modal;
+        const modal = document.querySelector("#" + modalId);
+
+        if (modal != null) {
+            modalTrigger.addEventListener("click", () => {
+                openModal(modal);
+            });
+
+            // Setup modal closers
+            const modalClosers = modal.querySelectorAll(".modal-closer");
+            modalClosers.forEach(modalCloser => {
+                if (!modalCloser.classList.contains(modalCloserCheckClass)) {
+                    modalCloser.classList.add(modalCloserCheckClass);
+
+                    modalCloser.addEventListener("click", () => {
+                        closeModal(modal);
+                    });
+                }
+            });
+
+            // Setup modal submitters
+            const modalSubmitters = modal.querySelectorAll(".modal-submit");
+            modalSubmitters.forEach(modalSubmitter => {
+                if (
+                    !modalSubmitter.classList.contains(modalSubmitterCheckClass)
+                ) {
+                    modalSubmitter.classList.add(modalSubmitterCheckClass);
+
+                    modalSubmitter.addEventListener("click", () => {
+                        submitModal(modal);
+                    });
+                }
+            });
+        }
+    });
+
+    function openModal(modal) {
+        if (modal == null) {
+            return false;
+        }
+
+        modal.classList.add("modal-open");
+        document.documentElement.classList.add("modal-open");
+
+        lastFocusedElement = document.activeElement;
+        modal.setAttribute("tabindex", 0);
+        modal.focus();
+    }
+
+    function closeModal(modal) {
+        if (modal == null) {
+            return false;
+        }
+
+        modal.classList.remove("modal-open");
+        document.documentElement.classList.remove("modal-open");
+        lastFocusedElement.focus();
+    }
+
+    function submitModal(modal) {
+        if (modal == null) {
+            return false;
+        }
+
+        closeModal(modal);
+
+        const form = modal.querySelector("form");
+        form.submit();
+    }
+})();
