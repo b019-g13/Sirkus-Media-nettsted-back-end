@@ -149,13 +149,14 @@ if (token) {
         });
     });
 
-    function toggleConditionals() {
+    function toggleConditionals(conditionals) {
         conditionals.forEach(conditional => {
             conditional.classList.toggle("form-group-conditional-active");
         });
     }
 })();
 
+// Modals
 (function() {
     let lastFocusedElement = document.body;
     const modalTriggers = document.querySelectorAll(".modal-trigger");
