@@ -57,6 +57,8 @@ $color_button_active_border: $color_darker;
 $color_selection_fg: #fff;
 $color_selection_bg: $cyan;
 
+$color_shadow: darken($blue, 33%);
+
 $color_input_bg: #fff;
 $color_input_fg: $color_darker;
 $color_input_border: $color_light;
