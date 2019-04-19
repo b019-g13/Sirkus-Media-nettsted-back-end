@@ -19,3 +19,6 @@ public/js/
 public/mix-manifest\.json
 
 public/images/
+
+public/icons/*
+!public/icons/icon-missing.svg
