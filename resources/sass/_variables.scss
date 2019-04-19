@@ -1,5 +1,6 @@
 // Body
-$body-bg: #f8fafc;
+$color_body_fg: #383a3c;
+$color_body_bg: #f8fafc;
 
 // Typography
 $font-family-sans-serif: sans-serif;
@@ -30,9 +31,29 @@ $color_dark: #bbb;
 $color_darker: #383a3c;
 $color_darkest: #000;
 
+$color_primary: $blue;
+$color_primary_light: lighten($color_primary, 33%);
+$color_primary_dark: darken($color_primary, 33%);
+
+$color_secondary: $green;
+$color_secondary_light: lighten($color_secondary, 33%);
+$color_secondary_dark: darken($color_secondary, 33%);
+
+$color_accent: $orange;
+$color_accent_light: lighten($color_accent, 33%);
+$color_accent_dark: darken($color_accent, 33%);
+
 $color_success: $green;
 $color_success_light: lighten($color_success, 40%);
 $color_success_dark: darken($color_success, 33%);
+
+$color_button_bg: $color_lighter;
+$color_button_fg: $color_darker;
+$color_button_border: $color_lighter;
+$color_button_active_bg: $color_darker;
+$color_button_active_fg: $color_lighter;
+$color_button_active_border: $color_darker;
+
 $color_selection_fg: #fff;
 $color_selection_bg: $cyan;
 

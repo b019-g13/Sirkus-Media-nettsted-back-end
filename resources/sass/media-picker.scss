@@ -1,17 +1,4 @@
 .component-field .cf-media-picker {
-    // cursor: pointer;
-    // padding: 1em 2em;
-    // background-color: red;
-
-    // &:focus,
-    // &:hover {
-    //     background-color: blue;
-    // }
-
-    // &:active {
-    //     background-color: green;
-    // }
-
     .cf-input {
         display: none;
     }
@@ -43,7 +30,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #eee;
+    background-color: $color_lighter;
 
     @media screen and (min-width: $size_medium) {
         grid-template-rows: 15vh 70vh 15vh;
@@ -63,11 +50,11 @@
 
     .media-picker-header,
     .media-picker-footer {
-        background-color: #eee;
+        background-color: $color_lighter;
     }
 
     .media-picker-body {
-        background-color: #fff;
+        background-color: $color_lightest;
     }
 }
 
@@ -128,8 +115,8 @@
         align-content: center;
         align-items: center;
         text-align: center;
-        border: 0.5em solid #fff;
-        background-color: #fff;
+        border: 0.5em solid $color_lightest;
+        background-color: $color_lightest;
         overflow: hidden;
         height: 10em;
     }
@@ -146,15 +133,15 @@
     }
 
     .media-picker-medium-input:focus + .media-picker-medium {
-        border-color: #999;
-        background-color: #999;
+        border-color: $color_dark;
+        background-color: $color_dark;
     }
 
     .media-picker-medium:focus,
     .media-picker-medium:hover,
     .media-picker-medium-input:checked + .media-picker-medium {
-        border-color: blue;
-        background-color: blue;
+        border-color: $color_selection_bg;
+        background-color: $color_selection_bg;
     }
 
     #media-picker-upload-preview {
@@ -180,22 +167,7 @@
         }
 
         button {
-            display: inline-block;
             margin: 0;
-            border: none;
-            padding: 0.5em 1em;
-            color: lighten(mix(blue, #ccc, 50%), 33%);
-            background-color: mix(blue, #ccc, 33%);
-
-            &:focus,
-            &:hover {
-                color: lighten(blue, 30%);
-                background-color: darken(blue, 30%);
-            }
-
-            @media screen and (min-width: $size_medium) {
-                padding: 1em 2em;
-            }
 
             .icon {
                 &.spinner {
@@ -206,15 +178,6 @@
             }
 
             &:first-child {
-                color: #222;
-                background-color: #aaa;
-
-                &:hover,
-                &:focus {
-                    background-color: #222;
-                    color: #aaa;
-                }
-
                 @media screen and (min-width: $size_medium) {
                     margin-right: 2em;
                 }
@@ -222,18 +185,6 @@
 
             &:last-child {
                 margin-left: auto;
-                color: #fff;
-                background-color: lighten(blue, 10%);
-
-                @media screen and (min-width: $size_medium) {
-                    padding: 1em 4em;
-                }
-
-                &:hover,
-                &:focus {
-                    color: lighten(blue, 30%);
-                    background-color: darken(blue, 30%);
-                }
             }
         }
     }

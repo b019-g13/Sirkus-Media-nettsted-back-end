@@ -17,8 +17,9 @@ html {
 body {
     font-family: $font-family-sans-serif;
     line-height: $font-line-height-base;
-    background-color: $body-bg;
     font-size: 1em;
+    color: $color_body_fg;
+    background-color: $color_body_bg;
 }
 
 img {
@@ -52,15 +53,6 @@ main {
 @import "media-picker";
 @import "form-elements";
 @import "a11y";
-
-.button,
-button {
-    display: flex;
-
-    span {
-        vertical-align: middle;
-    }
-}
 
 .icon {
     vertical-align: middle;
