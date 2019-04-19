@@ -25,7 +25,7 @@ class ComponentController extends Controller
 
     public function index()
     {
-        $components = Component::paginate(30);
+        $components = Component::orderBy('name')->paginate(30);
 
         return view('components.index', compact('components'));
     }
