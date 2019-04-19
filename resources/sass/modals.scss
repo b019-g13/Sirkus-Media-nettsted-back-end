@@ -29,7 +29,7 @@ html.modal-open {
 .modal > .modal-body,
 .modal > .modal-footer {
     margin: 0 auto;
-    max-width: $size_medium;
+    max-width: 100%;
     padding: 1em;
     width: 100%;
     height: auto;
