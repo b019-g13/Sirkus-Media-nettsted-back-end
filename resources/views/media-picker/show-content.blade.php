@@ -20,17 +20,17 @@
         </div>
         <footer class="media-picker-footer">
             <nav class="media-picker-footer-nav">
-                <button type="button" class="media-picker-button-close">
+                <button type="button" class="button-blank media-picker-button-close">
                     <span>Lukk</span>
                     @icon('x')
                 </button>
                 <input type="file" name="upload_medium" id="media-picker-upload-input" class="hide">
-                <button type="button" id="media-picker-upload-trigger">
+                <button type="button" id="media-picker-upload-trigger" class="button-dark">
                     <span>Last opp nytt</span>
                     @icon('load', 'spinner')
                     @icon('upload-cloud')
                 </button>
-                <button type="submit" id="media-picker-submit">
+                <button type="submit" id="media-picker-submit" class="button-primary">
                     <span>Velg</span>
                     @icon('load', 'spinner')
                     @icon('save')

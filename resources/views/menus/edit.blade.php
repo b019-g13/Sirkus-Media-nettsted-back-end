@@ -1,15 +1,10 @@
 @extends('layouts.app')
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2> Rediger Menu </h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('menus.index') }}"> Tilbake </a>
-            </div>
-        </div>
-    </div>
+    <h2>Rediger Menu</h2>
+    <a href="{{ route('menus.index') }}" class="button">
+        @icon('arrow-left')
+        <span>Tilbake</span>
+    </a>
   
     <form action="{{ route('menus.update', $menu->id) }}" method="POST">
         @csrf
@@ -23,10 +18,10 @@
                 </div>
             </div>
 
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
+        <button type="submit" class="button-success">
+            <span>Oppdater</span>
                     <strong> Velg page :</strong>
-                    <select name="page_id" class="form-control" >
+        </button>
                             <option></option>
                         @foreach($pages as $page)
                             <option value="{{$page->id}}" {{old('page_id', $page->id)}}? selected> {{$page->title}} </option>
@@ -53,11 +48,5 @@
                     <input type="text" name="global" value="{{old('global', (isset($menu->global)? $menu->global : null))}}" required class="form-control" placeholder="Global">
                 </div>
              </div>
-
-            <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-              <button type="submit" class="btn btn-primary"> Oppdater </button>
-            </div>
-        </div>
-
     </form>
 @endsection

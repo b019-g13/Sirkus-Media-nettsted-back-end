@@ -1,15 +1,10 @@
 @extends('layouts.app')
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2> Legg til ny Menu </h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('menus.index') }}"> Tilbake </a>
-        </div>
-    </div>
-</div>
+<h2>Legg til ny Menu</h2>
+<a href="{{ route('menus.index') }}" class="button">
+    @icon('arrow-left')
+    <span>Tilbake</span>
+</a>
    
 <form action="{{ route('menus.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
@@ -23,10 +18,10 @@
             </div>
         </div>
         
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong> Velg page:</strong>
-                <select name="page_id"  class="form-control" > 
+    <button type="submit" class="button-success">
+        <span>Opprett</span>
+        @icon('save')
+    </button>
                         <option></option>  
                     @foreach($pages as $page)
                         <option value="{{$page->id}}" {{old('page_id', $page->id)}}? selected> {{$page->title}} </option>
@@ -54,10 +49,6 @@
             </div>
         </div>
 
-        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            <button type="submit" class="btn btn-primary"> Opprett </button>
-        </div>
-    </div>
    
 </form>
 @endsection
