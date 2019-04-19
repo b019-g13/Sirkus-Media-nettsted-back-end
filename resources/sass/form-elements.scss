@@ -35,9 +35,9 @@ button {
 
 .form-group-switch {
     $input_switch_track_width: 4em;
-    $input_switch_track_height: 100%;
+    $input_switch_track_height: 1.6em;
     $input_switch_toggle_width: (4em/3);
-    $input_switch_toggle_height: 100%;
+    $input_switch_toggle_height: 1.6em;
 
     label {
         position: relative;
@@ -45,7 +45,8 @@ button {
         &::before,
         &::after {
             content: " ";
-            top: 0;
+            top: 50%;
+            transform: translateY(-50%);
             position: absolute;
             transition-duration: 200ms;
             transition-property: "background-color";
@@ -54,9 +55,13 @@ button {
 
         // Track
         &::before {
+            text-align: right;
+            padding-right: $input_switch_track_width/8;
             left: 100%;
             width: $input_switch_track_width;
             height: $input_switch_track_height;
+            line-height: $input_switch_track_height;
+            color: $color_input_fg;
             border: 1px solid $color_input_border;
             background-color: $color_input_bg;
         }
@@ -64,11 +69,10 @@ button {
         // Toggle
         &::after {
             transition-property: "left", "background-color";
-            top: 50%;
-            transform: translateY(-50%);
             left: 100%;
             width: $input_switch_toggle_width;
             height: $input_switch_toggle_height;
+            line-height: $input_switch_toggle_height;
             border: 1px solid $color_input_fg;
             background-color: $color_input_fg;
         }
@@ -92,6 +96,8 @@ button {
 
         &:checked {
             + label::before {
+                text-align: left;
+                color: $color_success_dark;
                 border-color: $color_success_dark;
                 background-color: $color_success_light;
             }
@@ -106,6 +112,26 @@ button {
                 );
                 border-color: $color_success_dark;
                 background-color: $color_success_dark;
+            }
+        }
+    }
+
+    &.form-group-switch-yn {
+        label {
+            &::before {
+                content: "Nei";
+                text-align: right;
+                padding-right: $input_switch_track_width/8;
+            }
+        }
+
+        input {
+            &:checked {
+                + label::before {
+                    content: "Ja";
+                    padding-right: 0;
+                    padding-left: $input_switch_track_width/8;
+                }
             }
         }
     }
