@@ -146,7 +146,7 @@ class MenuController extends Controller
             'name' => 'required|string|max:255',
             'global' => 'nullable|string',
             'page_id' => ['nullable', 'uuid', Rule::in($pages)],
-            'menu_location_id' => ['nullable', 'integer', Rule::in($menu_locations)],
+            'menu_location_id' => ['required', 'integer', Rule::in($menu_locations)],
             'links' => 'nullable|json',
         ]);
     }

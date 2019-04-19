@@ -25,8 +25,8 @@
 </div>
 
 <div class="form-group form-group-conditional form-group-conditional-reverse" data-condition-switch="form-menu-global">
-    <label for="page_id">Vis på en side</label>
-    <select id="page_id" name="page_id">
+    <label for="form-menu-page_id">Vis på en side</label>
+    <select id="form-menu-page_id" name="page_id">
         @php
             $old_value = old('page_id', isset($menu->page_id) ? $menu->page_id : null);
         @endphp
@@ -44,8 +44,8 @@
 </div>
 
 <div class="form-group">
-    <label for="menu_location_id">Meny lokasjon</label>
-    <select id="menu_location_id" name="menu_location_id" required>
+    <label for="form-menu-menu_location_id">Meny lokasjon</label>
+    <select id="form-menu-menu_location_id" name="menu_location_id" required>
         @php
             $old_value = old('menu_location_id', isset($menu->menu_location_id) ? $menu->menu_location_id : null);
         @endphp
