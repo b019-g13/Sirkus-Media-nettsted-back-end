@@ -110,3 +110,48 @@ if (token) {
 
     return sortable;
 })();
+
+// Conditional form elements
+(function() {
+    let conditionalSwitches = {};
+    const conditionals = document.querySelectorAll(".form-group-conditional");
+
+    conditionals.forEach(conditional => {
+        const conditionalSwitchId = conditional.dataset.conditionSwitch;
+        const conditionalSwitch = document.querySelector(
+            "#" + conditionalSwitchId
+        );
+
+        if (!conditionalSwitch.dataset.switchId) {
+            conditionalSwitch.dataset.switchId = uuidv4();
+        }
+        const randomId = conditionalSwitch.dataset.switchId;
+
+        if (conditionalSwitches[randomId]) {
+            conditionalSwitches[randomId].conditionals.push(conditional);
+        } else {
+            conditionalSwitches[randomId] = {
+                switch: conditionalSwitch,
+                conditionals: [conditional]
+            };
+        }
+    });
+
+    Object.keys(conditionalSwitches).forEach(function(key) {
+        const conditionalSwitch = conditionalSwitches[key];
+
+        if (conditionalSwitch.switch.checked) {
+            toggleConditionals(conditionalSwitch.conditionals);
+        }
+
+        conditionalSwitch.switch.addEventListener("change", () => {
+            toggleConditionals(conditionalSwitch.conditionals);
+        });
+    });
+
+    function toggleConditionals() {
+        conditionals.forEach(conditional => {
+            conditional.classList.toggle("form-group-conditional-active");
+        });
+    }
+})();

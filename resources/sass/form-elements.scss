@@ -1,0 +1,154 @@
+select,
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+label,
+button {
+    cursor: pointer;
+
+    &:active {
+        cursor: pointer;
+    }
+}
+
+.form-group {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    margin: 0 auto 1em;
+
+    input,
+    textarea,
+    select {
+        padding: 0.4em 0.8em;
+        border: 1px solid $color_input_border;
+        color: $color_input_fg;
+        background-color: $color_input_bg;
+
+        &:focus {
+            outline: none;
+            color: $color_input_active_fg;
+            border-color: $color_input_active_border;
+            background-color: $color_input_active_bg;
+        }
+    }
+}
+
+.form-group-switch {
+    $input_switch_track_width: 4em;
+    $input_switch_track_height: 1.6em;
+    $input_switch_toggle_width: (4em/3);
+    $input_switch_toggle_height: 1.6em;
+
+    label {
+        position: relative;
+
+        &::before,
+        &::after {
+            content: " ";
+            top: 50%;
+            transform: translateY(-50%);
+            position: absolute;
+            transition-duration: 200ms;
+            transition-property: "background-color";
+            transition-timing-function: $transition_timing_ease_in_out;
+        }
+
+        // Track
+        &::before {
+            text-align: right;
+            padding-right: $input_switch_track_width/8;
+            left: 100%;
+            width: $input_switch_track_width;
+            height: $input_switch_track_height;
+            line-height: $input_switch_track_height;
+            color: $color_input_fg;
+            border: 1px solid $color_input_border;
+            background-color: $color_input_bg;
+        }
+
+        // Toggle
+        &::after {
+            transition-property: "left", "background-color";
+            left: 100%;
+            width: $input_switch_toggle_width;
+            height: $input_switch_toggle_height;
+            line-height: $input_switch_toggle_height;
+            border: 1px solid $color_input_fg;
+            background-color: $color_input_fg;
+        }
+    }
+
+    input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        appearance: none;
+        border: none;
+        font-size: 1px;
+        opacity: 0.1;
+
+        &:focus {
+            + label::before {
+                border-color: $color_input_active_border;
+                background-color: $color_input_active_bg;
+            }
+        }
+
+        &:checked {
+            + label::before {
+                text-align: left;
+                color: $color_success_dark;
+                border-color: $color_success_dark;
+                background-color: $color_success_light;
+            }
+
+            + label::after {
+                left: 120%;
+                left: calc(
+                    100% + #{(
+                            $input_switch_track_width -
+                                $input_switch_toggle_width
+                        )}
+                );
+                border-color: $color_success_dark;
+                background-color: $color_success_dark;
+            }
+        }
+    }
+
+    &.form-group-switch-yn {
+        label {
+            &::before {
+                content: "Nei";
+                text-align: right;
+                padding-right: $input_switch_track_width/8;
+            }
+        }
+
+        input {
+            &:checked {
+                + label::before {
+                    content: "Ja";
+                    padding-right: 0;
+                    padding-left: $input_switch_track_width/8;
+                }
+            }
+        }
+    }
+}
+
+.form-group-conditional {
+    display: none;
+
+    &.form-group-conditional-active {
+        display: grid;
+    }
+}
+
+.form-group-conditional-reverse {
+    display: grid;
+
+    &.form-group-conditional-active {
+        display: none;
+    }
+}

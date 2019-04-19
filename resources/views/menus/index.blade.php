@@ -10,33 +10,31 @@
             </div>
         </div>
     </div>
-   
+
     <table class="table table-bordered">
         <tr>
-            <th> Menu ID</th>
-            <th> Navn </th>
-            <th> Page  </th>
-            <th> Lokasjon </th>
-            <th> Global </th>
-            <th width="280px"> Handling </th>
+            <th>Navn</th>
+            <th>Lokasjon</th>
+            <th>Global</th>
+            <th>Page </th>
+            <th>Handling</th>
         </tr>
         @foreach ($menus as $menu)
         <tr>
-            <td>{{ $menu->id }}</td>
             <td>{{ $menu->name }}</td>
-            <td>{{ $menu->page_id }}</td>
-            <td>{{ $menu->menu_location_id }}</td>
-            <td>{{ $menu->global }}</td>
+            <td>{{ $menu->menu_location->name }}</td>
+            <td>{{ $menu->global ? 'Ja' : 'Nei' }}</td>
+            <td>{{ $menu->page ? $menu->page->title : null }}</td>
             <td>
                 <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" enctype="multipart/form-data">
                      @csrf
 
                     <a class="btn btn-info" href="{{ route('menus.show',$menu->id) }}"> Vis </a>
-    
+
                     <a class="btn btn-primary" href="{{ route('menus.edit',$menu->id) }}"> Rediger </a>
-   
+
                     @method('DELETE')
-   
+
                     <button type="submit" class="btn btn-danger"  onclick="return confirm('Er du sikkert å slette det?')"> Slett </button>
                 </form>
             </td>

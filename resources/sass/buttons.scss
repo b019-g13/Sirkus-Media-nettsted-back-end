@@ -1,0 +1,112 @@
+button,
+input[type="submit"],
+input[type="reset"],
+.button,
+a.button {
+    display: inline-block;
+    margin: 0;
+    padding: 0.2em 0.8em;
+    font-size: inherit;
+    outline: none;
+    color: $color_button_fg;
+    border: 2px solid $color_button_border;
+    background-color: $color_button_bg;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 0.4em 0.8em -0.2em rgba($color_button_bg, 0.25);
+
+    // Remove FF dotted line
+    &::-moz-focus-inner {
+        border: 0;
+        outline: none;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:focus,
+    &:hover {
+        color: $color_button_active_fg;
+        border-color: $color_button_active_border;
+        background-color: $color_button_active_bg;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_button_active_bg, 0.25);
+    }
+
+    span {
+        vertical-align: middle;
+    }
+
+    &.button-primary {
+        color: $color_primary_dark;
+        border-color: $color_primary_light;
+        background-color: $color_primary_light;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_primary, 0.25);
+
+        &:focus,
+        &:hover {
+            color: $color_primary_light;
+            border-color: $color_primary_dark;
+            background-color: $color_primary_dark;
+            box-shadow: 0 0.4em 0.8em -0.2em rgba($color_primary_dark, 0.25);
+        }
+    }
+
+    &.button-accent {
+        color: $color_accent_dark;
+        border-color: $color_accent_light;
+        background-color: $color_accent_light;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent, 0.25);
+
+        &:focus,
+        &:hover {
+            color: $color_accent_light;
+            border-color: $color_accent_dark;
+            background-color: $color_accent_dark;
+            box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent_dark, 0.25);
+        }
+    }
+
+    &.button-success {
+        color: $color_success_dark;
+        border-color: $color_success_light;
+        background-color: $color_success_light;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_success, 0.25);
+
+        &:focus,
+        &:hover {
+            color: $color_success_light;
+            border-color: $color_success_dark;
+            background-color: $color_success_dark;
+            box-shadow: 0 0.4em 0.8em -0.2em rgba($color_success_dark, 0.25);
+        }
+    }
+
+    &.button-blank {
+        border-color: transparent;
+        background-color: transparent;
+        box-shadow: none;
+
+        &:focus,
+        &:hover {
+            border-color: $color_button_active_bg;
+            background-color: $color_button_active_bg;
+            box-shadow: 0 0.4em 0.8em -0.2em rgba($color_button_active_bg, 0.25);
+        }
+    }
+
+    &.button-dark {
+        color: $color_lighter;
+        border-color: $color_darker;
+        background-color: $color_darker;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_darker, 0.25);
+
+        &:focus,
+        &:hover {
+            color: $color_lightest;
+            border-color: $color_darkest;
+            background-color: $color_darkest;
+            box-shadow: 0 0.4em 0.8em -0.2em rgba($color_darkest, 0.25);
+        }
+    }
+}

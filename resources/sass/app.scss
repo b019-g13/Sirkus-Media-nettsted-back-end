@@ -17,8 +17,9 @@ html {
 body {
     font-family: $font-family-sans-serif;
     line-height: $font-line-height-base;
-    background-color: $body-bg;
     font-size: 1em;
+    color: $color_body_fg;
+    background-color: $color_body_bg;
 }
 
 img {
@@ -47,26 +48,11 @@ main {
     background-color: #fff;
 }
 
-select,
-input[type="checkbox"],
-input[type="radio"],
-input[type="submit"],
-button {
-    cursor: pointer;
-
-    &:active {
-        cursor: pointer;
-    }
-}
-
-.button,
-button {
-    display: flex;
-
-    span {
-        vertical-align: middle;
-    }
-}
+@import "buttons";
+@import "draggable";
+@import "media-picker";
+@import "form-elements";
+@import "a11y";
 
 .icon {
     vertical-align: middle;
@@ -85,9 +71,6 @@ button {
         margin: 0;
     }
 }
-
-@import "draggable";
-@import "media-picker";
 
 .hide {
     display: none !important;

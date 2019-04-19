@@ -15,7 +15,7 @@
 
         @include('pages.form-fields')
 
-        <button type="submit">
+        <button type="submit" class="button-success">
             <span>Opprett</span>
             @icon('save')
         </button>
