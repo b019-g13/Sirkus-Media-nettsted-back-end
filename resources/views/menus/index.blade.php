@@ -22,7 +22,7 @@
         @foreach ($menus as $menu)
         <tr>
             <td>{{ $menu->name }}</td>
-            <td>{{ $menu->menu_location->name }}</td>
+            <td>{{ $menu->menu_location ? $menu->menu_location->name : null }}</td>
             <td>{{ $menu->global ? 'Ja' : 'Nei' }}</td>
             <td>{{ $menu->page ? $menu->page->title : null }}</td>
             <td>

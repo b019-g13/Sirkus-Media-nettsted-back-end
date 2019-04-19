@@ -1,0 +1,121 @@
+html.modal-open {
+    overflow: hidden;
+}
+
+.modal {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0 auto;
+    background-color: rgba($color_darkest, 0.66);
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
+
+    @media screen and (min-width: $size_medium) {
+        padding: 3em 1em;
+    }
+
+    &.modal-open {
+        display: flex;
+    }
+}
+
+.modal > .modal-header,
+.modal > .modal-body,
+.modal > .modal-footer {
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 1em;
+    width: 100%;
+    height: auto;
+}
+
+.modal.modal-small > .modal-header,
+.modal.modal-small > .modal-body,
+.modal.modal-small > .modal-footer {
+    max-width: $size_small;
+}
+
+.modal.modal-medium > .modal-header,
+.modal.modal-medium > .modal-body,
+.modal.modal-medium > .modal-footer {
+    max-width: $size_medium;
+}
+
+.modal.modal-large > .modal-header,
+.modal.modal-large > .modal-body,
+.modal.modal-large > .modal-footer {
+    max-width: $size_large;
+}
+
+.modal > .modal-header {
+    position: relative;
+    background-color: $color_lighter;
+
+    @media screen and (min-width: $size_medium) {
+        padding: 2em 2em 1em;
+    }
+
+    .modal-heading {
+        display: block;
+        font-weight: 700;
+        font-size: 2em;
+        line-height: 1;
+        margin: 0 auto 0.4em;
+    }
+
+    .modal-info {
+        font-size: 0.8rem;
+        line-height: 1.2;
+        max-width: $size_medium;
+
+        @media screen and (min-width: $size_small) {
+            line-height: $font-line-height-base;
+            max-width: $size_medium;
+        }
+    }
+
+    .modal-closer {
+        position: fixed;
+        top: 0.4em;
+        right: 1em;
+
+        @media screen and (min-width: $size_medium) {
+            top: 1em;
+            position: absolute;
+        }
+    }
+}
+
+.modal > .modal-body {
+    padding: 2em 1em;
+    background-color: $color_lightest;
+
+    @media screen and (min-width: $size_medium) {
+        padding: 2em;
+    }
+}
+
+.modal > .modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    background-color: $color_lighter;
+}
+
+.modal > .modal-spacer {
+    display: none;
+    padding: 1em;
+    width: 100%;
+
+    @media screen and (min-width: $size_medium) {
+        display: block;
+    }
+}

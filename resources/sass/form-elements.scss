@@ -16,6 +16,10 @@ button {
     grid-template-columns: 1fr 2fr;
     margin: 0 auto 1em;
 
+    label {
+        padding-right: 0.4em;
+    }
+
     input,
     textarea,
     select {

@@ -20,70 +20,52 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <nav id="nav-main">
+        <a href="{{ url('/') }}">
+            {{ config('app.name', 'Laravel') }}
+        </a>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    @auth
-                      <ul class="navbar-nav mr-auto">
-                          <li><a class="navbar-brand" href="{{ route('pages.index') }}"> Pages </a> </li>
-                          <li><a class="navbar-brand" href="{{ route('menus.index') }}"> Menus </a></li>
-                      </ul>
-                      @role('superadmin')
-                          <ul class="navbar-nav mr-auto">
-                              <li><a class="navbar-brand" href="{{ route('components.index') }}">Components</a> </li>
-                              <li><a class="navbar-brand" href="{{ route('fields.index') }}">Fields</a></li>
-                              <li><a class="navbar-brand" href="{{ route('menu_locations.index') }}">Menu locations</a></li>
-                          </ul>
-                      @endrole
-                    @endauth
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                        @endguest
-                        @auth
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+        @auth
+            <ul>
+                <li><a href="{{ route('pages.index') }}">Pages</a></li>
+                <li><a href="{{ route('menus.index') }}">Menus</a></li>
+                <li><a href="{{ route('register') }}">Register</a></li>
+            </ul>
+            <ul>
+                <li>
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        {{ __('Logout') }}
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                </li>
+            </ul>
+        @endauth
+        @guest
+            <ul>
+                <li>
+                    <a href="{{ route('login') }}">{{ __('Login') }}</a>
+                </li>
+            </ul>
+        @endguest
+    </nav>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
+    @include('messages.flash-message')
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('register') }}">Register</a>
-                            </li>
-                        @endauth
-                    </ul>
-                </div>
-            </div>
-        </nav>
+    <main>
+        @yield('content')
+    </main>
 
-        <main class="py-4">
-            @include('messages.flash-message')
-            @yield('content')
-        </main>
-    </div>
+    <footer id="footer-main">
+        @role('superadmin')
+            <strong>Superadmin</strong>
+            <ul>
+                <li><a href="{{ route('components.index') }}">Components</a> </li>
+                <li><a href="{{ route('fields.index') }}">Fields</a></li>
+                <li><a href="{{ route('menu_locations.index') }}">Menu locations</a></li>
+            </ul>
+        @endrole
+    </footer>
 </body>
 </html>

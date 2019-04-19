@@ -3,8 +3,6 @@
     const menuLinksWrapper = document.querySelector("#drag-area-wrapper");
     const menuLinksInput = document.querySelector("#drag-area-input");
 
-    console.log(form);
-
     // Adds links in the "menu links" list to the input
     form.onsubmit = evt => {
         evt.preventDefault();
