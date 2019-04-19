@@ -30,7 +30,7 @@ class CreateUsersTable extends Migration
 
         Schema::table('images', function (Blueprint $table)
         {
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cacscade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
