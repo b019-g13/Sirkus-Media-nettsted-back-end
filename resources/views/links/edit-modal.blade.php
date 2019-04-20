@@ -3,7 +3,10 @@
         <button type="button" class="button-action button-blank modal-closer">
             @icon('x')
         </button>
-        <span class="modal-heading">Rediger link</span>
+        <span class="modal-heading">
+            <span>Rediger link</span>
+            @icon('load', 'spinner')
+        </span>
     </header>
     <section class="modal-body">
         <form action="{{ route('links.update', 'LINK_ID') }}" method="POST">

@@ -75,7 +75,7 @@
                 </button>
             </li>
             @foreach ($links as $link)
-                <li class="draggable" data-link_id="{{ $link->id }}">
+                <li class="draggable" data-link-id="{{ $link->id }}">
                     <span class="menu-link-name" title="{{ $link->name }}"><span class="handle"></span>{{ $link->name }}</span>
                     <span class="menu-link-value" title="{{ $link->value }}">({{ $link->value }})</span>
                     <div class="menu-link-actions">
@@ -102,7 +102,7 @@
         <ul class="drag-area drag-area-destination">
             @if (isset($menu->links))
                 @foreach ($menu->links as $link)
-                    <li class="draggable" data-link_id="{{ $link->id }}">
+                    <li class="draggable" data-link-id="{{ $link->id }}">
                         <span class="menu-link-name" title="{{ $link->name }}"><span class="handle"></span>{{ $link->name }}</span>
                         <span class="menu-link-value" title="{{ $link->value }}">({{ $link->value }})</span>
                     </li>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Link;
 use App\Page;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class LinkController extends Controller
 {
@@ -65,8 +67,17 @@ class LinkController extends Controller
 
         $link = new Link;
         $link->name = $request->name;
-        $link->value = $request->value;
-        $link->page_id = $request->page_id;
+        $link->value = null;
+        $link->page_id = null;
+
+        if ($request->has('internal')) {
+            $link->page_id = $request->page_id;
+        } else if ($request->value == null) {
+            $link->page_id = $request->page_id;
+        } else {
+            $link->value = $request->value;
+        }
+
         $link->save();
 
         return redirect()->back()->with('success', 'Linken ble opprettet');
@@ -78,11 +89,16 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Link $link)
+    public function show(Request $request, Link $link)
     {
+        if ($request->ajax()) {
+            return $link;
+        }
+
         $link->menus;
         $link->component_fields;
         $link->page;
+
         return view('links.show', compact('link'));
     }
 
@@ -110,8 +126,17 @@ class LinkController extends Controller
         $this->link_validator($request->all())->validate();
 
         $link->name = $request->name;
-        $link->value = $request->value;
-        $link->page_id = $request->page_id;
+        $link->value = null;
+        $link->page_id = null;
+
+        if ($request->has('internal')) {
+            $link->page_id = $request->page_id;
+        } else if ($request->value == null) {
+            $link->page_id = $request->page_id;
+        } else {
+            $link->value = $request->value;
+        }
+
         $link->save();
 
         return redirect()->back()->with('success', 'Linken er oppdatert');
