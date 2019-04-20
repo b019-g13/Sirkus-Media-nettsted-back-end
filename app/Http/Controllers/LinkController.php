@@ -35,10 +35,22 @@ class LinkController extends Controller
     {
         $links = Link::All();
         $pages = Page::All();
+
         return view('links.create', compact(
             'links',
             'pages'
         ));
+    }
+
+    protected function link_validator(array $data)
+    {
+        $pages = Page::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'value' => 'nullable|string|max:255',
+            'page_id' => ['nullable', 'uuid', Rule::in($pages)],
+        ]);
     }
 
     /**
@@ -49,17 +61,14 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
-            'page_id' => 'nullable',
-        ]);
-        $link = new Link([
-            'name' => $request->get('name'),
-            'value' => $request->get('value'),
-            'page_id' => $request->get('page_id'),
-        ]);
+        $this->link_validator($request->all())->validate();
+
+        $link = new Link;
+        $link->name = $request->name;
+        $link->value = $request->value;
+        $link->page_id = $request->page_id;
         $link->save();
+
         return redirect()->back()->with('success', 'Linken ble opprettet');
     }
 
@@ -83,9 +92,8 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Link $link)
     {
-        $link = Link::find($id);
         $pages = Page::All();
         return view('links.edit', compact('link', 'pages'));
     }
@@ -97,17 +105,13 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Link $link)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
-            'page_id' => 'nullable',
-        ]);
-        $link = Link::find($id);
-        $link->name = $request->get('name');
-        $link->value = $request->get('value');
-        $link->page_id = $request->get('page_id');
+        $this->link_validator($request->all())->validate();
+
+        $link->name = $request->name;
+        $link->value = $request->value;
+        $link->page_id = $request->page_id;
         $link->save();
 
         return redirect()->back()->with('success', 'Linken er oppdatert');
@@ -119,9 +123,8 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Link $link)
     {
-        $link = Link::find($id);
         $link->delete();
         return redirect()->route('links.index')->with('success', 'Linker er slettet');
     }
