@@ -54,7 +54,8 @@ if (token) {
     }
 
     let sortable = new Sortable(dragAreaContainers, {
-        draggable: ".draggable"
+        draggable: ".draggable",
+        handle: ".handle"
     });
 
     sortable.on("sortable:stop", evt => {

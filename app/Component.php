@@ -125,6 +125,7 @@ class Component extends Model
     public function getFieldsAndChildrenHTML()
     {
         $html_output = '<div class="page-component" data-component_id="' . $this->id . '">';
+        $html_output .= '<span class="handle"></span>';
         $html_output .= '<span class="heading">' . $this->name . '</span>';
         $html_output .= $this->getFieldsHTML();
 

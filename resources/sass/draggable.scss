@@ -1,11 +1,9 @@
-.draggable {
+.draggable .handle {
     user-select: none;
 
     &:hover,
     &:focus {
         cursor: grab;
-        color: $blue;
-        background-color: #fff;
     }
 }
 

@@ -76,7 +76,7 @@
             </li>
             @foreach ($links as $link)
                 <li class="draggable" data-link_id="{{ $link->id }}">
-                    <span>{{ $link->name }}</span>
+                    <span class="menu-link-name" title="{{ $link->name }}"><span class="handle"></span>{{ $link->name }}</span>
                 </li>
             @endforeach
             @if ($links->count() > 10)
@@ -94,7 +94,7 @@
             @if (isset($menu->links))
                 @foreach ($menu->links as $link)
                     <li class="draggable" data-link_id="{{ $link->id }}">
-                        <span>{{ $link->name }}</span>
+                        <span class="menu-link-name" title="{{ $link->name }}"><span class="handle"></span>{{ $link->name }}</span>
                     </li>
                 @endforeach
             @endif
