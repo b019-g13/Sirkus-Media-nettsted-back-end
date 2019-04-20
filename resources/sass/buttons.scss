@@ -96,6 +96,21 @@ a.button {
         }
     }
 
+    &.button-error {
+        color: $color_error_dark;
+        border-color: $color_error_light;
+        background-color: $color_error_light;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_error, 0.25);
+
+        &:focus,
+        &:hover {
+            color: $color_error_light;
+            border-color: $color_error_dark;
+            background-color: $color_error_dark;
+            box-shadow: 0 0.4em 0.8em -0.2em rgba($color_error_dark, 0.25);
+        }
+    }
+
     &.button-blank {
         border-color: transparent;
         background-color: transparent;
