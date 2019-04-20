@@ -51,15 +51,43 @@ class MenuController extends Controller
      */
     public function create()
     {
-        $menu_locations = MenuLocation::All();
-        $pages = Page::All();
-        $links = Link::All();
+        $menu_locations = MenuLocation::all();
+        $pages = Page::all();
+        $links = Link::all()->sortBy('name');
 
         return view('menus.create', compact(
             'pages',
             'menu_locations',
             'links'
         ));
+    }
+
+    // Validation to run before changing the request
+    protected function menu_pre_validator(array $data)
+    {
+        $menu_locations = MenuLocation::pluck('id')->toArray();
+        $pages = Page::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'global' => 'nullable|string',
+            'page_id' => ['nullable', 'uuid', Rule::in($pages)],
+            'menu_location_id' => ['required', 'integer', Rule::in($menu_locations)],
+            'links' => 'nullable|json',
+        ]);
+    }
+    // Validation to run after changing the request
+    protected function menu_post_validator(array $data)
+    {
+        $available_links = Link::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'global' => 'required|boolean',
+            'links' => 'nullable|array',
+            'links.*' => ['required_with:links', 'array'],
+            'links.*.id' => ['required_with:links', 'uuid', Rule::in($available_links)],
+            'links.*.order' => 'required_with:links|integer',
+        ]);
     }
 
     /**
@@ -125,9 +153,9 @@ class MenuController extends Controller
      */
     public function edit(Menu $menu)
     {
-        $menu_locations = MenuLocation::All();
-        $pages = Page::All();
-        $links = Link::All();
+        $menu_locations = MenuLocation::all();
+        $pages = Page::all();
+        $links = Link::all()->sortBy('name');
 
         return view('menus.edit', compact(
             'menu',
@@ -135,34 +163,6 @@ class MenuController extends Controller
             'menu_locations',
             'links'
         ));
-    }
-
-    // Validation to run before changing the request
-    protected function menu_pre_validator(array $data)
-    {
-        $menu_locations = MenuLocation::pluck('id')->toArray();
-        $pages = Page::pluck('id')->toArray();
-
-        return Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'global' => 'nullable|string',
-            'page_id' => ['nullable', 'uuid', Rule::in($pages)],
-            'menu_location_id' => ['required', 'integer', Rule::in($menu_locations)],
-            'links' => 'nullable|json',
-        ]);
-    }
-    // Validation to run after changing the request
-    protected function menu_post_validator(array $data)
-    {
-        $available_links = Link::pluck('id')->toArray();
-
-        return Validator::make($data, [
-            'global' => 'required|boolean',
-            'links' => 'nullable|array',
-            'links.*' => ['required_with:links', 'array'],
-            'links.*.id' => ['required_with:links', 'uuid', Rule::in($available_links)],
-            'links.*.order' => 'required_with:links|integer',
-        ]);
     }
 
     /**
