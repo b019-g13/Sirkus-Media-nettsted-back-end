@@ -108,6 +108,10 @@ html.modal-open {
     align-content: center;
     align-items: center;
     background-color: $color_lighter;
+
+    @media screen and (min-width: $size_medium) {
+        padding: 1em 2em;
+    }
 }
 
 .modal > .modal-spacer {
