@@ -26,8 +26,8 @@ $cyan: #6cb2eb;
 
 $color_lightest: #f8fafc;
 $color_lighter: #eee;
-$color_light: #ccc;
-$color_dark: #bbb;
+$color_light: #bbb;
+$color_dark: #777;
 $color_darker: #383a3c;
 $color_darkest: #000;
 
@@ -46,6 +46,10 @@ $color_accent_dark: darken($color_accent, 33%);
 $color_success: $green;
 $color_success_light: lighten($color_success, 40%);
 $color_success_dark: darken($color_success, 33%);
+
+$color_error: $red;
+$color_error_light: lighten($color_error, 40%);
+$color_error_dark: darken($color_error, 33%);
 
 $color_button_bg: $color_lighter;
 $color_button_fg: $color_darker;
