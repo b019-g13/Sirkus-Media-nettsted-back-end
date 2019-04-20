@@ -184,6 +184,61 @@ main {
             text-align: center;
         }
     }
+
+    .draggable {
+        display: flex;
+
+        .menu-link-name,
+        .menu-link-value {
+            max-width: 40%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .menu-link-name {
+            font-weight: 700;
+        }
+
+        .menu-link-value {
+            font-weight: 400;
+            color: $color_dark;
+            padding-left: 0.2em;
+        }
+
+        .menu-link-actions {
+            display: inline-flex;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 20%;
+            margin-left: auto;
+
+            button {
+                opacity: 0;
+            }
+        }
+
+        &:focus-within,
+        &:focus,
+        &:hover {
+            .menu-link-actions button {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.drag-area-destination {
+        .draggable {
+            .menu-link-name,
+            .menu-link-value {
+                max-width: 50%;
+            }
+
+            .menu-link-actions {
+                display: none;
+            }
+        }
+    }
 }
 
 table {
