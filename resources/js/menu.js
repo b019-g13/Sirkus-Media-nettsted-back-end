@@ -101,6 +101,25 @@
 
     function setupMenuLinkDeleteModal(trigger) {
         trigger.classList.add(deleteModalTriggerCheckClass);
+
+        trigger.addEventListener("click", () => {
+            // Find modal, form and the link id
+            const linkId = trigger.parentNode.parentNode.dataset.linkId;
+            const modalId = trigger.dataset.modal;
+            const modal = document.querySelector("#" + modalId);
+            const form = modal.querySelector("form");
+
+            // Edit the form action to use the link id
+            let formAction = form.getAttribute("action");
+            if (form.dataset.originalAction) {
+                formAction = form.dataset.originalAction;
+            } else {
+                form.dataset.originalAction = formAction;
+            }
+
+            formAction = formAction.replace("LINK_ID", linkId);
+            form.setAttribute("action", formAction);
+        });
     }
 
     // Adds links in the "menu links" list to the input
@@ -113,7 +132,6 @@
             .forEach((link, i) => {
                 links.push({
                     id: link.dataset.linkId,
-                    // nickname: link.querySelector("input").value,
                     order: i
                 });
             });

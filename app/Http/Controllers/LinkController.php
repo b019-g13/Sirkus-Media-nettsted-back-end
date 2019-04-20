@@ -151,6 +151,6 @@ class LinkController extends Controller
     public function destroy(Link $link)
     {
         $link->delete();
-        return redirect()->route('links.index')->with('success', 'Linker er slettet');
+        return redirect()->back()->with('success', 'Linken ble slettet');
     }
 }
