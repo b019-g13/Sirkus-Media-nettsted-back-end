@@ -78,24 +78,25 @@ body.draggable--is-dragging {
 }
 
 #drag-area-wrapper > .drag-area > .draggable {
-    padding: 1em;
-    color: #333;
-    border: 2px solid #999;
+    border: 2px solid $color_dark;
     background-color: white;
+    margin: 4px 0;
 
     &:hover {
-        border: 2px solid #000;
+        border: 2px solid $color_accent;
     }
 
     .heading {
         font-weight: 700;
     }
 
-    .draggable {
-        color: #333;
-        padding-left: 0.5em;
-        border-left: 2px solid #999;
-        background-color: white;
+    > .page-component {
+        padding: 0.4em;
+    }
+
+    > .page-component .page-component {
+        padding-left: 0.4em;
+        border-left: 2px solid $color_lighter;
 
         &:hover {
             border-left: 2px solid #000;
