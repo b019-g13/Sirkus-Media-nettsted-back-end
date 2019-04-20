@@ -18,6 +18,7 @@ class Page extends Model
 
     public $appends = [
         'slug',
+        'url',
     ];
 
     protected function setupComponent(PageComponent $page_component, bool $manipulate_data = false)
@@ -185,6 +186,11 @@ class Page extends Model
     public function getSlugAttribute()
     {
         return Str::slug($this->title);
+    }
+
+    public function getUrlAttribute()
+    {
+        return '/' . $this->slug;
     }
 
     public function page_components()
