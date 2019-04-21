@@ -178,6 +178,8 @@ class PageController extends Controller
             }
         }
 
+        Page::run_cleanup();
+
         return redirect()->route('pages.edit', $page)->with('success', 'Page er oppdatert');
     }
 

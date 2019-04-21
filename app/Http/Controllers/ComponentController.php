@@ -91,7 +91,7 @@ class ComponentController extends Controller
         $component->save();
 
         foreach ($component->component_fields as $component_field) {
-            $component_field->delete();
+            $component_field->mark_for_deletion();
         }
 
         foreach ($request->fields as $field) {
@@ -154,7 +154,7 @@ class ComponentController extends Controller
         $component->save();
 
         foreach ($component->component_fields as $component_field) {
-            $component_field->delete();
+            $component_field->mark_for_deletion();
         }
 
         foreach ($request->fields as $field) {

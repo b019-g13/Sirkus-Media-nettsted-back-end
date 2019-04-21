@@ -184,6 +184,20 @@ class Page extends Model
         }
     }
 
+    public static function run_cleanup()
+    {
+        $page_component_field_ids = PageComponent::pluck('component_field_id')->toArray();
+        $component_fields = ComponentField::where('status', 1)->get();
+
+        foreach ($component_fields as $component_field) {
+            // Check if the component_field is being used by any pages
+            if (!in_array($component_field->id, $page_component_field_ids)) {
+                // Comp field is not being used, so let's delete it
+                $component_field->delete();
+            }
+        }
+    }
+
     public function getSlugAttribute()
     {
         return Str::slug($this->title);

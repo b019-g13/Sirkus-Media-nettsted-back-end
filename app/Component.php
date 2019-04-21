@@ -28,6 +28,7 @@ class Component extends Model
     {
         $comp_fields = ComponentField::where([
             'component_id' => $this->id,
+            'status' => 0,
         ])->get();
 
         return $comp_fields;
