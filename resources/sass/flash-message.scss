@@ -1,0 +1,92 @@
+#flash-messages {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 0;
+    width: 100%;
+    padding: 1em 1em 0;
+    max-width: 24em;
+    list-style-type: none;
+    z-index: 11; // Nav is 10
+
+    @media screen and (min-width: $size_medium) {
+        padding: 2em 2em 0 0;
+        max-width: 32em;
+    }
+
+    li {
+        display: block;
+        position: relative;
+
+        label {
+            cursor: pointer;
+            margin: 0 0 1em;
+            display: block;
+            padding: 1em 2em;
+            color: #fff;
+            background-color: #000;
+            border: 1px solid #000;
+            border-radius: 3px;
+            box-shadow: 0 1em 1em -1em rgba(darken($blue, 50%), 0.33);
+
+            @media screen and (min-width: $size_medium) {
+                margin: 0 0 2em;
+                padding: 2em 4em;
+                transition: transform 200ms ease-in-out;
+                transform: scale(1);
+            }
+
+            &:hover,
+            &:focus {
+                color: #000;
+                background-color: #fff;
+
+                @media screen and (min-width: $size_medium) {
+                    transform: scale(1.05) translateX(-1.5%);
+                }
+            }
+
+            &:active {
+                @media screen and (min-width: $size_medium) {
+                    transform: scale(0.95) translateX(1.5%);
+                }
+            }
+        }
+
+        &.flash-message-success label {
+            border: none;
+            color: $color_success_dark;
+            background-color: $color_success_light;
+            box-shadow: 0 1em 1em -1em rgba($color_success, 0.33);
+        }
+
+        &.flash-message-error label {
+            border: none;
+            color: $color_error_dark;
+            background-color: $color_error_light;
+            box-shadow: 0 1em 1em -1em rgba($red, 0.33);
+        }
+
+        &.flash-message-info label {
+            border: none;
+            color: $color_dark;
+            background-color: $color_light;
+            box-shadow: 0 1em 1em -1em rgba($color_dark, 0.33);
+        }
+
+        input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        input:checked {
+            display: none;
+
+            & + label {
+                display: none;
+            }
+        }
+    }
+}

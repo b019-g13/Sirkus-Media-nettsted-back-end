@@ -124,6 +124,7 @@ main {
 @import "draggable";
 @import "media-picker";
 @import "form-elements";
+@import "flash-message";
 @import "a11y";
 
 .icon {
@@ -144,6 +145,35 @@ main {
     }
 }
 
+.handle {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    width: 1.5em;
+    height: 1.5em;
+    overflow: hidden;
+    vertical-align: middle;
+    background-color: transparent;
+    color: $color_dark;
+
+    &::before {
+        content: ":::";
+        padding-left: 0.125em;
+        vertical-align: middle;
+        font-weight: 400;
+        letter-spacing: 1px;
+        writing-mode: vertical-lr;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: $color_lighter;
+    }
+}
+
 #form-menu #drag-area-wrapper .drag-area {
     min-height: 200px;
     max-height: 50vh;
@@ -153,6 +183,61 @@ main {
         .action {
             margin: 1em auto;
             text-align: center;
+        }
+    }
+
+    .draggable {
+        display: flex;
+
+        .menu-link-name,
+        .menu-link-value {
+            max-width: 40%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .menu-link-name {
+            font-weight: 700;
+        }
+
+        .menu-link-value {
+            font-weight: 400;
+            color: $color_dark;
+            padding-left: 0.2em;
+        }
+
+        .menu-link-actions {
+            display: inline-flex;
+            white-space: nowrap;
+            overflow: hidden;
+            max-width: 20%;
+            margin-left: auto;
+
+            button {
+                opacity: 0;
+            }
+        }
+
+        &:focus-within,
+        &:focus,
+        &:hover {
+            .menu-link-actions button {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.drag-area-destination {
+        .draggable {
+            .menu-link-name,
+            .menu-link-value {
+                max-width: 50%;
+            }
+
+            .menu-link-actions {
+                display: none;
+            }
         }
     }
 }

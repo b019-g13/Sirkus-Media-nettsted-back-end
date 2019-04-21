@@ -31,6 +31,7 @@
         <ul class="drag-area drag-area-source">
             @foreach ($fields as $field)
                 <li class="draggable" data-field_id="{{ $field->id }}">
+                    <span class="handle"></span>
                     <span>{{ $field->name }}</span>
                     <input type="text" placeholder="Kallenavn">
                 </li>
@@ -42,6 +43,7 @@
             @if (isset($component->fields))
                 @foreach ($component->fields as $field)
                     <li class="draggable" data-field_id="{{ $field->field_id }}">
+                        <span class="handle"></span>
                         <span>{{ $field->name }}</span>
                         <input type="text" placeholder="Kallenavn" value="{{ $field->nickname }}">
                     </li>

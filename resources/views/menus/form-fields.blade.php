@@ -69,19 +69,28 @@
         <p class="heading">Tilgjengelig linker</p>
         <ul class="drag-area drag-area-source">
             <li class="action">
-                <button type="button" class="button-blank modal-trigger" data-modal="mymodelyes">
+                <button type="button" class="button-blank modal-trigger" data-modal="menu-modal-create-link">
                     <span>Opprett ny</span>
                     @icon('plus-square')
                 </button>
             </li>
             @foreach ($links as $link)
-                <li class="draggable" data-link_id="{{ $link->id }}">
-                    <span>{{ $link->name }}</span>
+                <li class="draggable" data-link-id="{{ $link->id }}">
+                    <span class="menu-link-name" title="{{ $link->name }}"><span class="handle"></span>{{ $link->name }}</span>
+                    <span class="menu-link-value" title="{{ $link->value }}">({{ $link->value }})</span>
+                    <div class="menu-link-actions">
+                        <button type="button" class="button-action menu-link-action-edit modal-trigger" data-modal="menu-modal-edit-link">
+                            @icon('edit')
+                        </button>
+                        <button type="button" class="button-action menu-link-action-delete modal-trigger" data-modal="menu-modal-delete-link">
+                            @icon('x')
+                        </button>
+                    </div>
                 </li>
             @endforeach
             @if ($links->count() > 10)
                 <li class="action">
-                    <button type="button" class="button-blank modal-trigger" data-modal="mymodelyes">
+                    <button type="button" class="button-blank modal-trigger" data-modal="menu-modal-create-link">
                         <span>Opprett ny</span>
                         @icon('plus-square')
                     </button>
@@ -93,8 +102,9 @@
         <ul class="drag-area drag-area-destination">
             @if (isset($menu->links))
                 @foreach ($menu->links as $link)
-                    <li class="draggable" data-link_id="{{ $link->id }}">
-                        <span>{{ $link->name }}</span>
+                    <li class="draggable" data-link-id="{{ $link->id }}">
+                        <span class="menu-link-name" title="{{ $link->name }}"><span class="handle"></span>{{ $link->name }}</span>
+                        <span class="menu-link-value" title="{{ $link->value }}">({{ $link->value }})</span>
                     </li>
                 @endforeach
             @endif

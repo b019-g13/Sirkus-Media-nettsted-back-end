@@ -82,12 +82,8 @@ class PageComponent extends Model
 
     public function getFieldsAndChildrenHTML()
     {
-        // $field = $component_field->field;
-        // $field_type = $field->field_type->slug;
-        // if ($field_type === 'string') {
-        // }
-
         $html_output = '<div class="page-component" data-component_id="' . $this->component_id . '">';
+        $html_output .= '<span class="handle"></span>';
         $html_output .= '<span class="heading">' . $this->name . '</span>';
         $html_output .= Component::generateFieldsHTML($this->fields);
 

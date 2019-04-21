@@ -16,8 +16,8 @@ class CreateLinksTable extends Migration
         Schema::create('links', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('value');
-            $table->uuid('page_id')->nullable();
+            $table->string('value')->nullable()->default(null);
+            $table->uuid('page_id')->nullable()->default(null);
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
             $table->timestamps();
         });

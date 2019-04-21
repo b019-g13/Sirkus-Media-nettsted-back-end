@@ -18,6 +18,8 @@
     </form>
 
     @include('links.create-modal')
+    @include('links.edit-modal')
+    @include('links.delete-modal')
 
     <script src="{{ asset('js/menu.js') }}" defer></script>
 @endsection

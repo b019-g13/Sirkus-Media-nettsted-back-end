@@ -54,7 +54,8 @@ if (token) {
     }
 
     let sortable = new Sortable(dragAreaContainers, {
-        draggable: ".draggable"
+        draggable: ".draggable",
+        handle: ".handle"
     });
 
     sortable.on("sortable:stop", evt => {
@@ -159,51 +160,68 @@ if (token) {
 // Modals
 (function() {
     let lastFocusedElement = document.body;
-    const modalTriggers = document.querySelectorAll(".modal-trigger");
-    const modalCloserCheckClass = "modal-closer-is-setup";
-    const modalSubmitterCheckClass = "modal-submitter-is-setup";
+    setupModalTriggers();
 
-    if (modalTriggers == null) {
-        return false;
-    }
+    window.addEventListener("draggable-drag-new-item", setupModalTriggers);
 
-    // Setup modal openers
-    modalTriggers.forEach(modalTrigger => {
-        const modalId = modalTrigger.dataset.modal;
-        const modal = document.querySelector("#" + modalId);
+    // Setup modal openers/triggers
+    function setupModalTriggers() {
+        const modalTriggerCheckClass = "modal-trigger-is-setup";
+        const modalCloserCheckClass = "modal-closer-is-setup";
+        const modalSubmitterCheckClass = "modal-submitter-is-setup";
 
-        if (modal != null) {
-            modalTrigger.addEventListener("click", () => {
-                openModal(modal);
-            });
-
-            // Setup modal closers
-            const modalClosers = modal.querySelectorAll(".modal-closer");
-            modalClosers.forEach(modalCloser => {
-                if (!modalCloser.classList.contains(modalCloserCheckClass)) {
-                    modalCloser.classList.add(modalCloserCheckClass);
-
-                    modalCloser.addEventListener("click", () => {
-                        closeModal(modal);
-                    });
-                }
-            });
-
-            // Setup modal submitters
-            const modalSubmitters = modal.querySelectorAll(".modal-submit");
-            modalSubmitters.forEach(modalSubmitter => {
-                if (
-                    !modalSubmitter.classList.contains(modalSubmitterCheckClass)
-                ) {
-                    modalSubmitter.classList.add(modalSubmitterCheckClass);
-
-                    modalSubmitter.addEventListener("click", () => {
-                        submitModal(modal);
-                    });
-                }
-            });
+        const modalTriggers = document.querySelectorAll(".modal-trigger");
+        if (modalTriggers == null) {
+            return false;
         }
-    });
+
+        modalTriggers.forEach(modalTrigger => {
+            if (modalTrigger.classList.contains(modalTriggerCheckClass)) {
+                return;
+            }
+
+            modalTrigger.classList.add(modalTriggerCheckClass);
+
+            const modalId = modalTrigger.dataset.modal;
+            const modal = document.querySelector("#" + modalId);
+
+            if (modal != null) {
+                modalTrigger.addEventListener("click", () => {
+                    openModal(modal);
+                });
+
+                // Setup modal closers
+                const modalClosers = modal.querySelectorAll(".modal-closer");
+                modalClosers.forEach(modalCloser => {
+                    if (
+                        !modalCloser.classList.contains(modalCloserCheckClass)
+                    ) {
+                        modalCloser.classList.add(modalCloserCheckClass);
+
+                        modalCloser.addEventListener("click", () => {
+                            closeModal(modal);
+                        });
+                    }
+                });
+
+                // Setup modal submitters
+                const modalSubmitters = modal.querySelectorAll(".modal-submit");
+                modalSubmitters.forEach(modalSubmitter => {
+                    if (
+                        !modalSubmitter.classList.contains(
+                            modalSubmitterCheckClass
+                        )
+                    ) {
+                        modalSubmitter.classList.add(modalSubmitterCheckClass);
+
+                        modalSubmitter.addEventListener("click", () => {
+                            submitModal(modal);
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     function openModal(modal) {
         if (modal == null) {

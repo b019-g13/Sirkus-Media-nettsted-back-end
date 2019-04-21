@@ -21,6 +21,6 @@ class Link extends Model
             return $value;
         }
 
-        return $this->page;
+        return $this->page->url;
     }
 }

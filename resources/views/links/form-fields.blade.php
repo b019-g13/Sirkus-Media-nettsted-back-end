@@ -1,21 +1,28 @@
+@php
+    // Random enough for our needs.
+    // We just want to avoid collision in case the fields
+    // are included multiple times on a single page
+    $prefix = 'form-link-' . bin2hex(random_bytes(4));
+@endphp
+
 <div class="form-group">
-    <label for="form-link-name">Navn</label>
-    <input id="form-link-name" type="text" name="name" value="{{ old('name', (isset($link->name) ? $link->name : null)) }}" required>
+    <label for="{{ $prefix }}-name">Navn</label>
+    <input id="{{ $prefix }}-name" type="text" name="name" value="{{ old('name', (isset($link->name) ? $link->name : null)) }}" required>
 </div>
 
 <div class="form-group form-group-switch form-group-switch-yn">
-    <input id="form-link-internal" type="checkbox" checked>
-    <label for="form-link-internal">Intern link?</label>
+    <input id="{{ $prefix }}-internal" name="internal" type="checkbox" checked>
+    <label for="{{ $prefix }}-internal">Intern link?</label>
 </div>
 
-<div class="form-group form-group-conditional form-group-conditional-reverse" data-condition-switch="form-link-internal">
-    <label for="form-link-value">Link</label>
-    <input id="form-link-value" type="text" name="value" value="{{ old('value', (isset($link->value) ? $link->value : null)) }}">
+<div class="form-group form-group-conditional form-group-conditional-reverse" data-condition-switch="{{ $prefix }}-internal">
+    <label for="{{ $prefix }}-value">Link</label>
+    <input id="{{ $prefix }}-value" type="text" name="value" value="{{ old('value', (isset($link->value) ? $link->value : null)) }}">
 </div>
 
-<div class="form-group form-group-conditional" data-condition-switch="form-link-internal">
-    <label for="form-link-page_id">Side</label>
-    <select id="form-link-page_id" name="form-link-page_id">
+<div class="form-group form-group-conditional" data-condition-switch="{{ $prefix }}-internal">
+    <label for="{{ $prefix }}-page_id">Side</label>
+    <select id="{{ $prefix }}-page_id" name="page_id">
         @php
             $old_value = old('page_id', isset($link->page_id) ? $link->page_id : null);
         @endphp

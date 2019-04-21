@@ -18,6 +18,7 @@ class Page extends Model
 
     public $appends = [
         'slug',
+        'url',
     ];
 
     protected function setupComponent(PageComponent $page_component, bool $manipulate_data = false)
@@ -168,7 +169,8 @@ class Page extends Model
             if ($field->type === 'image' && !empty($field->value)) {
                 $page_component->image_id = $field->value;
             } else if ($field->type === 'url_internal' && !empty($field->value)) {
-                $page_component->link_id = $field->value;
+                // $page_component->link_id = $field->value;
+                $page_component->value = $field->value;
             } else {
                 $page_component->value = $field->value;
             }
@@ -185,6 +187,11 @@ class Page extends Model
     public function getSlugAttribute()
     {
         return Str::slug($this->title);
+    }
+
+    public function getUrlAttribute()
+    {
+        return '/' . $this->slug;
     }
 
     public function page_components()

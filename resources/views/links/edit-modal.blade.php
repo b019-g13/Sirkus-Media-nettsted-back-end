@@ -1,13 +1,17 @@
-<div id="menu-modal-create-link" class="modal modal-small">
+<div id="menu-modal-edit-link" class="modal modal-small">
     <header class="modal-header">
         <button type="button" class="button-action button-blank modal-closer">
             @icon('x')
         </button>
-        <span class="modal-heading">Lag en link</span>
+        <span class="modal-heading">
+            <span>Rediger link</span>
+            @icon('load', 'spinner')
+        </span>
     </header>
     <section class="modal-body">
-        <form action="{{ route('links.store') }}" method="POST">
+        <form action="{{ route('links.update', 'LINK_ID') }}" method="POST">
             @csrf
+            @method('patch')
             @include('links.form-fields')
         </form>
     </section>
