@@ -40,7 +40,6 @@ class MenuController extends Controller
     public function api_show(Menu $menu)
     {
         $menu->links;
-        $menu->menu_location;
         return $menu;
     }
 

@@ -7,8 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Menu extends Model
 {
     use Traits\UsesUuid;
+
     protected $fillable = [
         'name', 'global', 'page_id', 'menu_location_id',
+    ];
+
+    public $appends = [
+        'menu_location',
     ];
 
     //Har flere links
@@ -29,9 +34,9 @@ class Menu extends Model
         return $this->belongsTo('App\Page');
     }
 
-    public function menu_location()
+    public function getMenuLocationAttribute()
     {
-        return $this->belongsTo('App\MenuLocation');
+        return MenuLocation::find($this->menu_location_id);
     }
 
     public function menu_links()
