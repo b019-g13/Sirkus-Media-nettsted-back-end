@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateImagesTable extends Migration
 {
@@ -13,14 +13,14 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table)
-        {
+        Schema::create('images', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->unsignedInteger('image_size_id');
             $table->foreign('image_size_id')->references('id')->on('image_sizes');
             $table->uuid('user_id');
             $table->string('attribute_alt')->nullable();
             $table->string('url');
+            $table->tinyInteger('privacy')->unsigned()->default(0); // 0 = Private, 1 = Public
             $table->timestamps();
         });
     }

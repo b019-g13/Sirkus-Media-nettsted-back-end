@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Link;
+use App\Page;
 use Illuminate\Http\Request;
-
-Use App\Link;
-Use App\Page;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class LinkController extends Controller
 {
@@ -16,14 +17,15 @@ class LinkController extends Controller
      */
 
     public function __construct()
-    {     
-       $this->middleware('auth');
+    {
+        $this->middleware('auth');
+        $this->middleware('verified');
     }
 
     public function index()
     {
         $links = Link::paginate(30);
-         return view('links.index', compact('links'));
+        return view('links.index', compact('links'));
     }
 
     /**
@@ -35,10 +37,22 @@ class LinkController extends Controller
     {
         $links = Link::All();
         $pages = Page::All();
+
         return view('links.create', compact(
-            'links', 
+            'links',
             'pages'
         ));
+    }
+
+    protected function link_validator(array $data)
+    {
+        $pages = Page::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'value' => 'nullable|string|max:255',
+            'page_id' => ['nullable', 'uuid', Rule::in($pages)],
+        ]);
     }
 
     /**
@@ -49,18 +63,24 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name'=>'required|string|max:255',
-            'value'=> 'required|string|max:255',
-            'page_id'=> 'nullable'
-        ]);
-            $link = new Link([
-            'name' => $request->get('name'),
-            'value' => $request->get('value'),
-            'page_id' => $request->get('page_id')
-            ]);
-            $link->save(); 
-            return redirect()->route('links.index')->with('success', 'Linken blir opprettet');    
+        $this->link_validator($request->all())->validate();
+
+        $link = new Link;
+        $link->name = $request->name;
+        $link->value = null;
+        $link->page_id = null;
+
+        if ($request->has('internal')) {
+            $link->page_id = $request->page_id;
+        } else if ($request->value == null) {
+            $link->page_id = $request->page_id;
+        } else {
+            $link->value = $request->value;
+        }
+
+        $link->save();
+
+        return redirect()->back()->with('success', 'Linken ble opprettet');
     }
 
     /**
@@ -69,12 +89,17 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Link $link)
+    public function show(Request $request, Link $link)
     {
+        if ($request->ajax()) {
+            return $link;
+        }
+
         $link->menus;
         $link->component_fields;
         $link->page;
-         return view('links.show', compact('link'));
+
+        return view('links.show', compact('link'));
     }
 
     /**
@@ -83,9 +108,8 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Link $link)
     {
-        $link = Link::find($id);
         $pages = Page::All();
         return view('links.edit', compact('link', 'pages'));
     }
@@ -97,20 +121,25 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Link $link)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'value' => 'required|string|max:255',
-            'page_id' => 'nullable'
-        ]);
-        $link = Link::find($id);
-        $link->name = $request->get('name');
-        $link->value = $request->get('value');
-        $link->page_id = $request->get('page_id');
+        $this->link_validator($request->all())->validate();
+
+        $link->name = $request->name;
+        $link->value = null;
+        $link->page_id = null;
+
+        if ($request->has('internal')) {
+            $link->page_id = $request->page_id;
+        } else if ($request->value == null) {
+            $link->page_id = $request->page_id;
+        } else {
+            $link->value = $request->value;
+        }
+
         $link->save();
-        
-        return redirect()->route('links.index')->with('success', 'Linken er oppdatert');
+
+        return redirect()->back()->with('success', 'Linken er oppdatert');
     }
 
     /**
@@ -119,10 +148,9 @@ class LinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Link $link)
     {
-        $link = Link::find($id);
         $link->delete();
-        return redirect()->route('links.index')->with('success', 'Linker er slettet');
+        return redirect()->back()->with('success', 'Linken ble slettet');
     }
 }

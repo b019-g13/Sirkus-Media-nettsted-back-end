@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
+use App\Link;
 use App\Menu;
-use App\Page;
+use App\MenuLink;
 use App\MenuLocation;
+use App\Page;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class MenuController extends Controller
 {
@@ -17,14 +20,15 @@ class MenuController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('auth')->except(['api_index', 'api_show']);
-       $this->middleware('role:admin|superadmin|moderator')->except(['api_index', 'api_show']);
+        $this->middleware('auth')->except(['api_index', 'api_show']);
+        $this->middleware('verified')->except(['api_index', 'api_show']);
+        $this->middleware('role:admin|superadmin|moderator')->except(['api_index', 'api_show']);
     }
 
     public function index()
     {
         $menus = Menu::paginate(30);
-        return view('menus.index',compact('menus'));
+        return view('menus.index', compact('menus'));
     }
 
     public function api_index()
@@ -36,7 +40,6 @@ class MenuController extends Controller
     public function api_show(Menu $menu)
     {
         $menu->links;
-        $menu->menu_location;
         return $menu;
     }
 
@@ -47,14 +50,43 @@ class MenuController extends Controller
      */
     public function create()
     {
-        $menus = Menu::All();
-        $locations = MenuLocation::All();
-        $pages = Page::All();
+        $menu_locations = MenuLocation::all();
+        $pages = Page::all();
+        $links = Link::all()->sortBy('name');
+
         return view('menus.create', compact(
-            'menus',
             'pages',
-            'locations'
+            'menu_locations',
+            'links'
         ));
+    }
+
+    // Validation to run before changing the request
+    protected function menu_pre_validator(array $data)
+    {
+        $menu_locations = MenuLocation::pluck('id')->toArray();
+        $pages = Page::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'global' => 'nullable|string',
+            'page_id' => ['nullable', 'uuid', Rule::in($pages)],
+            'menu_location_id' => ['required', 'integer', Rule::in($menu_locations)],
+            'links' => 'nullable|json',
+        ]);
+    }
+    // Validation to run after changing the request
+    protected function menu_post_validator(array $data)
+    {
+        $available_links = Link::pluck('id')->toArray();
+
+        return Validator::make($data, [
+            'global' => 'required|boolean',
+            'links' => 'nullable|array',
+            'links.*' => ['required_with:links', 'array'],
+            'links.*.id' => ['required_with:links', 'uuid', Rule::in($available_links)],
+            'links.*.order' => 'required_with:links|integer',
+        ]);
     }
 
     /**
@@ -65,21 +97,38 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'global' => 'required|boolean',
-            'page_id' => 'nullable',
-            'menu_location_id' => 'nullable|integer'
-        ]);    
-        
-        $menu = new Menu([
-            'name' => $request->get('name'),
-            'global' => $request->get('global'),
-            'page_id' => $request->get('page_id'),
-            'menu_location_id' => $request->get('menu_location_id')
-        ]);
-            $menu->save();
-            return redirect()->route('menus.index')->with('success', 'Menu er opprettet' );
+        $this->menu_pre_validator($request->all())->validate();
+        $request->merge(['links' => json_decode($request->links, true)]);
+
+        if ($request->has('global') && $request->global === 'on') {
+            $request->merge(['global' => true]);
+        } else {
+            $request->merge(['global' => false]);
+        }
+        $this->menu_post_validator($request->all())->validate();
+
+        $menu = new Menu;
+        $menu->name = $request->name;
+        $menu->global = $request->global;
+        $menu->menu_location_id = $request->menu_location_id;
+
+        $menu->save();
+
+        if ($menu->global) {
+            $menu->page_id = null;
+        } else {
+            $menu->page_id = $request->page_id;
+        }
+
+        foreach ($request->links as $link) {
+            $menu_link = new MenuLink;
+            $menu_link->menu_id = $menu->id;
+            $menu_link->link_id = $link['id'];
+            $menu_link->order = $link['order'];
+            $menu_link->save();
+        }
+
+        return redirect()->route('menus.edit', $menu)->with('success', 'Menu ble opprettet');
     }
 
     /**
@@ -92,7 +141,7 @@ class MenuController extends Controller
     {
         $menu->links;
         $menu->menu_location;
-        return view('menus.show',compact('menu'));
+        return view('menus.show', compact('menu'));
     }
 
     /**
@@ -101,15 +150,17 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Menu $menu)
     {
-        $menu = Menu::find($id);
-        $locations = MenuLocation::All();
-        $pages = Page::All();
+        $menu_locations = MenuLocation::all();
+        $pages = Page::all();
+        $links = Link::all()->sortBy('name');
+
         return view('menus.edit', compact(
             'menu',
             'pages',
-            'locations'
+            'menu_locations',
+            'links'
         ));
     }
 
@@ -120,22 +171,43 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Menu $menu)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'global'=> 'required|boolean',
-            'page_id' => 'nullable',
-            'menu_location_id'=> 'nullable|integer'
-        ]);
+        $this->menu_pre_validator($request->all())->validate();
+        $request->merge(['links' => json_decode($request->links, true)]);
 
-            $menu = Menu::find($id);
-            $menu->name = $request->get('name');
-            $menu->global = $request->get('global');
-            $menu->page_id = $request->get('page_id');
-            $menu->menu_location_id = $request->get('menu_location_id');
-            $menu->save();
-            return redirect()->route('menus.index')->with('success', 'Menu er oppdatert');
+        if ($request->has('global') && $request->global === 'on') {
+            $request->merge(['global' => true]);
+        } else {
+            $request->merge(['global' => false]);
+        }
+        $this->menu_post_validator($request->all())->validate();
+
+        $menu->name = $request->name;
+        $menu->global = $request->global;
+        $menu->menu_location_id = $request->menu_location_id;
+
+        if ($menu->global) {
+            $menu->page_id = null;
+        } else {
+            $menu->page_id = $request->page_id;
+        }
+
+        $menu->save();
+
+        foreach ($menu->menu_links as $link) {
+            $link->delete();
+        }
+
+        foreach ($request->links as $link) {
+            $menu_link = new MenuLink;
+            $menu_link->menu_id = $menu->id;
+            $menu_link->link_id = $link['id'];
+            $menu_link->order = $link['order'];
+            $menu_link->save();
+        }
+
+        return redirect()->route('menus.edit', $menu)->with('success', 'Menu er oppdatert');
     }
 
     /**

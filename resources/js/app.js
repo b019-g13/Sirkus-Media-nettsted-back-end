@@ -10,56 +10,99 @@ function uuidv4() {
     );
 }
 
-(function() {
-    const containers = document.querySelectorAll(
-        "#drag-area-wrapper .drag-area"
+// Load Axios and set CSRF token
+window.axios = require("axios");
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+
+let token = document.head.querySelector('meta[name="csrf-token"]');
+
+if (token) {
+    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+} else {
+    console.error(
+        "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
     );
+}
 
-    const originalDragElementClasses = "draggable";
+// Setup draggable
+(function() {
+    const eventDragNewItem = new CustomEvent("draggable-drag-new-item");
+    const dragAreasWrapper = document.querySelector("#drag-area-wrapper");
 
-    if (containers.length === 0) {
+    // No drag area wrapper on this page
+    if (dragAreasWrapper == null) {
         return false;
     }
 
-    const sortable = new Sortable(containers, {
-        draggable: ".draggable"
-    });
+    let dragAreaContainers = dragAreasWrapper.querySelectorAll(".drag-area");
 
-    let sourceList = sortable.containers[0];
-    let destinationList = sortable.containers[1];
+    // No drag areas on this page
+    if (dragAreaContainers == null) {
+        return false;
+    }
+
+    let availableItemsContainer = dragAreasWrapper.querySelector(
+        ".drag-area-source"
+    );
+    let activeItemsContainers = dragAreasWrapper.querySelectorAll(
+        ".drag-area-destination"
+    );
+
+    // No drag area source or destinations on this page
+    if (availableItemsContainer == null || activeItemsContainers == null) {
+        return false;
+    }
+
+    let sortable = new Sortable(dragAreaContainers, {
+        draggable: ".draggable",
+        handle: ".handle"
+    });
 
     sortable.on("sortable:stop", evt => {
         // Make copy of node we dropped into destination list
         if (
-            evt.oldContainer === sourceList &&
-            evt.newContainer === destinationList
+            evt.oldContainer === availableItemsContainer &&
+            Array.prototype.indexOf.call(
+                activeItemsContainers,
+                evt.newContainer
+            ) >= 0
         ) {
-            let activeDragElementOriginal = evt.dragEvent.source.cloneNode(
-                true
-            );
-            let activeDragElementCopy = evt.dragEvent.originalSource;
+            let activeDragElementCopy = evt.dragEvent.source.cloneNode(true);
+            let activeDragElementOriginal = evt.dragEvent.originalSource;
 
             evt.oldContainer.insertBefore(
-                activeDragElementOriginal,
+                activeDragElementCopy,
                 evt.dragEvent.originalSource
             );
 
-            activeDragElementOriginal.classList = originalDragElementClasses;
+            activeDragElementCopy.classList = "draggable";
             activeDragElementOriginal.style.display = "";
 
-            const inputs = activeDragElementCopy.querySelectorAll("input");
+            const inputs = activeDragElementCopy.querySelectorAll(
+                "input, textarea"
+            );
 
             if (inputs != null) {
                 inputs.forEach(input => {
                     const uuid = uuidv4();
-                    const label = input.parentNode.querySelector("label");
                     input.setAttribute("id", "input-" + uuid);
-                    label.setAttribute("for", "input-" + uuid);
+
+                    const label = input.parentNode.querySelector("label");
+                    if (label != null) {
+                        label.setAttribute("for", "input-" + uuid);
+                    }
                 });
             }
+
+            setTimeout(() => {
+                dispatchEvent(eventDragNewItem);
+            }, 200);
         } else if (
-            evt.newContainer === sourceList &&
-            evt.oldContainer === destinationList
+            evt.newContainer === availableItemsContainer &&
+            Array.prototype.indexOf.call(
+                activeItemsContainers,
+                evt.oldContainer
+            ) >= 0
         ) {
             // Hide the node we dropped into source list (Can't be removed...)
             evt.dragEvent.originalSource.classList.add("hide");
@@ -67,4 +110,150 @@ function uuidv4() {
     });
 
     return sortable;
+})();
+
+// Conditional form elements
+(function() {
+    let conditionalSwitches = {};
+    const conditionals = document.querySelectorAll(".form-group-conditional");
+
+    conditionals.forEach(conditional => {
+        const conditionalSwitchId = conditional.dataset.conditionSwitch;
+        const conditionalSwitch = document.querySelector(
+            "#" + conditionalSwitchId
+        );
+
+        if (!conditionalSwitch.dataset.switchId) {
+            conditionalSwitch.dataset.switchId = uuidv4();
+        }
+        const randomId = conditionalSwitch.dataset.switchId;
+
+        if (conditionalSwitches[randomId]) {
+            conditionalSwitches[randomId].conditionals.push(conditional);
+        } else {
+            conditionalSwitches[randomId] = {
+                switch: conditionalSwitch,
+                conditionals: [conditional]
+            };
+        }
+    });
+
+    Object.keys(conditionalSwitches).forEach(function(key) {
+        const conditionalSwitch = conditionalSwitches[key];
+
+        if (conditionalSwitch.switch.checked) {
+            toggleConditionals(conditionalSwitch.conditionals);
+        }
+
+        conditionalSwitch.switch.addEventListener("change", () => {
+            toggleConditionals(conditionalSwitch.conditionals);
+        });
+    });
+
+    function toggleConditionals(conditionals) {
+        conditionals.forEach(conditional => {
+            conditional.classList.toggle("form-group-conditional-active");
+        });
+    }
+})();
+
+// Modals
+(function() {
+    let lastFocusedElement = document.body;
+    setupModalTriggers();
+
+    window.addEventListener("draggable-drag-new-item", setupModalTriggers);
+
+    // Setup modal openers/triggers
+    function setupModalTriggers() {
+        const modalTriggerCheckClass = "modal-trigger-is-setup";
+        const modalCloserCheckClass = "modal-closer-is-setup";
+        const modalSubmitterCheckClass = "modal-submitter-is-setup";
+
+        const modalTriggers = document.querySelectorAll(".modal-trigger");
+        if (modalTriggers == null) {
+            return false;
+        }
+
+        modalTriggers.forEach(modalTrigger => {
+            if (modalTrigger.classList.contains(modalTriggerCheckClass)) {
+                return;
+            }
+
+            modalTrigger.classList.add(modalTriggerCheckClass);
+
+            const modalId = modalTrigger.dataset.modal;
+            const modal = document.querySelector("#" + modalId);
+
+            if (modal != null) {
+                modalTrigger.addEventListener("click", () => {
+                    openModal(modal);
+                });
+
+                // Setup modal closers
+                const modalClosers = modal.querySelectorAll(".modal-closer");
+                modalClosers.forEach(modalCloser => {
+                    if (
+                        !modalCloser.classList.contains(modalCloserCheckClass)
+                    ) {
+                        modalCloser.classList.add(modalCloserCheckClass);
+
+                        modalCloser.addEventListener("click", () => {
+                            closeModal(modal);
+                        });
+                    }
+                });
+
+                // Setup modal submitters
+                const modalSubmitters = modal.querySelectorAll(".modal-submit");
+                modalSubmitters.forEach(modalSubmitter => {
+                    if (
+                        !modalSubmitter.classList.contains(
+                            modalSubmitterCheckClass
+                        )
+                    ) {
+                        modalSubmitter.classList.add(modalSubmitterCheckClass);
+
+                        modalSubmitter.addEventListener("click", () => {
+                            submitModal(modal);
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    function openModal(modal) {
+        if (modal == null) {
+            return false;
+        }
+
+        modal.classList.add("modal-open");
+        document.documentElement.classList.add("modal-open");
+
+        lastFocusedElement = document.activeElement;
+        modal.setAttribute("tabindex", 0);
+        modal.focus();
+    }
+
+    function closeModal(modal) {
+        if (modal == null) {
+            return false;
+        }
+
+        modal.classList.remove("modal-open");
+        document.documentElement.classList.remove("modal-open");
+        lastFocusedElement.focus();
+    }
+
+    function submitModal(modal) {
+        if (modal == null) {
+            return false;
+        }
+
+        closeModal(modal);
+
+        const form = modal.querySelector("form");
+        form.submit();
+    }
 })();

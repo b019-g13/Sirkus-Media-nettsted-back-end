@@ -2,8 +2,8 @@
 @section('content')
     <h1>Rediger komponent</h1>
 
-    <a href="{{ route('components.index') }}">
-        <span>&#8592;</span>
+    <a href="{{ route('components.index') }}" class="button">
+        @icon('arrow-left')
         <span>Tilbake</span>
     </a>
 
@@ -13,9 +13,12 @@
         @include('components.form-fields')
 
         <div class="form-group">
-            <button type="submit">Oppdater</button>
+            <button type="submit" class="button-success">
+                <span>Oppdater</span>
+                @icon('save')
+            </button>
         </div>
     </form>
 
-    <script src="{{ asset('js/component.js') }}"></script>
+    <script src="{{ asset('js/component.js') }}" defer></script>
 @endsection

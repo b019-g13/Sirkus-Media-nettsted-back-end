@@ -8,23 +8,19 @@ class Link extends Model
 {
     use Traits\UsesUuid;
 
-    protected $fillable = [ 'name', 'value', 'page_id' ];
-    
-    //Har en link
-    public function component_field()
-    {
-       return $this->hasOne('App\ComponentField');
-    }
+    protected $fillable = ['name', 'value', 'page_id'];
 
-    // Tilhører til page
     public function page()
     {
-      return  $this->belongsTo('App\Page');
+        return $this->belongsTo('App\Page');
     }
 
-    // Har flere menus
-    public function menu_links()
+    public function getValueAttribute($value)
     {
-      return  $this->hasMany('App\MenuLink');
+        if ($this->page_id === null) {
+            return $value;
+        }
+
+        return $this->page->url;
     }
 }

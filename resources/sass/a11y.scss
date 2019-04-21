@@ -1,0 +1,36 @@
+.form-group {
+    input,
+    textarea,
+    select {
+        &:focus {
+            animation: input_blink 250ms $transition_timing_ease_in_out;
+        }
+    }
+
+    &-switch input:focus + label::before {
+        animation: input_blink 250ms $transition_timing_ease_in_out;
+    }
+
+    @keyframes input_blink {
+        0% {
+            background-color: $color_input_bg;
+        }
+
+        50% {
+            color: $color_selection_fg;
+            background-color: $color_selection_bg;
+        }
+
+        100% {
+            background-color: $color_input_bg;
+        }
+    }
+}
+
+a {
+    &:focus {
+        outline: 3px dashed $color_selection_bg;
+        outline: 3px dashed currentColor;
+        outline-offset: 0.2rem;
+    }
+}

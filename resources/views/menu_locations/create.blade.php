@@ -1,15 +1,10 @@
 @extends('layouts.app')
 @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2> Legg til ny lokasjon </h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('menu_locations.index') }}"> Tilbake </a>
-        </div>
-    </div>
-</div>
+<h2>Legg til ny lokasjon</h2>
+<a href="{{ route('menu_locations.index') }}" class="button">
+    @icon('arrow-left')
+    <span>Tilbake</span>
+</a>
 
 <form action="{{ route('menu_locations.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
@@ -22,10 +17,11 @@
                 <input type="text" name="name"  value="{{old('name', (isset($menu_location->name)? $menu_location->name : null))}}" required class="form-control" placeholder="Navn">
             </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            <button type="submit" class="btn btn-primary"> Opprett </button>
-        </div>
+        <button type="submit" class="button-success">
+            <span>Opprett</span>
+            @icon('save')
+        </button>
     </div>
-   
+
 </form>
 @endsection

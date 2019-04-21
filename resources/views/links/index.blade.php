@@ -6,11 +6,11 @@
                 <h2> Link </h2>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('links.create') }}"> Oprett ny komponent </a>
+                <a class="btn btn-success" href="{{ route('links.create') }}">Oprett ny link</a>
             </div>
         </div>
     </div>
-   
+
     <table class="table table-bordered">
         <tr>
             <th> Link ID</th>
@@ -30,11 +30,11 @@
                      @csrf
 
                     <a class="btn btn-info" href="{{ route('links.show',$link->id) }}"> Vis </a>
-    
+
                     <a class="btn btn-primary" href="{{ route('links.edit',$link->id) }}"> Rediger </a>
-   
+
                     @method('DELETE')
-   
+
                     <button type="submit" class="btn btn-danger"  onclick="return confirm('Er du sikkert å slette det?')"> Slett </button>
                 </form>
             </td>
