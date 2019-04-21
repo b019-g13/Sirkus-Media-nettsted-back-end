@@ -24,7 +24,7 @@ class PageComponent extends Model
         $component_field = ComponentField::find($this->component_field_id);
         $field = null;
 
-        if ($component_field !== null) {
+        if ($component_field !== null && $component_field->status === 0) {
             $field = Field::find($component_field->id);
         }
 
