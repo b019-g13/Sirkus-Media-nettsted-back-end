@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateFieldTypesTable extends Migration
 {
@@ -13,11 +13,10 @@ class CreateFieldTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('field_types', function (Blueprint $table)
-        {
+        Schema::create('field_types', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->unique();
         });
     }
 

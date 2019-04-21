@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-
 use App\Component;
 use App\ComponentField;
 use App\Field;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ComponentController extends Controller
 {
@@ -20,16 +19,16 @@ class ComponentController extends Controller
 
     public function __construct()
     {
-       $this->middleware('auth');
-       $this->middleware('role:superadmin');
+        $this->middleware('auth');
+        $this->middleware('verified');
+        $this->middleware('role:superadmin');
     }
-
 
     public function index()
     {
-        $components = Component::paginate(30);
+        $components = Component::orderBy('name')->paginate(30);
 
-        return view('components.index',compact('components'));
+        return view('components.index', compact('components'));
     }
 
     /**
@@ -67,7 +66,8 @@ class ComponentController extends Controller
             'fields' => 'nullable|array',
             'fields.*' => ['required_with:fields', 'array'],
             'fields.*.id' => ['required_with:fields', 'uuid', Rule::in($available_fields)],
-            'fields.*.order' => 'required_with:fields|integer'
+            'fields.*.nickname' => 'present|nullable|string',
+            'fields.*.order' => 'required_with:fields|integer',
         ]);
     }
 
@@ -91,13 +91,14 @@ class ComponentController extends Controller
         $component->save();
 
         foreach ($component->component_fields as $component_field) {
-            $component_field->delete();
+            $component_field->mark_for_deletion();
         }
 
         foreach ($request->fields as $field) {
             $component_field = new ComponentField;
             $component_field->component_id = $component->id;
             $component_field->field_id = $field['id'];
+            $component_field->nickname = empty($field['nickname']) ? null : $field['nickname'];
             $component_field->order = $field['order'];
             $component_field->save();
         }
@@ -153,13 +154,14 @@ class ComponentController extends Controller
         $component->save();
 
         foreach ($component->component_fields as $component_field) {
-            $component_field->delete();
+            $component_field->mark_for_deletion();
         }
 
         foreach ($request->fields as $field) {
             $component_field = new ComponentField;
             $component_field->component_id = $component->id;
             $component_field->field_id = $field['id'];
+            $component_field->nickname = empty($field['nickname']) ? null : $field['nickname'];
             $component_field->order = $field['order'];
             $component_field->save();
         }
