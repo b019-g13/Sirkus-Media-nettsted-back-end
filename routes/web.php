@@ -20,7 +20,8 @@ Auth::routes(['verify' => true]);
 Route::get('home', 'HomeController@index')->name('home');
 Route::get('media-picker', 'MediaPickerController@show')->name('media-picker.show');
 Route::post('media-picker', 'MediaPickerController@store')->name('media-picker.store');
-
+Route::get('contact', 'SendEmailController@index');
+Route::post('contact', 'SendEmailController@send');
 Route::resources([
     'pages' => 'PageController',
     'components' => 'ComponentController',
