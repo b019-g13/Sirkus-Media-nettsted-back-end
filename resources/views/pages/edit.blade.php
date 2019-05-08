@@ -21,5 +21,7 @@
         </button>
     </form>
 
+    @include('links.pick-modal')
+
     <script src="{{ asset('js/page.js') }}" defer></script>
 @endsection

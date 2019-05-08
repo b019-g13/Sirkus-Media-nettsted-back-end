@@ -168,9 +168,8 @@ class Page extends Model
 
             if ($field->type === 'image' && !empty($field->value)) {
                 $page_component->image_id = $field->value;
-            } else if ($field->type === 'url_internal' && !empty($field->value)) {
-                // $page_component->link_id = $field->value;
-                $page_component->value = $field->value;
+            } else if (in_array($field->type, ['url_external', 'url_internal'])  && !empty($field->value)) {
+                $page_component->link_id = $field->value;
             } else {
                 $page_component->value = $field->value;
             }

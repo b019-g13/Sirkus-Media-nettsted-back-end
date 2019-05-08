@@ -115,6 +115,208 @@ function setupMediaPickers(form) {
     });
 }
 
+function setupLinkPicker(form) {
+    const pickerModal = document.querySelector("#menu-modal-pick-link");
+    const pickerForm = pickerModal.querySelector("form");
+
+    const editModalTriggerCheckClass = "menu-link-action-edit-is-setup";
+    const deleteModalTriggerCheckClass = "menu-link-action-delete-is-setup";
+
+    setupLinkPickerModals(pickerModal);
+    setupLinkPickerOutputs(form);
+
+    function setupLinkPickerOutputs(form) {
+        const linkComponents = form.querySelectorAll(
+            ".component-field-type-url_external, .component-field-type-url_internal"
+        );
+
+        if (linkComponents == null) {
+            return;
+        }
+
+        linkComponents.forEach(linkComponent => {
+            const input = linkComponent.querySelector(".cf-input");
+            const outputElement = linkComponent.querySelector(
+                ".cf-link-picker-selected"
+            );
+
+            if (
+                input == null ||
+                input.value == null ||
+                input.value.length === 0 ||
+                outputElement == null
+            ) {
+                return;
+            }
+
+            setupLinkPickerOutputElement(input.value, outputElement);
+        });
+    }
+
+    pickerForm.addEventListener("submit", function(evt) {
+        evt.preventDefault();
+
+        let formData = new FormData(pickerForm);
+        const linkId = formData.get("link");
+
+        // Make sure we found a link id, and that the form is connected to a modal,
+        // which in turn is connected to the trigger which opened it
+        if (
+            linkId == null ||
+            pickerForm._modal == null ||
+            pickerForm._modal._modalTrigger == null
+        ) {
+            return;
+        }
+
+        // Find the input via the modal trigger
+        const trigger = pickerForm._modal._modalTrigger;
+        const input = trigger.parentNode.querySelector(".cf-input");
+        const outputElement = trigger.parentNode.querySelector(
+            ".cf-link-picker-selected"
+        );
+
+        // Put the link id into the input
+        input.value = linkId;
+
+        setupLinkPickerOutputElement(linkId, outputElement);
+    });
+
+    function setupLinkPickerOutputElement(linkId, outputElement) {
+        // Get the link
+        axios.get("/links/" + linkId).then(response => {
+            let link = response.data;
+
+            // Make sure element is empty
+            while (outputElement.firstChild) {
+                outputElement.removeChild(outputElement.firstChild);
+            }
+
+            // Create text
+            const textValue = link.name + " (" + link.value + ")";
+            const textElement = document.createTextNode(textValue);
+
+            // Insert text
+            outputElement.appendChild(textElement);
+        });
+    }
+
+    function setupLinkPickerModals(pickerModal) {
+        const editModalTriggers = pickerModal.querySelectorAll(
+            ".links .link .link-edit"
+        );
+        const deleteModalTriggers = pickerModal.querySelectorAll(
+            ".links .link .link-delete"
+        );
+
+        editModalTriggers.forEach(editModalTrigger => {
+            if (
+                !editModalTrigger.classList.contains(editModalTriggerCheckClass)
+            ) {
+                setupLinkPickerEditModal(editModalTrigger);
+            }
+        });
+
+        deleteModalTriggers.forEach(deleteModalTrigger => {
+            if (
+                !deleteModalTrigger.classList.contains(
+                    deleteModalTriggerCheckClass
+                )
+            ) {
+                setupLinkPickerDeleteModal(deleteModalTrigger);
+            }
+        });
+    }
+
+    function setupLinkPickerEditModal(trigger) {
+        trigger.classList.add(editModalTriggerCheckClass);
+
+        // Find modal, form and the link id
+        const linkId = trigger.parentNode.dataset.linkId;
+        const modalId = trigger.dataset.modal;
+        const modal = document.querySelector("#" + modalId);
+        const form = modal.querySelector("form");
+        const modalLoadingIndicator = modal.querySelector(
+            ".modal-heading .spinner"
+        );
+        let formAction = form.getAttribute("action");
+
+        trigger.addEventListener("click", () => {
+            // Edit the form action to use the link id
+            if (form.dataset.originalAction) {
+                formAction = form.dataset.originalAction;
+            } else {
+                form.dataset.originalAction = formAction;
+            }
+
+            formAction = formAction.replace("LINK_ID", linkId);
+            form.setAttribute("action", formAction);
+
+            const inputLinkName = form.querySelector('input[name="name"]');
+            const inputLinkInternal = form.querySelector(
+                'input[name="internal"]'
+            );
+            const inputLinkValue = form.querySelector('input[name="value"]');
+            const inputLinkPageId = form.querySelector(
+                'select[name="page_id"]'
+            );
+
+            // inputLinkName.value = " ";
+            // inputLinkValue.value = null;
+            // inputLinkPageId.value = null;
+            modalLoadingIndicator.style.display = "inline-block";
+
+            // Get the link
+            axios.get(formAction).then(response => {
+                let link = response.data;
+                modalLoadingIndicator.style.display = "none";
+
+                inputLinkName.value = link.name;
+                inputLinkName.setAttribute("value", link.name);
+
+                if (link.page_id == null) {
+                    inputLinkValue.value = link.value;
+                    inputLinkPageId.value = 0;
+
+                    if (inputLinkInternal.checked) {
+                        inputLinkInternal.click();
+                    }
+                } else {
+                    inputLinkPageId.value = link.page_id;
+                    inputLinkValue.value = null;
+
+                    if (!inputLinkInternal.checked) {
+                        inputLinkInternal.click();
+                    }
+                }
+            });
+        });
+    }
+
+    function setupLinkPickerDeleteModal(trigger) {
+        trigger.classList.add(deleteModalTriggerCheckClass);
+
+        trigger.addEventListener("click", () => {
+            // Find modal, form and the link id
+            const linkId = trigger.parentNode.dataset.linkId;
+            const modalId = trigger.dataset.modal;
+            const modal = document.querySelector("#" + modalId);
+            const form = modal.querySelector("form");
+
+            // Edit the form action to use the link id
+            let formAction = form.getAttribute("action");
+            if (form.dataset.originalAction) {
+                formAction = form.dataset.originalAction;
+            } else {
+                form.dataset.originalAction = formAction;
+            }
+
+            formAction = formAction.replace("LINK_ID", linkId);
+            form.setAttribute("action", formAction);
+        });
+    }
+}
+
 function setupChildAdders(wrapper) {
     const buttons = wrapper.querySelectorAll(".page-component-duplicate");
     const checkClass = "button-has-been-setup-child-adder";
@@ -182,6 +384,7 @@ function setupChildRemover(component) {
         "#drag-area-wrapper > .drag-area-destination"
     );
 
+    setupLinkPicker(form);
     setupMediaPickers(form);
     setupChildAdders(pageComponentsDestination);
     setupChildRemovers(pageComponentsDestination);

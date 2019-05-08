@@ -23,3 +23,26 @@
     </footer>
     <div class="modal-spacer"></div>
 </div>
+<script>
+    (function() {
+        const form = document.querySelector("#menu-modal-create-link form");
+        form.addEventListener("submit", evt => {
+            evt.preventDefault();
+
+            const url = form.action;
+            const data = new FormData(form);
+            const config = {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                transformRequest: [function(data) {
+                    newData = {};
+                    data.forEach((value, key) => {newData[key] = value});
+                    return JSON.stringify(newData);
+                }]
+            };
+            
+            axios.post(url, data, config);
+        });
+    })();
+</script>

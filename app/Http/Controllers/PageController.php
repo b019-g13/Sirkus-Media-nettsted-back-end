@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Component;
 use App\Image;
 use App\Page;
+use App\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -43,11 +44,13 @@ class PageController extends Controller
     {
         $pages = Page::All();
         $images = Image::All();
+        $links = Link::all();
         $components = Component::whereNull('parent_id')->get();
 
         return view('pages.create', compact(
             'pages',
             'images',
+            'links',
             'components'
         ));
     }
@@ -138,12 +141,16 @@ class PageController extends Controller
     public function edit($id)
     {
         $page = Page::find($id);
+        $pages = Page::all();
         $images = Image::All();
+        $links = Link::all();
         $components = Component::whereNull('parent_id')->get();
 
         return view('pages.edit', compact(
             'page',
+            'pages',
             'images',
+            'links',
             'components'
         ));
     }
