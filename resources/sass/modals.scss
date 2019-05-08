@@ -112,6 +112,18 @@ html.modal-open {
     @media screen and (min-width: $size_medium) {
         padding: 1em 2em;
     }
+
+    button:first-child {
+        margin-right: auto;
+    }
+
+    button:last-child {
+        margin-left: 1em;
+    }
+
+    button:first-child:last-child {
+        margin: 0;
+    }
 }
 
 .modal > .modal-spacer {
