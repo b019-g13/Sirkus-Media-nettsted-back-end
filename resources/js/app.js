@@ -187,7 +187,7 @@ if (token) {
 
             if (modal != null) {
                 modalTrigger.addEventListener("click", () => {
-                    openModal(modal);
+                    openModal(modal, modalTrigger);
                 });
 
                 // Setup modal closers
@@ -223,8 +223,8 @@ if (token) {
         });
     }
 
-    function openModal(modal) {
-        if (modal == null) {
+    function openModal(modal, modalTrigger) {
+        if (modal == null || modalTrigger == null) {
             return false;
         }
 
@@ -234,6 +234,8 @@ if (token) {
         lastFocusedElement = document.activeElement;
         modal.setAttribute("tabindex", 0);
         modal.focus();
+
+        modal._modalTrigger = modalTrigger;
     }
 
     function closeModal(modal) {
@@ -244,6 +246,8 @@ if (token) {
         modal.classList.remove("modal-open");
         document.documentElement.classList.remove("modal-open");
         lastFocusedElement.focus();
+
+        modal._modalTrigger = null;
     }
 
     function submitModal(modal) {
@@ -251,9 +255,26 @@ if (token) {
             return false;
         }
 
-        closeModal(modal);
-
         const form = modal.querySelector("form");
-        form.submit();
+        if (form == null) {
+            return;
+        }
+
+        form._modal = modal;
+
+        // Append a hidden submit button inside the form. We do this instead of form.submit,
+        // because with this way we still trigger event listeners and form validation,
+        // but form.submit does not.
+        const button = document.createElement("button");
+        button.setAttribute("type", "submit");
+        button.classList.add("hide");
+
+        form.appendChild(button);
+        button.click();
+
+        // Close modal is form is valid
+        if (form.checkValidity()) {
+            closeModal(modal);
+        }
     }
 })();
