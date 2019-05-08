@@ -59,7 +59,7 @@ class Component extends Model
                 $nickname = $field->name;
             }
 
-            $push = (object) [
+            $push = (object)[
                 "component_field_id" => $component_field->id,
                 "field_id" => $field->id,
                 "name" => $field->name,
@@ -84,35 +84,7 @@ class Component extends Model
         }
 
         foreach ($fields as $field) {
-            $html_output .= '<div class="component-field component-field-type-' . $field->type
-            . '" data-component_field_id="' . $field->component_field_id . '" data-field_type="' . $field->type . '">';
-            $html_output .= '<label>' . $field->nickname . '</label>';
-
-            if ($field->type == 'string' || $field->type == 'icon') {
-                $html_output .= '<input class="cf-input" type="text" value="' . $field->value . '">';
-            } else if ($field->type == 'hex_color') {
-                $html_output .= '<input class="cf-input" type="color" value="' . $field->value . '">';
-            } else if ($field->type == 'text') {
-                $html_output .= '<textarea class="cf-input">' . $field->value . '</textarea>';
-            } else if ($field->type == 'image') {
-                $id = null;
-                $url = null;
-
-                if (!empty($field->value)) {
-                    $id = $field->value->id;
-                    $url = asset('storage/' . $field->value->url);
-                }
-
-                $html_output .= '<div class="cf-media-picker" data-value="' . $url . '">';
-                $html_output .= '<button class="mp-trigger-open" type="button">Velg bilde</button>';
-                $html_output .= '<button class="mp-trigger-delete" type="button">Fjern bilde</button>';
-                $html_output .= '<input class="cf-input" value="' . $id . '" type="text">';
-                $html_output .= '</div>';
-            } else {
-                $html_output .= '<input class="cf-input" type="text" value="' . $field->value . '">';
-            }
-
-            $html_output .= '</div>';
+            $html_output .= view('components.field_types', compact('field'));
         }
 
         return $html_output;
