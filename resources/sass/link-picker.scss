@@ -1,0 +1,93 @@
+#menu-modal-pick-link {
+    .links {
+        display: block;
+        max-height: 80vh;
+        overflow-x: auto;
+    }
+
+    .link-name {
+        color: $color_darkest;
+        padding-left: 0.5em;
+        white-space: nowrap;
+        max-width: 40%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 2;
+    }
+
+    .link-value {
+        color: $color_dark;
+        padding-left: 0.25rem;
+        padding-right: 0.5rem;
+        white-space: nowrap;
+        font-size: 0.8em;
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 2rem;
+        height: 2rem;
+    }
+
+    .link-edit,
+    .link-delete {
+        opacity: 0;
+        flex-shrink: 0;
+    }
+
+    .link-edit {
+        margin-left: auto;
+    }
+
+    .link-create {
+        margin-bottom: 1em;
+    }
+
+    .link-create:last-child {
+        margin-top: 1em;
+    }
+
+    .links .link {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-content: flex-start;
+        align-items: center;
+
+        &:first-of-type {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        &:hover {
+            background-color: $color_primary_light;
+            .link-edit,
+            .link-delete {
+                opacity: 1;
+            }
+        }
+    }
+
+    .link-select {
+        margin-right: 0.5em;
+
+        &:hover ~ .link-name,
+        &:focus ~ .link-name {
+            color: $color_primary_dark;
+        }
+
+        &:hover ~ .link-value,
+        &:focus ~ .link-value {
+            color: $color_primary;
+        }
+
+        &:checked ~ .link-name {
+            color: $color_lightest;
+            background-color: $color_primary;
+        }
+
+        &:checked ~ .link-value {
+            color: $color_primary_light;
+            background-color: $color_primary;
+        }
+    }
+}
