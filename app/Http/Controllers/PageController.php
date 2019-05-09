@@ -87,8 +87,9 @@ class PageController extends Controller
         $this->page_post_validator($request->all())->validate();
 
         $page = new Page;
-        $page->title = $request->get('title');
-        $page->image_id = $request->get('image_id');
+        $page->title = $request->title;
+        $page->slug = $request->slug;
+        $page->image_id = $request->image_id;
         $page->save();
 
         // Setup components
@@ -101,8 +102,10 @@ class PageController extends Controller
         return redirect()->route('pages.edit', $page)->with('success', 'Page er opprettet');
     }
 
-    public function api_show(Page $page)
+    public function api_show(String $page_slug)
     {
+        $page = Page::where('slug', $page_slug)->firstOrFail();
+        
         $api_page = new \stdClass;
         $api_page->id = $page->id;
         $api_page->title = $page->title;
@@ -152,6 +155,7 @@ class PageController extends Controller
         $this->page_post_validator($request->all())->validate();
 
         $page->title = $request->title;
+        $page->slug = $request->slug;
         $page->image_id = $request->image_id;
         $page->save();
 

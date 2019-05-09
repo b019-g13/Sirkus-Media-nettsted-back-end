@@ -197,11 +197,6 @@ class Page extends Model
         }
     }
 
-    public function getSlugAttribute()
-    {
-        return Str::slug($this->title);
-    }
-
     public function getUrlAttribute()
     {
         return '/' . $this->slug;
