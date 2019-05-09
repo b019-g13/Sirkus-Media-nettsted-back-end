@@ -18,6 +18,10 @@ Route::get('/', function () {
 Auth::routes(['verify' => true]);
 
 Route::get('home', 'HomeController@index')->name('home');
+
+Route::get('konto', 'UserController@show')->name('user.show');
+Route::post('konto', 'UserController@update')->name('user.update');
+
 Route::get('media-picker', 'MediaPickerController@show')->name('media-picker.show');
 Route::post('media-picker', 'MediaPickerController@store')->name('media-picker.store');
 
