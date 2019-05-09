@@ -13,7 +13,7 @@
 
 // Pages
 Route::get('pages', 'PageController@api_index');
-Route::get('pages/{page}', 'PageController@api_show');
+Route::get('pages/{page_slug}', 'PageController@api_show');
 
 // Menus
 Route::get('/menus', 'MenuController@api_index');
