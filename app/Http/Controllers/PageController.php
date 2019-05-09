@@ -26,7 +26,7 @@ class PageController extends Controller
 
     public function index()
     {
-        $pages = Page::paginate(30);
+        $pages = Page::paginate(10);
         return view('pages.index', compact('pages'));
     }
 
@@ -101,23 +101,6 @@ class PageController extends Controller
         return redirect()->route('pages.edit', $page)->with('success', 'Page er opprettet');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Page $page)
-    {
-        $page->menu;
-        $components = $page->components;
-        foreach ($components as $component) {
-            $component->fields;
-        }
-
-        return view('pages.show', compact('page'));
-    }
-
     public function api_show(Page $page)
     {
         $api_page = new \stdClass;
@@ -138,9 +121,8 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Page $page)
     {
-        $page = Page::find($id);
         $pages = Page::all();
         $images = Image::All();
         $links = Link::all();
@@ -196,11 +178,9 @@ class PageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Page $page)
     {
-        $page = Page::find($id);
         $page->delete();
-
-        return redirect()->route('pages.index')->with('success', 'Page er slettet');
+        return redirect()->route('pages.index')->with('success', 'Siden ble slettet');
     }
 }

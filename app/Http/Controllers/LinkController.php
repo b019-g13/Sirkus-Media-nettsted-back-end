@@ -22,28 +22,6 @@ class LinkController extends Controller
         $this->middleware('verified');
     }
 
-    public function index()
-    {
-        $links = Link::paginate(30);
-        return view('links.index', compact('links'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $links = Link::All();
-        $pages = Page::All();
-
-        return view('links.create', compact(
-            'links',
-            'pages'
-        ));
-    }
-
     protected function link_validator(array $data)
     {
         $pages = Page::pluck('id')->toArray();
@@ -95,23 +73,7 @@ class LinkController extends Controller
             return $link;
         }
 
-        $link->menus;
-        $link->component_fields;
-        $link->page;
-
-        return view('links.show', compact('link'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Link $link)
-    {
-        $pages = Page::All();
-        return view('links.edit', compact('link', 'pages'));
+        return redirect()->back();
     }
 
     /**
@@ -139,7 +101,7 @@ class LinkController extends Controller
 
         $link->save();
 
-        return redirect()->back()->with('success', 'Linken er oppdatert');
+        return redirect()->back()->with('success', 'Linken ble oppdatert');
     }
 
     /**

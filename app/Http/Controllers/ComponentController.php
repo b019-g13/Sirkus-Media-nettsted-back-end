@@ -175,10 +175,9 @@ class ComponentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Component $component)
     {
-        $component = Component::find($id);
         $component->delete();
-        return redirect()->route('components.index')->with('success', 'Komponenten er slettet');
+        return redirect()->route('components.index')->with('success', 'Komponenten ble slettet');
     }
 }

@@ -21,17 +21,16 @@ Route::get('epost-bekreftet', 'Auth\VerificationController@complete');
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::get('brukere', 'UserController@index')->name('user.index');
+Route::delete('bruker/{user}', 'UserController@destroy')->name('user.destroy');
 Route::get('konto', 'UserController@show')->name('user.show');
 Route::post('konto', 'UserController@update')->name('user.update');
 
 Route::get('media-picker', 'MediaPickerController@show')->name('media-picker.show');
 Route::post('media-picker', 'MediaPickerController@store')->name('media-picker.store');
 
-Route::resources([
-    'pages' => 'PageController',
-    'components' => 'ComponentController',
-    'links' => 'LinkController',
-    'fields' => 'FieldController',
-    'menus' => 'MenuController',
-    'menu_locations' => 'MenuLocationController',
-]);
+Route::resource('pages', 'PageController')->except(['show']);
+Route::resource('menus', 'MenuController')->except(['show']);
+Route::resource('components', 'ComponentController')->except(['show']);
+Route::resource('links', 'LinkController')->except(['index', 'edit']);
+Route::resource('fields', 'FieldController')->except(['show']);
+Route::resource('menu_locations', 'MenuLocationController')->except(['show']);

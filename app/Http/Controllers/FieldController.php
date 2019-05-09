@@ -73,7 +73,7 @@ class FieldController extends Controller
         $field->field_type_id = $request->field_type_id;
         $field->save();
 
-        return redirect()->route('fields.index')->with('success', 'Field er opprettet');
+        return redirect()->route('fields.index')->with('success', 'Feltet ble opprettet');
     }
 
     /**
@@ -118,7 +118,7 @@ class FieldController extends Controller
         $field->field_type_id = $request->field_type_id;
         $field->save();
 
-        return redirect()->route('fields.index')->with('success', 'Field er oppdatert');
+        return redirect()->route('fields.index')->with('success', 'Feltet ble oppdatert');
     }
 
     /**
@@ -127,10 +127,9 @@ class FieldController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Field $field)
     {
-        $field = Field::find($id);
         $field->delete();
-        return redirect()->route('fields.index')->with('success', 'Field er slettet');
+        return redirect()->route('fields.index')->with('success', 'Feltet ble slettet');
     }
 }
