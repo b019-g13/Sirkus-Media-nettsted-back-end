@@ -17,8 +17,7 @@ class Page extends Model
     ];
 
     public $appends = [
-        'slug',
-        'url',
+        'url'
     ];
 
     protected function setupComponent(PageComponent $page_component, bool $manipulate_data = false)
