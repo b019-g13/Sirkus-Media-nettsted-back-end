@@ -11,10 +11,38 @@ button {
     }
 }
 
+fieldset {
+    width: 100%;
+    margin: 2em auto 0;
+    border: 3px solid $color_primary;
+    border-radius: 3px;
+
+    legend {
+        font-weight: 700;
+        background-color: $color_primary;
+        padding: 0 0.5em;
+        color: $color_lightest;
+        border-radius: 3px;
+    }
+
+    fieldset {
+        margin: 0;
+        border: 1px solid $color_light;
+
+        legend {
+            background-color: $color_light;
+        }
+    }
+}
+
 .form-group {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr;
     margin: 0 auto 1em;
+
+    @media screen and (min-width: $size_m) {
+        grid-template-columns: 1fr 2fr;
+    }
 
     label {
         padding-right: 0.4em;
@@ -34,6 +62,80 @@ button {
             color: $color_input_active_fg;
             border-color: $color_input_active_border;
             background-color: $color_input_active_bg;
+        }
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        width: 1em;
+        height: 1em;
+        align-self: center;
+
+        &:first-child {
+            margin-right: 1em;
+            justify-self: end;
+        }
+
+        &:last-child {
+            justify-self: start;
+        }
+    }
+
+    textarea {
+        width: 100%;
+        max-width: 100%;
+        max-height: 70vh;
+        min-height: 6em;
+        resize: vertical;
+    }
+}
+
+.form-group-checkbox {
+    grid-template-columns: 1fr 2fr;
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        &:last-child {
+            order: -1;
+
+            @media screen and (min-width: $size_m) {
+                order: 0;
+            }
+        }
+    }
+}
+
+.form-group-submit {
+    display: flex;
+    margin: 1em auto 0;
+    justify-content: space-between;
+    align-items: center;
+
+    button[type="submit"] {
+        padding: 0.5em 2em;
+        border: 0;
+        color: lighten(mix($color_primary_light, $color_secondary_light), 10%);
+        font-size: 1.1em;
+        font-weight: 700;
+        text-transform: uppercase;
+        background-color: mix($color_primary, $color_secondary);
+        box-shadow: 0 0.6em 0.8em -0.4em rgba(mix($color_primary, $color_secondary), 0.5);
+        background-image: linear-gradient(
+            135deg,
+            $color_primary,
+            $color_secondary
+        );
+
+        &:focus,
+        &:hover {
+            color: darken(mix($color_primary_dark, $color_secondary_dark), 0%);
+            background-color: mix($color_primary_light, $color_secondary_light);
+            box-shadow: 0 0.6em 0.8em -0.4em rgba(mix($color_primary, $color_secondary), 0.5);
+            background-image: linear-gradient(
+                135deg,
+                $color_primary_light,
+                $color_secondary_light
+            );
         }
     }
 }
