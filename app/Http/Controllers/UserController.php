@@ -14,7 +14,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('role:superadmin|admin')->only('index');
+        $this->middleware('role:superadmin|admin')->only('index', 'destroy');
     }
 
     public function index(Request $request)
@@ -27,6 +27,12 @@ class UserController extends Controller
     {
         $user = $request->user();
         return view('user.show', compact('user'));
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->route('user.index')->with('success', 'Brukeren ble slettet');
     }
 
     protected function update_email_validator(array $data)
