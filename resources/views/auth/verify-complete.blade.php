@@ -1,12 +1,25 @@
 @extends('partials.master')
 
 @section('content')
-<div class="padded">
-    <h1>{{ __('Your email is now verified') }}</h1>
-
-    <div>
-        <p>{{ __('Your email was correctly verified') }}.</p>
-        <p>{{ __('Continue to') }} <a href="{{ route('home') }}">{{ __('dashboard') }}</a>.</p>
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('mail')
+                    <span>{{ _('Your email is now verified') }}</span>
+                </h1>
+            </div>
+            <div class="actions">
+                <a href="{{ route('home') }}" class="button button-primary-alt">
+                    @icon('arrow-right')
+                    <span>Gå videre</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            <p>{{ __('Your email was correctly verified') }}.</p>
+        </div>
     </div>
-</div>
 @endsection

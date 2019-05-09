@@ -1,43 +1,62 @@
-@extends('layouts.app')
+@extends('partials.master')
+
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-right">
-                <h2>Field</h2>
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('tag')
+                    <span>Felter</span>
+                </h1>
+                <p>Oversikt over alle felter.</p>
             </div>
-            <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('fields.create') }}"> Oprett ny field </a>
+            <div class="actions">
+                <a href="{{ route('fields.create') }}" class="button button-primary-alt">
+                    @icon('plus-square')
+                    <span>Nytt felt</span>
+                </a>
             </div>
         </div>
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            @if (!$fields->onFirstPage())
+                <p>Side {{ $fields->currentPage() }}</p>
+            @endif
+            <table class="first-bold">
+                <thead>
+                    <tr>
+                        <th>Navn</th>
+                        <th class="auto-hide">Slug</th>
+                        <th>Type</th>
+                        <th class="auto-hide">Sist redigert</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($fields as $field)
+                        <tr>
+                            <td>{{ $field->name }}</td>
+                            <td class="auto-hide">{{ $field->slug }}</td>
+                            <td>{{ $field->field_type->name }}</td>
+                            <td class="auto-hide" title="{{ $field->created_at->diffForHumans() }}">{{ $field->created_at->format('d-m-Y') }}</td>
+                            <td>
+                                <div>
+                                    <a class="button button-success button-action" href="{{ route('fields.edit', $field) }}">
+                                        @icon('edit')
+                                    </a>
+                                    <form action="{{ route('fields.destroy', $field) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="button-error button-action"  onclick="return confirm('Er du sikker på at du vil slette feltet?')">@icon('trash')</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @include('partials.nav-pagination', ['pagination_items' => $fields])
+        </div>
     </div>
-
-    <table class="table table-bordered">
-        <tr>
-            <th>Navn</th>
-            <th>Slug</th>
-            <th>Type</th>
-            <th>Handling</th>
-        </tr>
-        @foreach ($fields as $field)
-        <tr>
-            <td>{{ $field->name }}</td>
-            <td>{{ $field->slug }}</td>
-            <td>{{ $field->field_type->name }}</td>
-            <td>
-                <form action="{{ route('fields.destroy' , $field->id) }}" method="POST" enctype="multipart/form-data">
-                     @csrf
-
-                    <a class="btn btn-info" href="{{ route('fields.show',$field->id) }}"> Vis </a>
-
-                    <a class="btn btn-primary" href="{{ route('fields.edit',$field->id) }}"> Rediger </a>
-
-                    @method('DELETE')
-
-                    <button type="submit" class="btn btn-danger"  onclick="return confirm('Er du sikkert å slette det?')"> Slett </button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </table>
-    {{ $fields->onEachSide(1)->links() }}
 @endsection

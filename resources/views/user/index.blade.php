@@ -44,7 +44,11 @@
                             <td class="auto-hide" title="{{ $user->created_at->diffForHumans() }}">{{ $user->created_at->format('d-m-Y') }}</td>
                             <td>
                                 <div>
-                                    <button class="button-error button-action">@icon('trash')</button>
+                                    <form action="{{ route('user.destroy', $user) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="button-error button-action"  onclick="return confirm('Er du sikker på at du vil slette brukeren?')">@icon('trash')</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

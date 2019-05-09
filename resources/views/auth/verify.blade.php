@@ -1,16 +1,28 @@
 @extends('partials.master')
 
 @section('content')
-<div class="padded">
-    <h1>{{ __('Verify Your Email Address') }}</h1>
-
-    <div>
-        @if (session('resent'))
-            <p>{{ __('A fresh verification link has been sent to your email address.') }}</p>
-        @endif
-
-        <p>{{ __('Before proceeding, please check your email for a verification link.') }}</p>
-        <p>{{ __('If you did not receive the email') }}, <a href="{{ route('verification.resend') }}">{{ __('click here to request another') }}</a>.</p>
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('mail')
+                    <span>{{ _('Verify Your Email Address') }}</span>
+                </h1>
+            </div>
+            <div class="actions">
+                <a href="{{ route('verification.resend') }}" class="button button-primary-alt">
+                    <span>Send link på nytt</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            @if (session('resent'))
+                <p>{{ __('A fresh verification link has been sent to your email address.') }}</p>
+            @endif
+    
+            <p>{{ __('Before proceeding, please check your email for a verification link.') }}</p>
+        </div>
     </div>
-</div>
 @endsection
