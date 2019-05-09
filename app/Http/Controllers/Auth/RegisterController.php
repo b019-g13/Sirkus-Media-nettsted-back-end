@@ -80,6 +80,8 @@ class RegisterController extends Controller
 
         $role = Role::findOrFail($data['role']);
         $user->assignRole($role->name);
+
+        return $user;
     }
 
     /**
