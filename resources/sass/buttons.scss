@@ -71,16 +71,16 @@ a.button {
     }
 
     &.button-accent {
-        color: $color_accent_dark;
-        border-color: $color_accent_light;
-        background-color: $color_accent_light;
-        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent, 0.25);
+        color: #fff;
+        border-color: $color_accent;
+        background-color: $color_accent;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent-dark, 0.25);
 
         &:focus,
         &:hover {
-            color: $color_accent_light;
-            border-color: $color_accent_dark;
-            background-color: $color_accent_dark;
+            color: $color_accent_dark;
+            border-color: $color_accent_light;
+            background-color: $color_accent_light;
             box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent_dark, 0.25);
         }
     }
