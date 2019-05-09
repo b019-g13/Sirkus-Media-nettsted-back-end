@@ -4,7 +4,7 @@
     @if ($field->type == 'string' || $field->type == 'icon')
         <input class="cf-input" type="text" value="{{ $field->value }}">
     @elseif ($field->type == 'url_internal' || $field->type == 'url_external')
-        <input class="cf-input" type="hidden" value="{{ $field->value ? $field->value->id : null }}">
+        <input class="cf-input" type="hidden" value="{{ isset($field->value->id) ? $field->value->id : null }}">
         <button type="button" class="modal-trigger" data-modal="menu-modal-pick-link">
             @icon('link')
             <span>Velg link</span>
