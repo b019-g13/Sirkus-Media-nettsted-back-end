@@ -3,19 +3,19 @@
         <p>
             @guest
                 <a href="{{ route('login') }}">{{ __('Login') }}</a>
-                @if (Route::has('register'))
-                    <span>|</span>
-                    <a href="{{ route('register') }}">{{ __('Register') }}</a>
-                @endif
             @endguest
             @auth
                 <a href="{{ route('user.show') }}">{{ __('Profile') }}</a>
-                <span>|</span>
-                <a href="{{ route('pages.index') }}">{{ __('Pages') }}</a>
-                <span>|</span>
-                <a href="{{ route('menus.index') }}">{{ __('Menus') }}</a>
-                <span>|</span>
-                <a href="{{ route('user.index') }}">{{ __('Users') }}</a>
+                @role('superadmin|admin|moderator')
+                    <span>|</span>
+                    <a href="{{ route('pages.index') }}">{{ __('Pages') }}</a>
+                    <span>|</span>
+                    <a href="{{ route('menus.index') }}">{{ __('Menus') }}</a>
+                @endrole
+                @role('superadmin|admin')
+                    <span>|</span>
+                    <a href="{{ route('user.index') }}">{{ __('Users') }}</a>
+                @endrole                
                 @role('superadmin')
                     <div>
                         <strong>Superadmin</strong>

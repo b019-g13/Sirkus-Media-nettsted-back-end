@@ -9,20 +9,21 @@
         @guest
             <div class="nav-right">
                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                @if (Route::has('register'))
-                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                @endif
             </div>
         @endguest
         @auth
             <div class="nav-right">
-                <a class="nav-link" href="{{ route('pages.index') }}">{{ __('Pages') }}</a>
-                <a class="nav-link" href="{{ route('menus.index') }}">{{ __('Menus') }}</a>
-                <a class="nav-link" href="{{ route('user.index') }}">{{ __('Users') }}</a>
+                @role('superadmin|admin|moderator')
+                    <a class="nav-link" href="{{ route('pages.index') }}">{{ __('Pages') }}</a>
+                    <a class="nav-link" href="{{ route('menus.index') }}">{{ __('Menus') }}</a>
+                @endrole
+                @role('superadmin|admin')
+                    <a class="nav-link" href="{{ route('user.index') }}">{{ __('Users') }}</a>
+                @endrole
                 @php
                     $nav_user = Auth::user();
                 @endphp
-                <nav class="dropdown">
+                <nav class="dropdown user-dropdown">
                     <div class="dropdown-trigger">
                         <img src="{{ $nav_user->image->url_full }}" alt="{{ __(':name profile picture', ['name' => $nav_user->name]) }}">
                         @icon('more-vertical', 'opened')
