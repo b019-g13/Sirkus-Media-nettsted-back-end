@@ -66,7 +66,7 @@ main > header {
         flex-direction: column;
         padding: 2em 1em;
         background-color: $color_primary_light;
-        box-shadow: 0 1em 2em -1em rgba($color_shadow, 0.1);
+        box-shadow: 0 3em 3em -2em rgba($color_shadow, 0.1);
 
         @media screen and (min-width: $size_s) {
             padding: 2em;
@@ -81,6 +81,7 @@ main > header {
     }
 
     .info {
+        flex-grow: 1;
         h1,
         p {
             color: $color_darkest;
@@ -91,7 +92,8 @@ main > header {
             vertical-align: middle;
         }
 
-        h1 .icon {
+        h1 .icon,
+        h1 img {
             display: none;
         }
 
@@ -106,7 +108,16 @@ main > header {
                 color: $color_secondary_dark;
                 background-color: $color_secondary_light;
                 padding: 0.2em;
+                border-radius: 0.25em;
+            }
+
+            h1 img {
+                display: inline-block;
+                margin-right: 0.1em;
+                background-color: $color_secondary_light;
                 border-radius: 100%;
+                width: 1.5em;
+                height: 1.5em;
             }
         }
     }
@@ -124,17 +135,16 @@ main > .content {
     width: 100%;
     margin: 0 auto;
     max-width: 100%;
-    overflow: hidden;
 
     @media screen and (min-width: $size_xl) {
-        margin: 0 auto 4em;
+        margin: 0 auto 8em;
         padding: 0 4em;
     }
 
     .content-inner {
         padding: 2em 1em;
         background-color: #fff;
-        box-shadow: 0 1em 2em -1em rgba($color_shadow, 0.1);
+        box-shadow: 0 3em 3em -2em rgba($color_shadow, 0.1);
         overflow-x: auto;
 
         @media screen and (min-width: $size_s) {
@@ -375,6 +385,11 @@ table {
 
         &:hover {
             background-color: $color_lighter;
+        }
+
+        td:last-child > div {
+            display: flex;
+            justify-content: space-between;
         }
     }
 
