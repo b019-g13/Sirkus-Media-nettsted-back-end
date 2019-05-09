@@ -5,7 +5,8 @@
 
     img {
         display: block;
-        width: 200px;
+        height: 64px;
+        width: auto;
         max-width: 100%;
     }
 
@@ -15,7 +16,7 @@
 
     &.has-preview {
         .mp-trigger-delete {
-            display: block;
+            display: inline-block;
         }
     }
 }
