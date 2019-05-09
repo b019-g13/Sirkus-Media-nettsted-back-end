@@ -11,6 +11,22 @@ button {
     }
 }
 
+input,
+textarea,
+select {
+    padding: 0.4em 0.8em;
+    border: 1px solid $color_input_border;
+    color: $color_input_fg;
+    background-color: $color_input_bg;
+
+    &:focus {
+        outline: none;
+        color: $color_input_active_fg;
+        border-color: $color_input_active_border;
+        background-color: $color_input_active_bg;
+    }
+}
+
 fieldset {
     width: 100%;
     margin: 2em auto 0;
@@ -52,17 +68,6 @@ fieldset {
     textarea,
     select {
         width: 100%;
-        padding: 0.4em 0.8em;
-        border: 1px solid $color_input_border;
-        color: $color_input_fg;
-        background-color: $color_input_bg;
-
-        &:focus {
-            outline: none;
-            color: $color_input_active_fg;
-            border-color: $color_input_active_border;
-            background-color: $color_input_active_bg;
-        }
     }
 
     input[type="checkbox"],
