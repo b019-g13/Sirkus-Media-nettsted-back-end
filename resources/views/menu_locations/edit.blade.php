@@ -6,7 +6,7 @@
             <div class="info">
                 <h1>
                     @icon('file-plus')
-                    <span>Legg til ny meny plassering</span>
+                    <span>Rediger meny plassering: {{ $menu_location->name }}</span>
                 </h1>
             </div>
             <div class="actions">
