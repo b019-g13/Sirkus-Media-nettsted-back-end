@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
@@ -51,11 +52,14 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        $role_ids = Role::whereIn('name', ['admin', 'moderator'])->pluck('id')->toArray();
+
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'phone' => [ 'required','string', 'max:255' ],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
+            'role' => ['required', 'integer', Rule::in($role_ids)]
         ]);
     }
 
@@ -67,14 +71,14 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $user= User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
         ]);
 
-        $role = Role::find($data['role_id']);
+        $role = Role::findOrFail($data['role']);
         $user->assignRole($role->name);
     }
 
@@ -90,13 +94,12 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        return $this->registered($request, $user)
-                        ?: redirect($this->redirectPath());
+        return $this->registered($request, $user) ?: redirect($this->redirectPath());
     }
 
     public function showRegistrationForm()
     {
-        $roles = Role::All();
+        $roles = Role::whereIn('name', ['admin', 'moderator'])->get();
         return view('auth.register', compact('roles'));
     }
 }
