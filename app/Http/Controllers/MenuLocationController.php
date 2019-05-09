@@ -22,7 +22,7 @@ class MenuLocationController extends Controller
 
     public function index()
     {
-        $menu_locations = MenuLocation::paginate(30);
+        $menu_locations = MenuLocation::paginate(10);
         return view('menu_locations.index', compact('menu_locations'));
     }
 
@@ -54,7 +54,7 @@ class MenuLocationController extends Controller
             'slug' => str_slug($request->get('name')),
         ]);
         $menu_location->save();
-        return redirect()->route('menu_locations.index')->with('success', 'Menu_location er opprettet');
+        return redirect()->route('menu_locations.index')->with('success', 'Meny plasseringen ble opprettet');
     }
 
     /**
@@ -75,9 +75,8 @@ class MenuLocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(MenuLocation $menu_location)
     {
-        $menu_location = MenuLocation::find($id);
         return view('menu_locations.edit', compact('menu_location'));
     }
 
@@ -88,17 +87,16 @@ class MenuLocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, MenuLocation $menu_location)
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $menu_location = MenuLocation::find($id);
         $menu_location->name = $request->get('name');
         $menu_location->slug = str_slug($request->get('name'));
         $menu_location->save();
-        return redirect()->route('menu_locations.index')->with('success', 'Menu_location er oppdatert');
+        return redirect()->route('menu_locations.index')->with('success', 'Meny plasseringen ble oppdatert');
     }
 
     /**
@@ -107,10 +105,9 @@ class MenuLocationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(MenuLocation $menu_location)
     {
-        $menu_location = MenuLocation::find($id);
         $menu_location->delete();
-        return redirect()->route('menu_locations.index')->with('success', 'Menu_location er slettet');
+        return redirect()->route('menu_locations.index')->with('success', 'Meny plasseringen ble slettet');
     }
 }

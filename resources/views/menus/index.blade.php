@@ -1,45 +1,60 @@
-@extends('layouts.app')
+@extends('partials.master')
+
 @section('content')
-    <div class="row">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-right">
-                <h2> Menu </h2>
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('list')
+                    <span>Menyer</span>
+                </h1>
+                <p>Oversikt over alle menyer.</p>
             </div>
-            <div class="pull-right">
-                <a class="btn btn-success" href="{{ route('menus.create') }}"> Oprett ny menu </a>
+            <div class="actions">
+                <a href="{{ route('menus.create') }}" class="button button-primary-alt">
+                    @icon('plus-square')
+                    <span>Ny meny</span>
+                </a>
             </div>
         </div>
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            <table class="first-bold">
+                <thead>
+                    <tr>
+                        <th>Navn</th>
+                        <th>Lokasjon</th>
+                        <th>Global</th>
+                        <th>Side</th>
+                        <th>Handling</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($menus as $menu)
+                        <tr>
+                            <td>{{ $menu->name }}</td>
+                            <td>{{ $menu->menu_location ? $menu->menu_location->name : null }}</td>
+                            <td>{{ $menu->global ? 'Ja' : 'Nei' }}</td>
+                            <td>{{ $menu->page ? $menu->page->title : null }}</td>
+                            <td>
+                                <div>
+                                    <a class="button button-success button-action" href="{{ route('menus.edit', $menu) }}">
+                                        @icon('edit')
+                                    </a>
+                                    <form action="{{ route('menus.destroy', $menu) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="button-error button-action"  onclick="return confirm('Er du sikker på at du vil slette menyen?')">@icon('trash')</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            {{ $menus->onEachSide(1)->links() }}
+        </div>
     </div>
-
-    <table class="table table-bordered">
-        <tr>
-            <th>Navn</th>
-            <th>Lokasjon</th>
-            <th>Global</th>
-            <th>Page </th>
-            <th>Handling</th>
-        </tr>
-        @foreach ($menus as $menu)
-        <tr>
-            <td>{{ $menu->name }}</td>
-            <td>{{ $menu->menu_location ? $menu->menu_location->name : null }}</td>
-            <td>{{ $menu->global ? 'Ja' : 'Nei' }}</td>
-            <td>{{ $menu->page ? $menu->page->title : null }}</td>
-            <td>
-                <form action="{{ route('menus.destroy', $menu->id) }}" method="POST" enctype="multipart/form-data">
-                     @csrf
-
-                    <a class="btn btn-info" href="{{ route('menus.show',$menu->id) }}"> Vis </a>
-
-                    <a class="btn btn-primary" href="{{ route('menus.edit',$menu->id) }}"> Rediger </a>
-
-                    @method('DELETE')
-
-                    <button type="submit" class="btn btn-danger"  onclick="return confirm('Er du sikkert å slette det?')"> Slett </button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </table>
-    {{ $menus->onEachSide(1)->links() }}
 @endsection

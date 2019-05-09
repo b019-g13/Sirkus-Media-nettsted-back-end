@@ -15,13 +15,24 @@ html {
 }
 
 body {
-    font-family: $font-family-sans-serif;
+    font-family: $font-family-body;
     line-height: $font-line-height-base;
     margin: 0;
     padding: 0;
     font-size: 1em;
     color: $color_body_fg;
     background-color: $color_body_bg;
+    overflow-x: hidden;
+    font-weight: 400;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-weight: 700;
+    font-family: $font-family-headings;
 }
 
 img {
@@ -40,16 +51,79 @@ a {
     }
 }
 
-main {
-    width: $size_large;
+main > header {
+    width: 100%;
     margin: 0 auto;
-    padding: 2em;
     max-width: 100%;
-    box-shadow: 0 1em 2em -1em rgba($color_shadow, 0.1);
-    background-color: #fff;
 
-    @media screen and (min-width: $size_medium) {
-        padding: 4em;
+    @media screen and (min-width: $size_xl) {
+        margin: 4em auto 0;
+        padding: 0 4em;
+    }
+
+    .header-inner {
+        display: flex;
+        flex-direction: column;
+        padding: 2em 1em;
+        background-color: $color_primary_light;
+        box-shadow: 0 3em 3em -2em rgba($color_shadow, 0.1);
+
+        @media screen and (min-width: $size_s) {
+            padding: 2em;
+        }
+
+        @media screen and (min-width: $size_l) {
+            padding: 2em 4em;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+    }
+
+    .info {
+        flex-grow: 1;
+        h1,
+        p {
+            color: $color_darkest;
+            margin: 0;
+        }
+
+        h1 span {
+            vertical-align: middle;
+        }
+
+        h1 .icon,
+        h1 img {
+            display: none;
+        }
+
+        @media screen and (min-width: $size_s) {
+            p {
+                margin-left: 3.75rem;
+            }
+
+            h1 .icon {
+                display: inline-block;
+                margin-right: 0.1em;
+                color: $color_secondary_dark;
+                background-color: $color_secondary_light;
+                padding: 0.2em;
+                border-radius: 0.25em;
+            }
+
+            h1 img {
+                display: inline-block;
+                margin-right: 0.1em;
+                background-color: $color_secondary_light;
+                border-radius: 100%;
+                width: 1.5em;
+                height: 1.5em;
+            }
+        }
+    }
+
+    .actions {
+        margin-top: 1em;
     }
 
     > h2 {
@@ -57,76 +131,112 @@ main {
     }
 }
 
-#nav-main {
-    padding: 1em 2em;
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
-    align-items: center;
-    border-bottom: 1px solid $color_lighter;
-    background-color: #fff;
+main > .content {
+    width: 100%;
+    margin: 0 auto;
+    max-width: 100%;
 
-    @media screen and (min-width: $size_large) {
-        margin: 0 auto 2em;
+    @media screen and (min-width: $size_xl) {
+        margin: 0 auto 8em;
+        padding: 0 4em;
     }
 
-    a {
-        text-decoration: none;
-    }
+    .content-inner {
+        padding: 2em 1em;
+        background-color: #fff;
+        box-shadow: 0 3em 3em -2em rgba($color_shadow, 0.1);
+        overflow-x: auto;
 
-    ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        margin: 0;
-
-        li {
-            margin-left: 1em;
-
-            &:first-child {
-                margin-left: 0;
-            }
+        @media screen and (min-width: $size_s) {
+            padding: 2em;
         }
-    }
-}
 
-#footer-main {
-    padding: 4em 2em 2em;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-content: flex-start;
-    align-items: flex-start;
-    background-color: #fff;
-
-    @media screen and (min-width: $size_large) {
-        margin: 4em auto 0;
-    }
-
-    ul {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        display: flex;
-
-        li {
-            margin-left: 1em;
-
-            &:first-child {
-                margin-left: 0;
-            }
+        @media screen and (min-width: $size_l) {
+            padding: 2em 4em;
         }
     }
 }
 
 @import "modals";
+@import "dropdowns";
 @import "buttons";
 @import "draggable";
 @import "media-picker";
 @import "link-picker";
 @import "form-elements";
+@import "nav";
+@import "footer";
 @import "flash-message";
 @import "a11y";
+
+.avatar {
+    width: 2em;
+    margin-right: 0.5em;
+    max-width: 100%;
+    border-radius: 100%;
+    background-color: #fff;
+
+    @media screen and (min-width: $size_l) {
+        margin-right: 1em;
+        width: 3em;
+    }
+}
+
+.padded {
+    padding: 1em;
+
+    @media screen and (min-width: $size_s) {
+        padding: 2em;
+    }
+
+    @media screen and (min-width: $size_l) {
+        padding: 4em;
+    }
+
+    @media screen and (min-width: $size_xl) {
+        padding: 8em;
+    }
+}
+
+.padded-lr {
+    padding-left: 1em;
+    padding-right: 1em;
+
+    @media screen and (min-width: $size-s) {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding-left: 4em;
+        padding-right: 4em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding-left: 8em;
+        padding-right: 8em;
+    }
+}
+
+.padded-tb-half {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    @media screen and (min-width: $size-s) {
+        padding-top: 1em;
+        padding-bottom: 1em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding-top: 2em;
+        padding-bottom: 2em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding-top: 4em;
+        padding-bottom: 4em;
+    }
+}
 
 .icon {
     vertical-align: middle;
@@ -246,9 +356,84 @@ main {
 table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 0.8em;
+    line-height: 1;
+
+    @media screen and (min-width: $size_l) {
+        font-size: 1em;
+        line-height: 1.6;
+    }
+
+    tbody {
+        border-bottom: 1px solid $color_lighter;
+    }
+
+    tr {
+        border-collapse: collapse;
+    }
+
+    thead tr {
+        background-color: $color_lighter;
+    }
+
+    tbody tr {
+        background-color: #fff;
+
+        &:nth-child(odd) {
+            background-color: $color_lightest;
+        }
+
+        &:hover {
+            background-color: $color_lighter;
+        }
+
+        td:last-child > div {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    td,
+    th {
+        border-collapse: collapse;
+        text-align: left;
+        border-right: 1px solid $color_lighter;
+        padding: 0.25em 0.5em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-family: $font-family-mono;
+
+        &:first-child {
+            border-left: 1px solid $color_lighter;
+        }
+
+        @media screen and (min-width: $size_l) {
+            padding: 0.5em 1em;
+        }
+    }
+
+    th {
+        font-weight: 700;
+    }
 
     td {
-        border: 1px solid $color_light;
+        font-weight: 400;
+    }
+
+    &.first-bold {
+        tr td:first-child {
+            font-weight: 700;
+        }
+    }
+
+    td.auto-hide,
+    th.auto-hide {
+        display: none;
+
+        @media screen and (min-width: $size_l) {
+            display: table-cell;
+        }
     }
 }
 

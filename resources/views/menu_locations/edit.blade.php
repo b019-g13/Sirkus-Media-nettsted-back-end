@@ -1,30 +1,39 @@
-@extends('layouts.app')
+@extends('partials.master')
+
 @section('content')
-<h2>Rediger lokasjon</h2>
-<a href="{{ route('menu_locations.index') }}" class="button">
-    @icon('arrow-left')
-    <span>Tilbake</span>
-</a>
-
-
-    <form action="{{ route('menu_locations.update', $menu_location->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    @csrf
-                    <strong> Navn : </strong>
-                    <input type="text" name="name" value="{{old('name', (isset($menu_location->name)? $menu_location->name : null))}}" required class="form-control" placeholder="Navn">
-                </div>
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('file-plus')
+                    <span>Legg til ny meny plassering</span>
+                </h1>
             </div>
-
-            <button type="submit" class="button-success">
-                <span>Oppdater</span>
-                @icon('save')
-            </button>
+            <div class="actions">
+                <a href="{{ route('menu_locations.index') }}" class="button button-primary-alt">
+                    @icon('arrow-left')
+                    <span>Tilbake</span>
+                </a>
+            </div>
         </div>
-
-    </form>
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            <form id="form-menu_locations" action="{{ route('menu_locations.update', $menu_location) }}" method="POST">
+                @csrf
+                @method('patch')
+                @include('menu_locations.form-fields')
+        
+                <div class="form-group form-group-submit">
+                    <span></span>
+                    <button type="submit">
+                        <span>Oppdater</span>
+                        @icon('save')
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection
+
+

@@ -1,113 +1,79 @@
-@extends('layouts.app')
+@extends('partials.master')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" name="name" value="{{ old('name') }}" required autofocus>
-
-                                @if ($errors->has('name'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="phone" class="col-md-4 col-form-label text-md-right">{{ __('Phone') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="phone" type="text" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" name="phone" value="{{ old('phone') }}" required autofocus>
-
-                                @if ($errors->has('phone'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('phone') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="role_id" class="col-md-4 col-form-label text-md-right"> Role </label>
-                            <div class="col-md-6">
-                                <select name="role_id" id="role_id">
-                                     @php
-                                        $old_value = old('role_id', isset($role->role_id) ? $role->name : null);
-                                    @endphp
-                                    @if ($old_value == null)
-                                        <option value="" hidden selected disabled>Velg en</option>
-                                    @endif
-                                    <option value="">Ingen forelder</option>
-                                    @foreach ($roles as $role)
-                                        @if ($old_value == $role->id)
-                                            <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
-                                        @else
-                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                        @endif
-                                    @endforeach
-                                </select>            
-                            </div>
-                        </div>
-                        
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('user-plus')
+                    <span>Registrer en ny bruker</span>
+                </h1>
+            </div>
+            <div class="actions">
+                <a href="{{ route('menu_locations.index') }}" class="button button-primary-alt">
+                    @icon('arrow-left')
+                    <span>Tilbake</span>
+                </a>
             </div>
         </div>
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+
+                <div class="form-group">
+                    <label for="name">{{ __('Name') }}</label>
+                    <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">{{ __('E-Mail Address') }}</label>
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">{{ __('Phone') }}</label>
+                    <input id="phone" type="tel" name="phone" value="{{ old('phone') }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">{{ __('Password') }}</label>
+                    <input id="password" type="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password-confirm">{{ __('Confirm Password') }}</label>
+                    <input id="password-confirm" type="password" name="password_confirmation" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">{{ __('Role') }}</label>
+                    <select name="role" id="role">
+                        @php
+                            $old_value = old('role');
+                        @endphp
+                        @if ($old_value == null)
+                            <option value="" hidden selected disabled>Velg en</option>
+                        @endif
+                        @foreach ($roles as $role)
+                            @if ($old_value == $role->id)
+                                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
+                            @else
+                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group form-group-submit">
+                    <span></span>
+                    <button type="submit">
+                        <span>{{ __('Register') }}</span>
+                        @icon('arrow-right')
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 @endsection

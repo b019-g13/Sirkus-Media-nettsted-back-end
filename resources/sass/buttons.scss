@@ -13,7 +13,11 @@ a.button {
     background-color: $color_button_bg;
     text-align: center;
     text-decoration: none;
+    border-radius: 4px;
     box-shadow: 0 0.4em 0.8em -0.2em rgba($color_button_bg, 0.25);
+    transition-property: "background-image", "background-color", "color";
+    transition-duration: 150ms;
+    transition-timing-function: $transition_timing_ease_in_out;
 
     span {
         vertical-align: middle;
@@ -66,17 +70,32 @@ a.button {
         }
     }
 
-    &.button-accent {
-        color: $color_accent_dark;
-        border-color: $color_accent_light;
-        background-color: $color_accent_light;
-        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent, 0.25);
+    &.button-primary-alt {
+        color: #fff;
+        border-color: $color_primary_dark;
+        background-color: $color_primary_dark;
+        box-shadow: none;
 
         &:focus,
         &:hover {
-            color: $color_accent_light;
-            border-color: $color_accent_dark;
-            background-color: $color_accent_dark;
+            color: #fff;
+            border-color: $color_primary;
+            background-color: $color_primary;
+            box-shadow: none;
+        }
+    }
+
+    &.button-accent {
+        color: #fff;
+        border-color: $color_accent;
+        background-color: $color_accent;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent-dark, 0.25);
+
+        &:focus,
+        &:hover {
+            color: $color_accent_dark;
+            border-color: $color_accent_light;
+            background-color: $color_accent_light;
             box-shadow: 0 0.4em 0.8em -0.2em rgba($color_accent_dark, 0.25);
         }
     }

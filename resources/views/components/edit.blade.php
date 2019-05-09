@@ -1,24 +1,39 @@
-@extends('layouts.app')
+@extends('partials.master')
+
 @section('content')
-    <h1>Rediger komponent</h1>
-
-    <a href="{{ route('components.index') }}" class="button">
-        @icon('arrow-left')
-        <span>Tilbake</span>
-    </a>
-
-    <form id="form-components" action="{{ route('components.update', $component) }}" method="POST">
-        @csrf
-        @method('PATCH')
-        @include('components.form-fields')
-
-        <div class="form-group">
-            <button type="submit" class="button-success">
-                <span>Oppdater</span>
-                @icon('save')
-            </button>
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('file-plus')
+                    <span>Rediger komponent: {{ $component->name }}</span>
+                </h1>
+            </div>
+            <div class="actions">
+                <a href="{{ route('components.index') }}" class="button button-primary-alt">
+                    @icon('arrow-left')
+                    <span>Tilbake</span>
+                </a>
+            </div>
         </div>
-    </form>
-
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            <form id="form-components" action="{{ route('components.update', $component) }}" method="POST">
+                @csrf
+                @method('patch')
+                @include('components.form-fields')
+        
+                <div class="form-group form-group-submit">
+                    <span></span>
+                    <button type="submit">
+                        <span>Opprett</span>
+                        @icon('save')
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="{{ asset('js/component.js') }}" defer></script>
 @endsection
+

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -30,10 +31,22 @@ class User extends Authenticatable implements MustVerifyEmail
         'password', 'remember_token',
     ];
 
-    // Har en user
     public function image()
     {
-      return  $this->belongsTo('App\Image', 'image_id');
+        return $this->hasOne('App\Image', 'id', 'image_id')->withDefault(function ($image) {
+            $image->url = '/icons/user.svg';
+            $image->is_default = true;
+        });
     }
 
+    /**
+     * Checks if the password is correct
+     *
+     * @param String $password
+     * @return boolean
+     */
+    public function check_password(String $password): bool
+    {
+        return Auth::attempt(['email' => $this->email, 'password' => $password]);
+    }
 }

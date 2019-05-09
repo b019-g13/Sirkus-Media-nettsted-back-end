@@ -1,4 +1,4 @@
-<div class="component-field component-field-type-{{ $field->type }}" data-component_field_id="{{ $field->component_field_id }}" data-field_type="{{ $field->type }}">
+<div class="component-field component-field-type-{{ $field->type }} form-group" data-component_field_id="{{ $field->component_field_id }}" data-field_type="{{ $field->type }}">
     <label>{{ $field->nickname }}</label>
 
     @if ($field->type == 'string' || $field->type == 'icon')

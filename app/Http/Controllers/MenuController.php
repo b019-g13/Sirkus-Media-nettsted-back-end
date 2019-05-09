@@ -27,7 +27,7 @@ class MenuController extends Controller
 
     public function index()
     {
-        $menus = Menu::paginate(30);
+        $menus = Menu::paginate(10);
         return view('menus.index', compact('menus'));
     }
 
@@ -128,20 +128,7 @@ class MenuController extends Controller
             $menu_link->save();
         }
 
-        return redirect()->route('menus.edit', $menu)->with('success', 'Menu ble opprettet');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Menu $menu)
-    {
-        $menu->links;
-        $menu->menu_location;
-        return view('menus.show', compact('menu'));
+        return redirect()->route('menus.edit', $menu)->with('success', 'Menyen ble opprettet');
     }
 
     /**
@@ -207,7 +194,7 @@ class MenuController extends Controller
             $menu_link->save();
         }
 
-        return redirect()->route('menus.edit', $menu)->with('success', 'Menu er oppdatert');
+        return redirect()->route('menus.edit', $menu)->with('success', 'Menyen ble oppdatert');
     }
 
     /**
@@ -216,10 +203,9 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Menu $menu)
     {
-        $menu = Menu::find($id);
         $menu->delete();
-        return redirect()->route('menus.index')->with('success', 'Menu er slettet');
+        return redirect()->route('menus.index')->with('success', 'Menyen ble slettet');
     }
 }

@@ -1,5 +1,6 @@
 <div class="form-group">
-    <input type="text" name="name" value="{{ old('name', (isset($field->name) ? $field->name : null)) }}" required>
+    <label for="name">Navn</label>
+    <input id="name" type="text" name="name" value="{{ old('name', (isset($field->name) ? $field->name : null)) }}" required>
 </div>
 <div class="form-group">
     <label for="field_type_id">Felt type</label>

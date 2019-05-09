@@ -1,27 +1,38 @@
-@extends('layouts.app')
+@extends('partials.master')
+
 @section('content')
-<h2>Legg til ny lokasjon</h2>
-<a href="{{ route('menu_locations.index') }}" class="button">
-    @icon('arrow-left')
-    <span>Tilbake</span>
-</a>
-
-<form action="{{ route('menu_locations.store') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-
-     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-            @csrf
-                <strong> Navn : </strong>
-                <input type="text" name="name"  value="{{old('name', (isset($menu_location->name)? $menu_location->name : null))}}" required class="form-control" placeholder="Navn">
+    <header>
+        <div class="header-inner">
+            <div class="info">
+                <h1>
+                    @icon('file-plus')
+                    <span>Legg til ny meny plassering</span>
+                </h1>
+            </div>
+            <div class="actions">
+                <a href="{{ route('menu_locations.index') }}" class="button button-primary-alt">
+                    @icon('arrow-left')
+                    <span>Tilbake</span>
+                </a>
             </div>
         </div>
-        <button type="submit" class="button-success">
-            <span>Opprett</span>
-            @icon('save')
-        </button>
+    </header>
+    <div class="content">
+        <div class="content-inner">
+            <form id="form-menu_locations" action="{{ route('menu_locations.store') }}" method="POST">
+                @csrf
+                @include('menu_locations.form-fields')
+        
+                <div class="form-group form-group-submit">
+                    <span></span>
+                    <button type="submit">
+                        <span>Opprett</span>
+                        @icon('save')
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-
-</form>
 @endsection
+
+

@@ -27,7 +27,7 @@
             background-color: #000;
             border: 1px solid #000;
             border-radius: 3px;
-            box-shadow: 0 1em 1em -1em rgba(darken($blue, 50%), 0.33);
+            box-shadow: 0 1em 1em -1em rgba(darken($color_primary, 50%), 0.33);
 
             @media screen and (min-width: $size_medium) {
                 margin: 0 0 2em;
@@ -57,21 +57,21 @@
             border: none;
             color: $color_success_dark;
             background-color: $color_success_light;
-            box-shadow: 0 1em 1em -1em rgba($color_success, 0.33);
+            box-shadow: 0 1em 1em -1em rgba($color_success_dark, 0.33);
         }
 
         &.flash-message-error label {
             border: none;
             color: $color_error_dark;
             background-color: $color_error_light;
-            box-shadow: 0 1em 1em -1em rgba($red, 0.33);
+            box-shadow: 0 1em 1em -1em rgba($color_error_dark, 0.33);
         }
 
         &.flash-message-info label {
             border: none;
             color: $color_dark;
             background-color: $color_light;
-            box-shadow: 0 1em 1em -1em rgba($color_dark, 0.33);
+            box-shadow: 0 1em 1em -1em rgba($color_darker, 0.33);
         }
 
         input {
