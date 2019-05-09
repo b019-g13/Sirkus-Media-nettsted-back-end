@@ -25,6 +25,10 @@ body.draggable--is-dragging {
             animation: blink 3s infinite both;
         }
     }
+
+    #drag-area-wrapper .drag-area {
+        padding: 4em 1em;
+    }
 }
 
 .draggable-source--is-dragging {
