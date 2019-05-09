@@ -93,7 +93,7 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-        $session->flash('success', 'Brukeren ble opprettet.');
+        $request->session->flash('success', 'Brukeren ble opprettet.');
 
         event(new Registered($user = $this->create($request->all())));
 
