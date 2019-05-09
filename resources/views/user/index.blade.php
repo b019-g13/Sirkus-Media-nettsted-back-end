@@ -20,6 +20,9 @@
     </header>
     <div class="content">
         <div class="content-inner">
+            @if (!$users->onFirstPage())
+                <p>Side {{ $users->currentPage() }}</p>
+            @endif
             <table class="first-bold">
                 <thead>
                     <tr>
@@ -55,6 +58,7 @@
                     @endforeach
                 </tbody>
             </table>
+            @include('partials.nav-pagination', ['pagination_items' => $users])
         </div>
     </div>
 @endsection

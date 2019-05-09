@@ -25,7 +25,7 @@ class FieldController extends Controller
 
     public function index()
     {
-        $fields = Field::paginate(30);
+        $fields = Field::paginate(10);
         return view('fields.index', compact('fields'));
     }
 

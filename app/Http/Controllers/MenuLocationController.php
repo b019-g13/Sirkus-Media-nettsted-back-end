@@ -22,7 +22,7 @@ class MenuLocationController extends Controller
 
     public function index()
     {
-        $menu_locations = MenuLocation::paginate(30);
+        $menu_locations = MenuLocation::paginate(10);
         return view('menu_locations.index', compact('menu_locations'));
     }
 
