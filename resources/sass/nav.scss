@@ -3,7 +3,7 @@
     justify-content: space-between;
     padding: 1em;
     color: $color_lightest;
-    background-color: $color_primary;
+    background-color: mix($color_primary, $color_secondary, 60%);
     background-image: linear-gradient(135deg, $color_primary, $color_secondary);
 
     @media screen and (min-width: $size_s) {

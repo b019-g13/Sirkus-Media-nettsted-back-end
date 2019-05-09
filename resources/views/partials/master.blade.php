@@ -2,10 +2,8 @@
 <body>
     @include('partials.nav')
     <main>
-        <div id="main-wrapper">
-            @include('partials.flash-messages')
-            @yield('content')
-        </div>
+        @include('partials.flash-messages')
+        @yield('content')
     </main>
     @include('partials.footer')
 </body>

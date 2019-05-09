@@ -1,6 +1,6 @@
 // Body
-$color_body_fg: #383a3c;
-$color_body_bg: #f8fafc;
+$color_body_fg: #282c37;
+$color_body_bg: #f8f9fa;
 
 // Sizes
 $size_s: 350px;
@@ -9,7 +9,9 @@ $size_l: 800px;
 $size_xl: 1200px;
 
 // Typography
-$font-family-sans-serif: sans-serif;
+$font-family-body: "Rubik", sans-serif;
+$font-family-headings: "EB Garamond", serif;
+$font-family-mono: "Roboto Mono", monospace;
 $font-size-base: 18px;
 $font-line-height-base: 1.6;
 
@@ -101,8 +103,8 @@ $color_secondary_light: lighten($color_secondary, 33%);
 $color_secondary_dark: darken($color_secondary, 33%);
 
 $color_accent: #f89079;
-$color_accent_light: lighten($color_accent, 23%);
-$color_accent_dark: darken($color_accent, 33%);
+$color_accent_light: lighten($color_accent, 21%);
+$color_accent_dark: darken($color_accent, 35%);
 
 $color_success: $green2;
 $color_success_light: lighten($color_success, 40%);
@@ -122,7 +124,7 @@ $color_button_active_border: $color_darker;
 $color_selection_fg: #fff;
 $color_selection_bg: $cyan2;
 
-$color_shadow: darken($blue2, 33%);
+$color_shadow: $blue4;
 
 $color_input_bg: #fff;
 $color_input_fg: $color_darker;
