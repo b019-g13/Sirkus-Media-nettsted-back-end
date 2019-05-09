@@ -104,5 +104,10 @@
                 margin-left: 4em;
             }
         }
+
+        .user-dropdown .dropdown-trigger img {
+            padding: 2px;
+            background-color: $color_lightest;
+        }
     }
 }
