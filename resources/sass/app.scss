@@ -40,93 +40,90 @@ a {
     }
 }
 
-main {
-    width: $size_large;
-    margin: 0 auto;
-    padding: 2em;
-    max-width: 100%;
-    box-shadow: 0 1em 2em -1em rgba($color_shadow, 0.1);
-    background-color: #fff;
+// main {
+//     width: $size_large;
+//     margin: 0 auto;
+//     padding: 2em;
+//     max-width: 100%;
+//     box-shadow: 0 1em 2em -1em rgba($color_shadow, 0.1);
+//     background-color: #fff;
 
-    @media screen and (min-width: $size_medium) {
-        padding: 4em;
-    }
+//     @media screen and (min-width: $size_medium) {
+//         padding: 4em;
+//     }
 
-    > h2 {
-        margin-top: 0;
-    }
-}
-
-#nav-main {
-    padding: 1em 2em;
-    display: flex;
-    justify-content: space-between;
-    align-content: center;
-    align-items: center;
-    border-bottom: 1px solid $color_lighter;
-    background-color: #fff;
-
-    @media screen and (min-width: $size_large) {
-        margin: 0 auto 2em;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    ul {
-        list-style: none;
-        display: flex;
-        padding: 0;
-        margin: 0;
-
-        li {
-            margin-left: 1em;
-
-            &:first-child {
-                margin-left: 0;
-            }
-        }
-    }
-}
-
-#footer-main {
-    padding: 4em 2em 2em;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-content: flex-start;
-    align-items: flex-start;
-    background-color: #fff;
-
-    @media screen and (min-width: $size_large) {
-        margin: 4em auto 0;
-    }
-
-    ul {
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        display: flex;
-
-        li {
-            margin-left: 1em;
-
-            &:first-child {
-                margin-left: 0;
-            }
-        }
-    }
-}
+//     > h2 {
+//         margin-top: 0;
+//     }
+// }
 
 @import "modals";
+@import "dropdowns";
 @import "buttons";
 @import "draggable";
 @import "media-picker";
 @import "link-picker";
 @import "form-elements";
+@import "nav";
+@import "footer";
 @import "flash-message";
 @import "a11y";
+
+.padded {
+    padding: 1em;
+
+    @media screen and (min-width: $size_s) {
+        padding: 2em;
+    }
+
+    @media screen and (min-width: $size_l) {
+        padding: 4em;
+    }
+
+    @media screen and (min-width: $size_xl) {
+        padding: 8em;
+    }
+}
+
+.padded-lr {
+    padding-left: 1em;
+    padding-right: 1em;
+
+    @media screen and (min-width: $size-s) {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding-left: 4em;
+        padding-right: 4em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding-left: 8em;
+        padding-right: 8em;
+    }
+}
+
+.padded-tb-half {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+
+    @media screen and (min-width: $size-s) {
+        padding-top: 1em;
+        padding-bottom: 1em;
+    }
+
+    @media screen and (min-width: $size-l) {
+        padding-top: 2em;
+        padding-bottom: 2em;
+    }
+
+    @media screen and (min-width: $size-xl) {
+        padding-top: 4em;
+        padding-bottom: 4em;
+    }
+}
 
 .icon {
     vertical-align: middle;

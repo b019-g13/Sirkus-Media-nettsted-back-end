@@ -1,0 +1,30 @@
+body > footer {
+    margin-top: 4em;
+    padding: 1em;
+    color: $color_lighter;
+    background-color: $color_darker;
+    background-image: linear-gradient(135deg, $color_dark, $blue4);
+
+    @media screen and (min-width: $size_s) {
+        padding: 2em;
+    }
+
+    @media screen and (min-width: $size_l) {
+        padding: 4em;
+    }
+
+    @media screen and (min-width: $size_xl) {
+        padding: 4em 8em;
+    }
+
+    a {
+        display: inline-block;
+        color: $color_primary_light;
+        line-height: inherit;
+
+        &:focus,
+        &:hover {
+            color: $color_lightest;
+        }
+    }
+}

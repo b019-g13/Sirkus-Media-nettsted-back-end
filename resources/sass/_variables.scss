@@ -2,6 +2,12 @@
 $color_body_fg: #383a3c;
 $color_body_bg: #f8fafc;
 
+// Sizes
+$size_s: 350px;
+$size_m: 500px;
+$size_l: 800px;
+$size_xl: 1200px;
+
 // Typography
 $font-family-sans-serif: sans-serif;
 $font-size-base: 18px;
@@ -13,41 +19,96 @@ $size_large: 1200px;
 $size_extra_large: 1600px;
 
 // Colors
-$blue: #3490dc;
-$indigo: #6574cd;
-$purple: #9561e2;
-$pink: #f66d9b;
-$red: #e3342f;
-$orange: #f6993f;
-$yellow: #ffed4a;
-$green: #38c172;
-$teal: #4dc0b5;
-$cyan: #6cb2eb;
+$gray0: #f8f9fa;
+$gray1: #d9e1e8;
+$gray2: #9baec8;
+$gray3: #454d5b;
+$gray4: #282c37;
+$blue0: #cbe4f5;
+$blue1: #8bc3ea;
+$blue2: #2b91d9;
+$blue3: #2172ab;
+$blue4: #144364;
+$indigo0: #d4d7f7;
+$indigo1: #9ba1ed;
+$indigo2: #2b39d9;
+$indigo3: #212ca9;
+$indigo4: #131960;
+$violet0: #e2d4f7;
+$violet1: #bc9aed;
+$violet2: #732bd9;
+$violet3: #5a21aa;
+$violet4: #331361;
+$fuschia0: #f4d3f7;
+$fuschia1: #e59aec;
+$fuschia2: #ca2bd9;
+$fuschia3: #9f22ab;
+$fuschia4: #5e1465;
+$pink0: #f7d4e8;
+$pink1: #ed9aca;
+$pink2: #d92b91;
+$pink3: #ab2272;
+$pink4: #651443;
+$red0: #f7d4d7;
+$red1: #ed9ca2;
+$red2: #d92b39;
+$red3: #ab222d;
+$red4: #65141a;
+$orange0: #f5ddcb;
+$orange1: #eab28b;
+$orange2: #d9732b;
+$orange3: #ab5a22;
+$orange4: #653514;
+$yellow0: #f4f0c3;
+$yellow1: #e8df7e;
+$yellow2: #d9cb2b;
+$yellow3: #aca122;
+$yellow4: #676114;
+$lime0: #e1f4c5;
+$lime1: #bde881;
+$lime2: #91d92b;
+$lime3: #73ac22;
+$lime4: #456714;
+$green0: #cff5cc;
+$green1: #93ea8b;
+$green2: #3ad92b;
+$green3: #2eac22;
+$green4: #1b6714;
+$teal0: #cbf5dd;
+$teal1: #8aeab2;
+$teal2: #2bd974;
+$teal3: #22ac5c;
+$teal4: #146737;
+$cyan0: #caf5f2;
+$cyan1: #89e9e2;
+$cyan2: #2bd9cb;
+$cyan3: #22aca1;
+$cyan4: #146761;
 
-$color_lightest: #f8fafc;
-$color_lighter: #eee;
-$color_light: #bbb;
-$color_dark: #777;
-$color_darker: #383a3c;
+$color_lightest: #f8f9fa;
+$color_lighter: #d9e1e8;
+$color_light: #9baec8;
+$color_dark: #454d5b;
+$color_darker: #282c37;
 $color_darkest: #000;
 
-$color_primary: $blue;
+$color_primary: $blue2;
 $color_primary_light: lighten($color_primary, 33%);
 $color_primary_dark: darken($color_primary, 33%);
 
-$color_secondary: $green;
+$color_secondary: $cyan2;
 $color_secondary_light: lighten($color_secondary, 33%);
 $color_secondary_dark: darken($color_secondary, 33%);
 
-$color_accent: $orange;
+$color_accent: #f89079;
 $color_accent_light: lighten($color_accent, 33%);
 $color_accent_dark: darken($color_accent, 33%);
 
-$color_success: $green;
+$color_success: $green2;
 $color_success_light: lighten($color_success, 40%);
 $color_success_dark: darken($color_success, 33%);
 
-$color_error: $red;
+$color_error: $red2;
 $color_error_light: lighten($color_error, 40%);
 $color_error_dark: darken($color_error, 33%);
 
@@ -59,9 +120,9 @@ $color_button_active_fg: $color_lighter;
 $color_button_active_border: $color_darker;
 
 $color_selection_fg: #fff;
-$color_selection_bg: $cyan;
+$color_selection_bg: $cyan2;
 
-$color_shadow: darken($blue, 33%);
+$color_shadow: darken($blue2, 33%);
 
 $color_input_bg: #fff;
 $color_input_fg: $color_darker;
