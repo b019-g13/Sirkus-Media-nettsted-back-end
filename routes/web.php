@@ -20,6 +20,7 @@ Route::get('epost-bekreftet', 'Auth\VerificationController@complete');
 
 Route::get('home', 'HomeController@index')->name('home');
 
+Route::get('brukere', 'UserController@index')->name('user.index');
 Route::get('konto', 'UserController@show')->name('user.show');
 Route::post('konto', 'UserController@update')->name('user.update');
 

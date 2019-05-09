@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\User;
 use App\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,6 +14,13 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('role:superadmin|admin')->only('index');
+    }
+
+    public function index(Request $request)
+    {
+        $users = User::all();
+        return view('user.index', compact('users'));
     }
 
     public function show(Request $request)

@@ -31,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/brukere';
 
     /**
      * Create a new controller instance.
@@ -93,6 +93,7 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
+        $session->flash('success', 'Brukeren ble opprettet.');
 
         event(new Registered($user = $this->create($request->all())));
 
