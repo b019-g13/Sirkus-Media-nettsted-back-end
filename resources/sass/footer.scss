@@ -1,8 +1,8 @@
-body > footer {
+#footer-main {
     padding: 1em;
     color: $color_lighter;
     background-color: $color_darker;
-    background-image: linear-gradient(135deg, $color_dark, $blue4);
+    background-image: linear-gradient(135deg, $color_dark, $color_darker);
 
     @media screen and (min-width: $size_s) {
         padding: 2em;
@@ -13,17 +13,68 @@ body > footer {
     }
 
     @media screen and (min-width: $size_xl) {
-        padding: 4em 8em;
+        padding: 8em;
+    }
+}
+
+#footer-main-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .footer-menu {
+        margin-top: 1em;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        @media screen and (min-width: $size_l) {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        > a,
+        > p {
+            margin: 0;
+            flex-basis: 25%;
+
+            @media screen and (min-width: $size_l) {
+                padding: 1em;
+            }
+        }
+
+        > a {
+            display: inline-block;
+            color: $color_primary_light;
+            background-color: rgba($color_primary_dark, 0);
+            line-height: inherit;
+            transition-property: "color", "background-color";
+            transition-duration: 150ms;
+            transition-timing-function: $transition_timing_ease_in_out;
+
+            &:focus,
+            &:hover {
+                text-decoration: none;
+                color: $color_lightest;
+                background-color: rgba($color_primary_dark, 1);
+            }
+        }
     }
 
-    a {
-        display: inline-block;
-        color: $color_primary_light;
-        line-height: inherit;
+    .copyright {
+        padding: 1em;
+        margin: 2em 0 0;
 
-        &:focus,
-        &:hover {
-            color: $color_lightest;
+        @media screen and (min-width: $size_l) {
+            margin: 4em auto 0;
         }
     }
 }
