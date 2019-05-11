@@ -32,6 +32,7 @@
                 </div>
             </form>
         
+            @include('components.pick-modal')
             @include('links.pick-modal')
         </div>
     </div>
