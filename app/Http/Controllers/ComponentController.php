@@ -21,7 +21,7 @@ class ComponentController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('verified');
-        $this->middleware('role:superadmin');
+        $this->middleware('role:superadmin')->except('show');
     }
 
     public function index()
@@ -114,8 +114,6 @@ class ComponentController extends Controller
      */
     public function show(Component $component)
     {
-        $component->fields;
-        $component;
         return view('components.show', compact('component'));
     }
 

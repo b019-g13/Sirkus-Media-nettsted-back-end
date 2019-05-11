@@ -94,57 +94,57 @@ body.draggable--is-dragging {
         font-weight: 700;
     }
 
-    > .page-component {
-        padding: 0.4em;
-    }
+    // > .page-component {
+    //     padding: 0.4em;
+    // }
 
-    > .page-component .page-component {
-        padding-left: 0.4em;
-        border-left: 2px solid $color_lighter;
+    // > .page-component .page-component {
+    //     padding-left: 0.4em;
+    //     border-left: 2px solid $color_lighter;
 
-        &:hover {
-            border-left: 2px solid #000;
-        }
-    }
+    //     &:hover {
+    //         border-left: 2px solid #000;
+    //     }
+    // }
 
-    > .page-component > .heading {
-        font-size: 1.25em;
-    }
+    // > .page-component > .heading {
+    //     font-size: 1.25em;
+    // }
 
-    .component-field {
-        display: grid;
-        grid-template-columns: 1fr 2fr;
-    }
+    // .component-field {
+    //     display: grid;
+    //     grid-template-columns: 1fr 2fr;
+    // }
 
-    > .page-component .page-component-actions {
-        display: none;
-    }
+    // > .page-component .page-component-actions {
+    //     display: none;
+    // }
 
-    .drag-area > .draggable {
-        > .page-component > .page-component-actions {
-            display: none;
+    // .drag-area > .draggable {
+    //     > .page-component > .page-component-actions {
+    //         display: none;
 
-            button {
-                display: none;
-            }
-        }
+    //         button {
+    //             display: none;
+    //         }
+    //     }
 
-        &:last-child {
-            > .page-component > .page-component-actions {
-                display: flex;
-                justify-content: space-between;
+    //     &:last-child {
+    //         > .page-component > .page-component-actions {
+    //             display: flex;
+    //             justify-content: space-between;
 
-                button {
-                    display: block;
-                    opacity: 0.5;
+    //             button {
+    //                 display: block;
+    //                 opacity: 0.5;
 
-                    &.ready {
-                        opacity: 1;
-                    }
-                }
-            }
-        }
-    }
+    //                 &.ready {
+    //                     opacity: 1;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 #drag-area-wrapper > .drag-area-source {
@@ -152,16 +152,16 @@ body.draggable--is-dragging {
         display: none;
     }
 
-    > .draggable > .page-component {
-        .heading {
-            font-weight: 400;
-        }
+    // > .draggable > .page-component {
+    //     .heading {
+    //         font-weight: 400;
+    //     }
 
-        .component-field,
-        .drag-area {
-            display: none;
-        }
-    }
+    //     // .component-field,
+    //     .drag-area {
+    //         display: none;
+    //     }
+    // }
 }
 
 #drag-area-wrapper .drag-area-destination {

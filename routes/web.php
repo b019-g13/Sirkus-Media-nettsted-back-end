@@ -30,7 +30,7 @@ Route::post('media-picker', 'MediaPickerController@store')->name('media-picker.s
 
 Route::resource('pages', 'PageController')->except(['show']);
 Route::resource('menus', 'MenuController')->except(['show']);
-Route::resource('components', 'ComponentController')->except(['show']);
+Route::resource('components', 'ComponentController');
 Route::resource('links', 'LinkController')->except(['index', 'edit']);
 Route::resource('fields', 'FieldController')->except(['show']);
 Route::resource('menu_locations', 'MenuLocationController')->except(['show']);

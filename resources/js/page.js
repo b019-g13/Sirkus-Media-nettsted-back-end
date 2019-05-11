@@ -376,6 +376,169 @@ function setupChildRemover(component) {
     component.parentNode.removeChild(component);
 }
 
+// Component picker
+function setupComponentPicker(form) {
+    const pickerModal = document.querySelector("#page-modal-pick-component");
+    const pickerForm = pickerModal.querySelector("form");
+    const componentSuperParent = document.querySelector(
+        "#page-component-superparent"
+    );
+
+    if (
+        pickerModal == null ||
+        pickerForm == null ||
+        componentSuperParent == null
+    ) {
+        return;
+    }
+
+    const componentGetURL = componentSuperParent.dataset.component_get_url;
+
+    setupComponentRemovers(form);
+    setupComponentMinimizers(form);
+    setupComponentMaximizers(form);
+    setupComponentMoverUp(form);
+    setupComponentMoverDown(form);
+
+    pickerForm.addEventListener("submit", evt => {
+        evt.preventDefault();
+
+        let formData = new FormData(pickerForm);
+        const componentId = formData.get("component");
+
+        // Make sure we found a component id, and that the form is connected to a modal,
+        // which in turn is connected to the trigger which opened it
+        if (
+            componentId == null ||
+            pickerForm._modal == null ||
+            pickerForm._modal._modalTrigger == null
+        ) {
+            return;
+        }
+
+        // Let's find the output element via the modal trigger
+        const outputElementParent =
+            pickerForm._modal._modalTrigger.parentNode.parentNode;
+
+        // First set or get an id on the parent element, this is so we can select direct children
+        let originalOutputElementParentId = outputElementParent.getAttribute(
+            "id"
+        );
+        if (originalOutputElementParentId === null) {
+            outputElementParent.setAttribute(
+                "id",
+                outputElementParent.dataset.componentId
+            );
+        }
+
+        // Get the output element
+        const selector =
+            "#" +
+            outputElementParent.getAttribute("id") +
+            " > .page-component-contents > .page-component-children";
+        const outputElement = document.querySelector(selector);
+
+        // If we created an ID for this element, remove it
+        if (originalOutputElementParentId === null) {
+            outputElementParent.removeAttribute("id");
+        }
+
+        // Get HTML for component
+        axios
+            .get(componentGetURL.replace("COMPONENT_ID", componentId))
+            .then(response => {
+                // console.log("AXIOS response", response);
+                const parsedHTML = new DOMParser().parseFromString(
+                    response.data,
+                    "text/html"
+                );
+
+                setupComponentRemovers(parsedHTML);
+                setupComponentMinimizers(parsedHTML);
+                setupComponentMaximizers(parsedHTML);
+                setupComponentMoverUp(parsedHTML);
+                setupComponentMoverDown(parsedHTML);
+                setupMediaPickers(parsedHTML);
+
+                parsedHTML.body.childNodes.forEach(child => {
+                    outputElement.appendChild(child);
+                });
+
+                new setupModalTriggers();
+            });
+    });
+}
+
+function setupComponentRemovers(html) {
+    const removers = html.querySelectorAll(".page-component-remove");
+
+    removers.forEach(remover => {
+        remover.addEventListener("click", function() {
+            const child = this.parentNode.parentNode.parentNode;
+            const parent = child.parentNode;
+
+            parent.removeChild(child);
+        });
+    });
+}
+
+function setupComponentMinimizers(html) {
+    const minimizers = html.querySelectorAll(".page-component-minimize");
+
+    minimizers.forEach(minimizer => {
+        minimizer.addEventListener("click", function() {
+            const component = this.parentNode.parentNode.parentNode;
+            component.classList.add("minimize");
+        });
+    });
+}
+
+function setupComponentMaximizers(html) {
+    const maximizers = html.querySelectorAll(".page-component-maximize");
+
+    maximizers.forEach(maximizer => {
+        maximizer.addEventListener("click", function() {
+            const component = this.parentNode.parentNode.parentNode;
+            component.classList.remove("minimize");
+        });
+    });
+}
+
+function setupComponentMoverUp(html) {
+    const mover_ups = html.querySelectorAll(".page-component-move_up");
+
+    mover_ups.forEach(mover_up => {
+        mover_up.addEventListener("click", function() {
+            const child = this.parentNode.parentNode.parentNode;
+            const parent = child.parentNode;
+
+            if (child.previousElementSibling === null) {
+                return;
+            }
+
+            parent.insertBefore(child, child.previousElementSibling);
+        });
+    });
+}
+
+function setupComponentMoverDown(html) {
+    const mover_downs = html.querySelectorAll(".page-component-move_down");
+
+    mover_downs.forEach(mover_down => {
+        mover_down.addEventListener("click", function() {
+            const child = this.parentNode.parentNode.parentNode;
+            const parent = child.parentNode;
+
+            if (child.nextElementSibling === null) {
+                return;
+            }
+
+            parent.insertBefore(child.nextElementSibling, child);
+        });
+    });
+}
+
+// Submit form and setup page
 (function() {
     const form = document.querySelector("#form-page");
     const pageComponentsWrapper = document.querySelector("#drag-area-wrapper");
@@ -384,16 +547,18 @@ function setupChildRemover(component) {
         "#drag-area-wrapper > .drag-area-destination"
     );
 
+    setupComponentPicker(form);
+
     setupLinkPicker(form);
     setupMediaPickers(form);
-    setupChildAdders(pageComponentsDestination);
-    setupChildRemovers(pageComponentsDestination);
+    // setupChildAdders(pageComponentsDestination);
+    // setupChildRemovers(pageComponentsDestination);
 
-    // When the draggable event fires, lets set up the duplicate and remove buttons
-    window.addEventListener("draggable-drag-new-item", () => {
-        setupChildAdders(pageComponentsDestination);
-        setupChildRemovers(pageComponentsDestination);
-    });
+    // // When the draggable event fires, lets set up the duplicate and remove buttons
+    // window.addEventListener("draggable-drag-new-item", () => {
+    //     setupChildAdders(pageComponentsDestination);
+    //     setupChildRemovers(pageComponentsDestination);
+    // });
 
     // Adds Components in the "page components" list to the input
     form.onsubmit = evt => {
