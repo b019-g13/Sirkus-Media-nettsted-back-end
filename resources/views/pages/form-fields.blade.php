@@ -6,27 +6,27 @@
     <section>
         <h3>Legg til komponenter for siden</h3>
 
-        <div id="drag-area-wrapper">
-            <p class="heading">Tilgjengelig komponenter</p>
-            <ul class="drag-area drag-area-source">
-                @foreach ($components as $component)
-                    <li class="draggable">
-                        {!! $component->getFieldsAndChildrenHTML() !!}
-                    </li>
-                @endforeach
-            </ul>
-
-            <p class="heading">Sidens komponenter</p>
-            <ul class="drag-area drag-area-destination">
-                @if (isset($page->components))
-                    @foreach ($page->components as $page_component)
-                        <li class="draggable" >
-                            {!! $page_component->getFieldsAndChildrenHTML() !!}
-                        </li>
-                    @endforeach
-                @endif
-            </ul>
+        <div id="page-component-superparent"
+            class="page-component"
+            data-component_id="superparent"
+            data-component_get_url="{{ route('components.show', 'COMPONENT_ID') }}"
+        >
+            <div class="page-component-contents">
+                <div class="page-component-children">
+                    @if (isset($page))
+                        @foreach ($page->components as $component)
+                            @include('components.show')
+                        @endforeach
+                    @endif
+                </div>
+            </div>
+            <div class="page-component-footer">
+                <button type="button" class="modal-trigger page-component-add" data-modal="page-modal-pick-component">
+                    @icon('package')
+                    <span>Legg til komponent</span>
+                </button>
+            </div>
         </div>
 
-        <input id="drag-area-input" name="components" type="hidden">
+        <input id="page-components-input" name="components" type="hidden">
     </section>
