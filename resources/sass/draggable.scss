@@ -1,3 +1,32 @@
+.handle {
+    display: inline-flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    width: 1.5em;
+    height: 1.5em;
+    overflow: hidden;
+    vertical-align: middle;
+    background-color: transparent;
+    color: $color_dark;
+
+    &::before {
+        content: ":::";
+        padding-left: 0.125em;
+        vertical-align: middle;
+        font-weight: 400;
+        letter-spacing: 1px;
+        writing-mode: vertical-lr;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: $color_lighter;
+    }
+}
+
 .draggable .handle {
     user-select: none;
 
