@@ -170,6 +170,12 @@
         align-self: center;
         justify-self: center;
     }
+
+    .component-field:nth-child(3) {
+        .cf-link-picker-selected {
+            color: #fff;
+        }
+    }
 }
 @media screen and (min-width: $size_l) {
     .page-component.page-component--header
@@ -193,12 +199,14 @@
             font-family: $font-family-headings;
         }
 
-        .component-field:nth-child(3) .modal-trigger {
-            color: #fff;
-            border-color: $color_accent;
-            background-color: $color_accent;
-            text-transform: uppercase;
-            padding: 0.5em;
+        .component-field:nth-child(3) {
+            .modal-trigger {
+                color: #fff;
+                border-color: $color_accent;
+                background-color: $color_accent;
+                text-transform: uppercase;
+                padding: 0.25em;
+            }
         }
 
         .component-field:nth-child(5) {
