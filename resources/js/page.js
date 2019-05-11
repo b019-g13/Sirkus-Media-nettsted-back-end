@@ -1,80 +1,31 @@
 require("./media-picker");
 
-function getFields(component) {
-    let componentId = component.getAttribute("id");
-    if (componentId == null) {
-        componentId =
-            "page-component-draggable-loop-current-field" +
-            component.dataset.component_id;
-        component.setAttribute("id", componentId);
+window.components = {};
+
+// Polyfill for Element.closest for IE9+
+(function() {
+    if (!Element.prototype.matches) {
+        Element.prototype.matches =
+            Element.prototype.msMatchesSelector ||
+            Element.prototype.webkitMatchesSelector;
     }
 
-    const componentFields = document.querySelectorAll(
-        "#" + componentId + " > .component-field"
-    );
+    if (!Element.prototype.closest) {
+        Element.prototype.closest = function(s) {
+            var el = this;
 
-    component.removeAttribute("id");
-
-    let fields = [];
-    componentFields.forEach((field, i) => {
-        let inputField = field.querySelector(".cf-input");
-        if (inputField != null) {
-            const value = inputField.value;
-
-            fields.push({
-                component_field_id: field.dataset.component_field_id,
-                type: field.dataset.field_type,
-                order: i,
-                value: value
-            });
-        } else {
-            console.error("null!");
-        }
-    });
-
-    return fields;
-}
-
-function getChildren(parent, order) {
-    let output = [];
-
-    if (parent == null) {
-        return output;
+            do {
+                if (el.matches(s)) return el;
+                el = el.parentElement || el.parentNode;
+            } while (el !== null && el.nodeType === 1);
+            return null;
+        };
     }
+})();
 
-    let parentId = parent.getAttribute("id");
-    if (parentId == null) {
-        parentId =
-            "page-component-draggable-loop-current-child-" +
-            parent.dataset.component_id;
-        parent.setAttribute("id", parentId);
-    }
-
-    const componentChildren = document.querySelectorAll(
-        "#" +
-            parentId +
-            " > .page-component > .drag-area > .draggable > .page-component"
-    );
-
-    parent.removeAttribute("id");
-
-    if (componentChildren.length !== 0) {
-        componentChildren.forEach((componentChild, i) => {
-            output.push({
-                id: componentChild.dataset.component_id,
-                parent_id: parent.dataset.component_id,
-                order: order,
-                fields: getFields(componentChild),
-                children: getChildren(componentChild.parentNode, i)
-            });
-        });
-    }
-
-    return output;
-}
-
-function setupMediaPickers(form) {
-    const cfMediaPickers = form.querySelectorAll(".cf-media-picker");
+// Media pickers
+function setupMediaPickers(html) {
+    const cfMediaPickers = html.querySelectorAll(".cf-media-picker");
 
     cfMediaPickers.forEach(cfMediaPicker => {
         const value = cfMediaPicker.dataset.value;
@@ -115,6 +66,7 @@ function setupMediaPickers(form) {
     });
 }
 
+// Link pickers
 function setupLinkPicker(form) {
     const pickerModal = document.querySelector("#menu-modal-pick-link");
     const pickerForm = pickerModal.querySelector("form");
@@ -261,9 +213,6 @@ function setupLinkPicker(form) {
                 'select[name="page_id"]'
             );
 
-            // inputLinkName.value = " ";
-            // inputLinkValue.value = null;
-            // inputLinkPageId.value = null;
             modalLoadingIndicator.style.display = "inline-block";
 
             // Get the link
@@ -317,65 +266,6 @@ function setupLinkPicker(form) {
     }
 }
 
-function setupChildAdders(wrapper) {
-    const buttons = wrapper.querySelectorAll(".page-component-duplicate");
-    const checkClass = "button-has-been-setup-child-adder";
-
-    buttons.forEach(button => {
-        if (!button.classList.contains(checkClass)) {
-            button.classList.add(checkClass);
-            button.classList.add("ready");
-
-            button.addEventListener("click", () => {
-                setupChildAdder(button.parentNode.parentNode.parentNode);
-            });
-        }
-    });
-}
-
-function setupChildAdder(component_original) {
-    // Make a clone of the component and append it
-    const component_clone = component_original.cloneNode(true);
-    component_original.parentNode.appendChild(component_clone);
-
-    // Setup the cloned duplicator button
-    const button_clone_duplicate = component_clone.querySelector(
-        ".page-component-duplicate"
-    );
-    button_clone_duplicate.classList.add("button-has-been-setup-child-adder");
-    button_clone_duplicate.addEventListener("click", () => {
-        setupChildAdder(component_clone);
-    });
-
-    // Setup the cloned remover button
-    const button_clone_remove = component_clone.querySelector(
-        ".page-component-remove"
-    );
-    button_clone_remove.addEventListener("click", () => {
-        setupChildRemover(component_clone);
-    });
-}
-
-function setupChildRemovers(wrapper) {
-    const buttons = wrapper.querySelectorAll(".page-component-remove");
-    const checkClass = "has-been-setup-child-remove";
-
-    buttons.forEach(button => {
-        if (!button.classList.contains(checkClass)) {
-            button.classList.add(checkClass);
-            button.classList.add("ready");
-
-            button.addEventListener("click", () => {
-                setupChildRemover(button.parentNode.parentNode.parentNode);
-            });
-        }
-    });
-}
-
-function setupChildRemover(component) {
-    component.parentNode.removeChild(component);
-}
-
 // Component picker
 function setupComponentPicker(form) {
     const pickerModal = document.querySelector("#page-modal-pick-component");
@@ -427,7 +317,7 @@ function setupComponentPicker(form) {
         if (originalOutputElementParentId === null) {
             outputElementParent.setAttribute(
                 "id",
-                outputElementParent.dataset.componentId
+                "component-" + outputElementParent.dataset.component_id
             );
         }
 
@@ -453,6 +343,7 @@ function setupComponentPicker(form) {
                     "text/html"
                 );
 
+                // Setup the different action buttons
                 setupComponentRemovers(parsedHTML);
                 setupComponentMinimizers(parsedHTML);
                 setupComponentMaximizers(parsedHTML);
@@ -467,6 +358,90 @@ function setupComponentPicker(form) {
                 new setupModalTriggers();
             });
     });
+}
+
+function setupComponentVariable(html, parentSelector, parentObject) {
+    // Get components
+    const components = html.querySelectorAll(
+        parentSelector +
+            " > .page-component-contents > .page-component-children > .page-component"
+    );
+
+    for (let i = 0; i < components.length; i++) {
+        const component = components[i];
+
+        if (component.dataset == null) {
+            return;
+        }
+
+        const componentId = component.dataset.component_id;
+        const componentTmpUuid = window.uuid();
+        const componentObject = {};
+
+        componentObject.id = componentId;
+        componentObject.fields = [];
+        componentObject.children = [];
+        componentObject.order = i;
+
+        // Set or get an id on the parent element, this is so we can select direct children
+        let originalComponentElementId = component.getAttribute("id");
+        if (originalComponentElementId === null) {
+            component.setAttribute("id", "component-" + componentTmpUuid);
+        }
+
+        // Get the component fields
+        const componentFields = html.querySelectorAll(
+            "#" +
+                component.getAttribute("id") +
+                " > .page-component-contents > .page-component-fields .component-field"
+        );
+
+        for (let j = 0; j < componentFields.length; j++) {
+            const componentField = componentFields[j];
+
+            if (componentField.dataset == null) {
+                return;
+            }
+
+            const componentFieldId = componentField.dataset.component_field_id;
+            const fieldType = componentField.dataset.field_type;
+            const fieldInput = componentField.querySelector(".cf-input");
+            let fieldInputValue = null;
+
+            if (fieldInput !== null) {
+                fieldInputValue = fieldInput.value;
+            }
+
+            componentObject.fields[j] = {
+                component_field_id: componentFieldId,
+                order: j,
+                type: fieldType,
+                value: fieldInputValue
+            };
+        }
+
+        // Get the component children
+        setupComponentVariable(
+            html.querySelector(
+                "#" +
+                    component.getAttribute("id") +
+                    " > .page-component-contents > .page-component-children"
+            ),
+            "#" + component.getAttribute("id"),
+            componentObject
+        );
+
+        if (parentObject == null) {
+            window.components[componentTmpUuid] = componentObject;
+        } else {
+            parentObject.children.push(componentObject);
+        }
+
+        // If we created an ID for this element, remove it
+        if (originalComponentElementId === null) {
+            component.removeAttribute("id");
+        }
+    }
 }
 
 function setupComponentRemovers(html) {
@@ -542,7 +517,9 @@ function setupComponentMoverDown(html) {
 (function() {
     const form = document.querySelector("#form-page");
     const pageComponentsWrapper = document.querySelector("#drag-area-wrapper");
-    const pageComponentsInput = document.querySelector("#drag-area-input");
+    const pageComponentsInput = document.querySelector(
+        "#page-components-input"
+    );
     let pageComponentsDestination = document.querySelector(
         "#drag-area-wrapper > .drag-area-destination"
     );
@@ -550,56 +527,15 @@ function setupComponentMoverDown(html) {
     setupComponentPicker(form);
 
     setupLinkPicker(form);
-    setupMediaPickers(form);
-    // setupChildAdders(pageComponentsDestination);
-    // setupChildRemovers(pageComponentsDestination);
+    setupMediaPickers(form); // TODO: Stop duplication
 
-    // // When the draggable event fires, lets set up the duplicate and remove buttons
-    // window.addEventListener("draggable-drag-new-item", () => {
-    //     setupChildAdders(pageComponentsDestination);
-    //     setupChildRemovers(pageComponentsDestination);
-    // });
-
-    // Adds Components in the "page components" list to the input
     form.onsubmit = evt => {
         evt.preventDefault();
-        let pageComponentsInputValue = [];
 
-        document
-            .querySelectorAll(
-                "#" +
-                    pageComponentsWrapper.getAttribute("id") +
-                    " > .drag-area-destination > .draggable"
-            )
-            .forEach((component, i) => {
-                let componentId = component.getAttribute("id");
-                if (componentId == null) {
-                    componentId =
-                        "page-component-draggable-loop-current-parent";
-                    component.setAttribute("id", componentId);
-                }
+        setupComponentVariable(form, "#page-component-superparent");
 
-                pageComponentsInputValue.push({
-                    id: document.querySelector(
-                        "#" + componentId + "> .page-component"
-                    ).dataset.component_id,
-                    order: i,
-                    parent_id: null,
-                    name: document.querySelector(
-                        "#" + componentId + "> .page-component > .heading"
-                    ).innerHTML,
-                    fields: getFields(
-                        document.querySelector(
-                            "#" + componentId + "> .page-component"
-                        )
-                    ),
-                    children: getChildren(component, i)
-                });
+        pageComponentsInput.value = JSON.stringify(window.components);
 
-                component.removeAttribute("id");
-            });
-
-        pageComponentsInput.value = JSON.stringify(pageComponentsInputValue);
         form.submit();
     };
 })();

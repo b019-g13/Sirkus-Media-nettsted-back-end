@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import { Sortable } from "@shopify/draggable";
 
-function uuidv4() {
+function uuid() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
         (
             c ^
@@ -9,6 +9,8 @@ function uuidv4() {
         ).toString(16)
     );
 }
+
+window.uuid = uuid;
 
 // Load Axios and set CSRF token
 window.axios = require("axios");
@@ -26,7 +28,7 @@ if (token) {
 
 // Setup draggable
 (function() {
-    const eventDragNewItem = new CustomEvent("draggable-drag-new-item");
+    // const eventDragNewItem = new CustomEvent("draggable-drag-new-item");
     const dragAreasWrapper = document.querySelector("#drag-area-wrapper");
 
     // No drag area wrapper on this page
@@ -84,7 +86,7 @@ if (token) {
 
             if (inputs != null) {
                 inputs.forEach(input => {
-                    const uuid = uuidv4();
+                    const uuid = window.uuid();
                     input.setAttribute("id", "input-" + uuid);
 
                     const label = input.parentNode.querySelector("label");
@@ -94,9 +96,9 @@ if (token) {
                 });
             }
 
-            setTimeout(() => {
-                dispatchEvent(eventDragNewItem);
-            }, 200);
+            // setTimeout(() => {
+            //     dispatchEvent(eventDragNewItem);
+            // }, 200);
         } else if (
             evt.newContainer === availableItemsContainer &&
             Array.prototype.indexOf.call(
@@ -124,7 +126,7 @@ if (token) {
         );
 
         if (!conditionalSwitch.dataset.switchId) {
-            conditionalSwitch.dataset.switchId = uuidv4();
+            conditionalSwitch.dataset.switchId = window.uuid();
         }
         const randomId = conditionalSwitch.dataset.switchId;
 
@@ -157,132 +159,123 @@ if (token) {
     }
 })();
 
-// Modals
-(function() {
-    let lastFocusedElement = document.body;
-    setupModalTriggers();
+window.addEventListener("load", ready);
+// window.addEventListener("draggable-drag-new-item", setupModalTriggers);
 
-    window.addEventListener("draggable-drag-new-item", setupModalTriggers);
+function ready() {
+    window.lastFocusedElement = document.body;
+    new setupModalTriggers();
+    setupDropdowns();
+}
 
-    // Setup modal openers/triggers
-    function setupModalTriggers() {
-        const modalTriggerCheckClass = "modal-trigger-is-setup";
-        const modalCloserCheckClass = "modal-closer-is-setup";
-        const modalSubmitterCheckClass = "modal-submitter-is-setup";
+// Setup modal openers/triggers
+window.setupModalTriggers = function() {
+    const modalTriggerCheckClass = "modal-trigger-is-setup";
+    const modalCloserCheckClass = "modal-closer-is-setup";
+    const modalSubmitterCheckClass = "modal-submitter-is-setup";
 
-        const modalTriggers = document.querySelectorAll(".modal-trigger");
-        if (modalTriggers == null) {
-            return false;
-        }
-
-        modalTriggers.forEach(modalTrigger => {
-            if (modalTrigger.classList.contains(modalTriggerCheckClass)) {
-                return;
-            }
-
-            modalTrigger.classList.add(modalTriggerCheckClass);
-
-            const modalId = modalTrigger.dataset.modal;
-            const modal = document.querySelector("#" + modalId);
-
-            if (modal != null) {
-                modalTrigger.addEventListener("click", () => {
-                    openModal(modal, modalTrigger);
-                });
-
-                // Setup modal closers
-                const modalClosers = modal.querySelectorAll(".modal-closer");
-                modalClosers.forEach(modalCloser => {
-                    if (
-                        !modalCloser.classList.contains(modalCloserCheckClass)
-                    ) {
-                        modalCloser.classList.add(modalCloserCheckClass);
-
-                        modalCloser.addEventListener("click", () => {
-                            closeModal(modal);
-                        });
-                    }
-                });
-
-                // Setup modal submitters
-                const modalSubmitters = modal.querySelectorAll(".modal-submit");
-                modalSubmitters.forEach(modalSubmitter => {
-                    if (
-                        !modalSubmitter.classList.contains(
-                            modalSubmitterCheckClass
-                        )
-                    ) {
-                        modalSubmitter.classList.add(modalSubmitterCheckClass);
-
-                        modalSubmitter.addEventListener("click", () => {
-                            submitModal(modal);
-                        });
-                    }
-                });
-            }
-        });
+    const modalTriggers = document.querySelectorAll(".modal-trigger");
+    if (modalTriggers == null) {
+        return false;
     }
 
-    function openModal(modal, modalTrigger) {
-        if (modal == null || modalTrigger == null) {
-            return false;
-        }
-
-        modal.classList.add("modal-open");
-        document.documentElement.classList.add("modal-open");
-
-        lastFocusedElement = document.activeElement;
-        modal.setAttribute("tabindex", 0);
-        modal.focus();
-
-        modal._modalTrigger = modalTrigger;
-    }
-
-    function closeModal(modal) {
-        if (modal == null) {
-            return false;
-        }
-
-        modal.classList.remove("modal-open");
-        document.documentElement.classList.remove("modal-open");
-        lastFocusedElement.focus();
-
-        modal._modalTrigger = null;
-    }
-
-    function submitModal(modal) {
-        if (modal == null) {
-            return false;
-        }
-
-        const form = modal.querySelector("form");
-        if (form == null) {
+    modalTriggers.forEach(modalTrigger => {
+        if (modalTrigger.classList.contains(modalTriggerCheckClass)) {
             return;
         }
 
-        form._modal = modal;
+        modalTrigger.classList.add(modalTriggerCheckClass);
 
-        // Append a hidden submit button inside the form. We do this instead of form.submit,
-        // because with this way we still trigger event listeners and form validation,
-        // but form.submit does not.
-        const button = document.createElement("button");
-        button.setAttribute("type", "submit");
-        button.classList.add("hide");
+        const modalId = modalTrigger.dataset.modal;
+        const modal = document.querySelector("#" + modalId);
 
-        form.appendChild(button);
-        button.click();
+        if (modal != null) {
+            modalTrigger.addEventListener("click", () => {
+                openModal(modal, modalTrigger);
+            });
 
-        // Close modal is form is valid
-        if (form.checkValidity()) {
-            closeModal(modal);
+            // Setup modal closers
+            const modalClosers = modal.querySelectorAll(".modal-closer");
+            modalClosers.forEach(modalCloser => {
+                if (!modalCloser.classList.contains(modalCloserCheckClass)) {
+                    modalCloser.classList.add(modalCloserCheckClass);
+
+                    modalCloser.addEventListener("click", () => {
+                        closeModal(modal);
+                    });
+                }
+            });
+
+            // Setup modal submitters
+            const modalSubmitters = modal.querySelectorAll(".modal-submit");
+            modalSubmitters.forEach(modalSubmitter => {
+                if (
+                    !modalSubmitter.classList.contains(modalSubmitterCheckClass)
+                ) {
+                    modalSubmitter.classList.add(modalSubmitterCheckClass);
+
+                    modalSubmitter.addEventListener("click", () => {
+                        submitModal(modal);
+                    });
+                }
+            });
         }
+    });
+};
+
+function openModal(modal, modalTrigger) {
+    if (modal == null || modalTrigger == null) {
+        return false;
     }
-})();
 
-window.addEventListener("load", ready);
+    modal.classList.add("modal-open");
+    document.documentElement.classList.add("modal-open");
 
-function ready() {
-    setupDropdowns();
+    window.lastFocusedElement = document.activeElement;
+    modal.setAttribute("tabindex", 0);
+    modal.focus();
+
+    modal._modalTrigger = modalTrigger;
+}
+
+function closeModal(modal) {
+    if (modal == null) {
+        return false;
+    }
+
+    modal.classList.remove("modal-open");
+    document.documentElement.classList.remove("modal-open");
+    window.lastFocusedElement.focus();
+
+    modal._modalTrigger = null;
+}
+
+function submitModal(modal) {
+    if (modal == null) {
+        return false;
+    }
+
+    const form = modal.querySelector("form");
+    if (form == null) {
+        return;
+    }
+
+    form._modal = modal;
+
+    // Append a hidden submit button inside the form. We do this instead of form.submit,
+    // because with this way we still trigger event listeners and form validation,
+    // but form.submit does not.
+    const button = document.createElement("button");
+    button.setAttribute("type", "submit");
+    button.classList.add("hide");
+
+    form.appendChild(button);
+    button.click();
+
+    // Close modal is form is valid
+    if (form.checkValidity()) {
+        closeModal(modal);
+    }
 }
 
 function setupDropdowns() {

@@ -1,4 +1,22 @@
-<article class="page-component page-component--{{ $component->slug }}" data-component_id="{{ $component->id }}">
+@php
+    $component_classes = 'page-component';
+    
+    if ($component->slug !== null) {
+        $component_classes .= ' page-component--' . $component->slug;
+    } else {
+        $component_classes .= ' page-component--' . str_slug($component->name);
+    }
+    
+    if (!isset($parent_component_id)) {
+        $component_classes .= ' page-component-parent';
+    }
+
+    $component_id = $component->component_id;
+    if ($component_id === null) {
+        $component_id = $component->id;
+    }
+@endphp
+<article class="{{ $component_classes }}" data-component_id="{{ $component_id }}">
     <header class="page-component-titlebar">
         <div class="actions-left">
             <button class="button-action button-error page-component-remove" type="button">@icon('x')</button>
@@ -13,11 +31,22 @@
     </header>
     <section class="page-component-contents">
         <section class="page-component-fields">
-            @foreach ($component->fields as $field)
-                @include('components.field_types')
-            @endforeach
+            @if ($component->fields !== null && count($component->fields) > 0)
+                @foreach ($component->fields as $field)
+                    @include('components.field_types')
+                @endforeach
+            @endif
         </section>
-        <section class="page-component-children"></section>
+        <section class="page-component-children">
+            @if ($component->children !== null && count($component->children) > 0)
+                @foreach ($component->children as $component_child)
+                    @include('components.show', [
+                        'component' => $component_child,
+                        'parent_component_id' => $component->id,
+                    ])
+                @endforeach
+            @endif
+        </section>
     </section>
     <footer class="page-component-footer">
         <button type="button" class="modal-trigger page-component-add" data-modal="page-modal-pick-component" title="Velg komponent for {{ $component->name}}">
