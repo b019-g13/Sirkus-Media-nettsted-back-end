@@ -10,7 +10,7 @@ $size_xl: 1200px;
 
 // Typography
 $font-family-body: "Rubik", sans-serif;
-$font-family-headings: "EB Garamond", serif;
+$font-family-headings: "Playfair Display", serif;
 $font-family-mono: "Roboto Mono", monospace;
 $font-size-base: 18px;
 $font-line-height-base: 1.6;
@@ -95,24 +95,28 @@ $color_darker: #282c37;
 $color_darkest: #000;
 
 $color_primary: $blue2;
-$color_primary_light: lighten($color_primary, 33%);
-$color_primary_dark: darken($color_primary, 33%);
+$color_primary_light: $blue0;
+$color_primary_dark: $blue4;
 
 $color_secondary: $cyan2;
-$color_secondary_light: lighten($color_secondary, 33%);
-$color_secondary_dark: darken($color_secondary, 33%);
+$color_secondary_light: $cyan0;
+$color_secondary_dark: $cyan4;
 
 $color_accent: #f89079;
-$color_accent_light: lighten($color_accent, 21%);
-$color_accent_dark: darken($color_accent, 35%);
+$color_accent_light: $orange0;
+$color_accent_dark: $orange4;
 
 $color_success: $green2;
-$color_success_light: lighten($color_success, 40%);
-$color_success_dark: darken($color_success, 33%);
+$color_success_light: $green0;
+$color_success_dark: $green4;
 
 $color_error: $red2;
-$color_error_light: lighten($color_error, 40%);
-$color_error_dark: darken($color_error, 33%);
+$color_error_light: $red0;
+$color_error_dark: $red4;
+
+$color_warning: $yellow2;
+$color_warning_light: $yellow0;
+$color_warning_dark: $yellow4;
 
 $color_button_bg: $color_lighter;
 $color_button_fg: $color_darker;

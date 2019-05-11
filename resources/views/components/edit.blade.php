@@ -27,7 +27,7 @@
                 <div class="form-group form-group-submit">
                     <span></span>
                     <button type="submit">
-                        <span>Opprett</span>
+                        <span>Oppdater</span>
                         @icon('save')
                     </button>
                 </div>

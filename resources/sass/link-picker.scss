@@ -91,3 +91,15 @@
         }
     }
 }
+
+.component-field.component-field-type-url_internal,
+.component-field.component-field-type-url_external {
+    .cf-link-picker-selected {
+        margin: 0.25em auto 0;
+        line-height: 1;
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
