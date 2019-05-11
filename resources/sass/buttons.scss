@@ -130,6 +130,21 @@ a.button {
         }
     }
 
+    &.button-warning {
+        color: $color_warning_dark;
+        border-color: $color_warning_light;
+        background-color: $color_warning_light;
+        box-shadow: 0 0.4em 0.8em -0.2em rgba($color_warning, 0.25);
+
+        &:focus,
+        &:hover {
+            color: $color_warning_light;
+            border-color: $color_warning_dark;
+            background-color: $color_warning_dark;
+            box-shadow: 0 0.4em 0.8em -0.2em rgba($color_warning_dark, 0.25);
+        }
+    }
+
     &.button-blank {
         border-color: transparent;
         background-color: transparent;

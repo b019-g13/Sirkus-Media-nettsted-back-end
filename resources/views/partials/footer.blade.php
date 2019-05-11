@@ -34,7 +34,7 @@
             <a href="https://b019-g13.group/" noopener noreferrer target="_blank">B019-G13</a>
         </p>
     </div>
-    <link href="https://fonts.googleapis.com/css?family=EB+Garamond:700" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Rubik:400,700" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet"/>
     <script src="{{ asset('js/app.js') }}"></script>
