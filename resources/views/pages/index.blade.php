@@ -21,7 +21,7 @@
     <div class="content">
         <div class="content-inner">
             @if (!$pages->onFirstPage())
-                <p>Side {{ $pages->currentPage() }}</p>
+                <p>{{ __('Page') }} {{ $pages->currentPage() }}</p>
             @endif
             <table class="first-bold">
                 <thead>

@@ -6,7 +6,7 @@
             <div class="info">
                 <h1>
                     @icon('user')
-                    <span>Brukere</span>
+                    <span>{{ __('Users') }}</span>
                 </h1>
                 <p>Oversikt over alle brukere.</p>
             </div>
@@ -21,7 +21,7 @@
     <div class="content">
         <div class="content-inner">
             @if (!$users->onFirstPage())
-                <p>Side {{ $users->currentPage() }}</p>
+                <p>{{ __('Page') }} {{ $users->currentPage() }}</p>
             @endif
             <table class="first-bold">
                 <thead>

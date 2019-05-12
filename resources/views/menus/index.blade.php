@@ -6,7 +6,7 @@
             <div class="info">
                 <h1>
                     @icon('list')
-                    <span>Menyer</span>
+                    <span>{{ __('Menus') }}</span>
                 </h1>
                 <p>Oversikt over alle menyer.</p>
             </div>
@@ -20,13 +20,16 @@
     </header>
     <div class="content">
         <div class="content-inner">
+            @if (!$menus->onFirstPage())
+                <p>{{ __('Page') }} {{ $menus->currentPage() }}</p>
+            @endif
             <table class="first-bold">
                 <thead>
                     <tr>
                         <th>Navn</th>
                         <th>Lokasjon</th>
                         <th>Global</th>
-                        <th>Side</th>
+                        <th>{{ __('Page') }}</th>
                         <th>Handling</th>
                     </tr>
                 </thead>
@@ -53,8 +56,7 @@
                     @endforeach
                 </tbody>
             </table>
-
-            {{ $menus->onEachSide(1)->links() }}
+            @include('partials.nav-pagination', ['pagination_items' => $menus])
         </div>
     </div>
 @endsection
