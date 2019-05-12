@@ -18,3 +18,7 @@ Route::get('pages/{page_slug}', 'PageController@api_show');
 // Menus
 Route::get('/menus', 'MenuController@api_index');
 Route::get('/menus/{menu}', 'MenuController@api_show');
+
+// Settings
+Route::get('/site_settings', 'SiteSettingController@api_index');
+Route::get('/site_settings/{site_setting}', 'SiteSettingController@api_show');

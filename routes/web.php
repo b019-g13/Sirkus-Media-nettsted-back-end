@@ -34,3 +34,4 @@ Route::resource('components', 'ComponentController');
 Route::resource('links', 'LinkController')->except(['index', 'edit']);
 Route::resource('fields', 'FieldController')->except(['show']);
 Route::resource('menu_locations', 'MenuLocationController')->except(['show']);
+Route::resource('site_settings', 'SiteSettingController')->except(['show']);

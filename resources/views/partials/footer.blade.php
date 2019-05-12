@@ -14,6 +14,7 @@
                 @endrole
                 @role('superadmin|admin')
                     <a href="{{ route('user.index') }}">{{ __('Users') }}</a>
+                    <a href="{{ route('site_settings.index') }}">{{ __('Settings') }}</a>
                 @endrole
             </div>
             @role('superadmin')

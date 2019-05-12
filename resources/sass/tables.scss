@@ -78,4 +78,13 @@ table {
             display: table-cell;
         }
     }
+
+    td.truncate,
+    th.truncate {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 10em;
+        max-width: 20vw;
+        overflow: hidden;
+    }
 }
