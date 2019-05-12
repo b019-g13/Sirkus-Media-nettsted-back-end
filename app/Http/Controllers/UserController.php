@@ -14,13 +14,15 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('verified');
         $this->middleware('role:superadmin|admin')->only('index', 'destroy');
     }
 
     public function index(Request $request)
     {
+        $current_user = $request->user();
         $users = User::paginate(10);
-        return view('user.index', compact('users'));
+        return view('user.index', compact('users', 'current_user'));
     }
 
     public function show(Request $request)
@@ -29,8 +31,28 @@ class UserController extends Controller
         return view('user.show', compact('user'));
     }
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        $current_user = $request->user();
+
+        if ($user->hasRole('superadmin') && !$current_user->hasRole('superadmin')) {
+            $request->session()->flash('error', 'Du har ikke tilgang til å slette en superadmin');
+            return redirect()->back();
+        }
+
+        if ($user->id === $current_user->id) {
+            if (User::count() === 1) {
+                $request->session()->flash('error', 'Du kan ikke slette deg selv, som eneste bruker.');
+                return redirect()->back();
+            }
+
+            // If a user deletes themself, log them out and redirect them to the frontpage.
+            Auth::logout();
+            $user->delete();
+        
+            return redirect('/');
+        }
+
         $user->delete();
         return redirect()->route('user.index')->with('success', 'Brukeren ble slettet');
     }
