@@ -21,7 +21,7 @@
     <div class="content">
         <div class="content-inner">
             @if (!$menu_locations->onFirstPage())
-                <p>Side {{ $menu_locations->currentPage() }}</p>
+                <p>{{ __('Page') }} {{ $menu_locations->currentPage() }}</p>
             @endif
             <table class="first-bold">
                 <thead>
