@@ -19,6 +19,7 @@
                 @endrole
                 @role('superadmin|admin')
                     <a class="nav-link" href="{{ route('user.index') }}">{{ __('Users') }}</a>
+                    <a class="nav-link" href="{{ route('site_settings.index') }}">@icon('settings')</a>
                 @endrole
                 @php
                     $nav_user = Auth::user();

@@ -1,7 +1,11 @@
 {
+    "Page": "Side",
     "Pages": "Sider",
     "Menus": "Menyer",
     "Users": "Brukere",
     "Profile": "Profil",
-    "A project by": "Et prosjekt av"
+    "A project by": "Et prosjekt av",
+    "Settings": "Innstillinger",
+    "Overview of all settings.": "Oversikt over alle innstillinger.",
+    "New setting": "Ny instilling"
 }
