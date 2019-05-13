@@ -22,6 +22,7 @@ class ComponentController extends Controller
         $this->middleware('auth');
         $this->middleware('verified');
         $this->middleware('role:superadmin')->except('show');
+        $this->middleware('role:superadmin|admin|moderator')->only('show');
     }
 
     public function index()
