@@ -20,6 +20,7 @@ class LinkController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('verified');
+        $this->middleware('role:superadmin|admin|moderator');
     }
 
     protected function link_validator(array $data)
