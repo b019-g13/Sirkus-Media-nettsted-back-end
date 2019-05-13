@@ -30,6 +30,14 @@ class MediaPickerController extends Controller
         return view('media-picker.show', compact('media'));
     }
 
+    public function show_refresh(Request $request)
+    {
+        $user = $request->user();
+        $media = Image::where('privacy', 0)->orWhere('privacy', 1)->where('user_id', $user->id)->orderByDesc('created_at')->get();
+
+        return view('media-picker.show-content-row', compact('media'));
+    }
+
     public function store(Request $request)
     {
         $user = $request->user();

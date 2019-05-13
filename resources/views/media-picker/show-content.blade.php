@@ -1,4 +1,9 @@
-<form action="{{ route('media-picker.store') }}" method="POST" enctype="multipart/form-data">
+<form id="media-picker-form"
+    action="{{ route('media-picker.store') }}"
+    method="POST"
+    enctype="multipart/form-data"
+    data-action_refresh="{{ route('media-picker.show_refresh') }}"
+>
     @csrf
     <section id="media-picker">
         <header class="media-picker-header">

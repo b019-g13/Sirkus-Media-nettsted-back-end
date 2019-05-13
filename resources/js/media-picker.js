@@ -46,7 +46,7 @@ window.mediaPicker = function() {
 
     // Loads the HTML for the media picker
     this.functions.loadViewIntoDocument = () => {
-        axios
+        window.axios
             .get("/media-picker")
             .then(response => {
                 document.body.insertAdjacentHTML("beforeend", response.data);
@@ -58,6 +58,11 @@ window.mediaPicker = function() {
             })
             .then(() => {
                 this.elements.form = this.element.parentNode;
+
+                if (this.elements.form == null) {
+                    console.error("Couldn't find the media picker's form");
+                    return;
+                }
 
                 this.functions.setupSubmitButton();
                 this.functions.setupCloseButtons();
@@ -75,8 +80,62 @@ window.mediaPicker = function() {
             });
     };
 
+    this.functions.refreshView = () => {
+        const url = this.elements.form.dataset.action_refresh;
+
+        window.axios
+            .get(url)
+            .then(response => {
+                const mediaPickerBody = this.elements.form.querySelector(
+                    ".media-picker-body"
+                );
+
+                // Remove all existing element, but keep the preview element
+                while (
+                    mediaPickerBody.lastElementChild !== null &&
+                    ![
+                        "media-picker-medium-preview-radio",
+                        "media-picker-upload-preview"
+                    ].includes(
+                        mediaPickerBody.lastElementChild.getAttribute("id")
+                    )
+                ) {
+                    mediaPickerBody.removeChild(
+                        mediaPickerBody.lastElementChild
+                    );
+                }
+
+                // Parse the HTML in the response
+                const parsedHTML = new DOMParser().parseFromString(
+                    response.data,
+                    "text/html"
+                );
+
+                // Append the parsed HTML to the media picker body
+                parsedHTML.body.childNodes.forEach(child => {
+                    mediaPickerBody.appendChild(child);
+                });
+
+                this.functions.loadMedia();
+                this.functions.setupMediaChangeEvent();
+
+                // Hide the preview
+                this.elements.uploadPreview.parentNode.style.display = "none";
+
+                // Select the newly uploaded media
+                this.elements.uploadPreview.parentNode.nextElementSibling.click();
+            })
+            .catch(error => {
+                console.log("Couldn't refresh media picker", error);
+            })
+            .then(() => {
+                this.functions.disableLoadingMode();
+            });
+    };
+
     // Triggers when user selected a different medium
     this.functions.mediaChange = evt => {
+        console.log("media change");
         this.activeMedium = evt.target;
     };
 
@@ -264,8 +323,7 @@ window.mediaPicker = function() {
         }
     };
 
-    // Upload the image
-    this.functions.uploadImage = () => {
+    this.functions.enableLoadingMode = () => {
         // Disable submit and upload buttons
         this.elements.submitButton.disabled = true;
         this.elements.uploadButton.disabled = true;
@@ -277,38 +335,79 @@ window.mediaPicker = function() {
             "block";
         this.elements.uploadButton.querySelector(".icon").style.display =
             "block";
+    };
 
+    this.functions.disableLoadingMode = () => {
+        // Re-enable submit and upload buttons
+        this.elements.uploadButton.disabled = false;
+        this.elements.submitButton.disabled = false;
+
+        // Hide load/spinner in the submit and upload buttons
+        this.elements.submitButton.querySelector("span").style.display = "";
+        this.elements.uploadButton.querySelector("span").style.display = "";
+        this.elements.submitButton.querySelector(".icon").style.display = "";
+        this.elements.uploadButton.querySelector(".icon").style.display = "";
+    };
+
+    // Upload the image
+    this.functions.uploadImage = () => {
         const data = new FormData(this.elements.form);
+        this.functions.enableLoadingMode();
 
-        axios({
-            method: this.elements.form.getAttribute("method"),
-            url: this.elements.form.getAttribute("action"),
-            data: data,
-            config: { headers: { "Content-Type": "multipart/form-data" } }
-        })
+        window
+            .axios({
+                method: this.elements.form.getAttribute("method"),
+                url: this.elements.form.getAttribute("action"),
+                data: data,
+                config: { headers: { "Content-Type": "multipart/form-data" } }
+            })
             .then(response => {
                 this.elements.uploadPreviewRadio.value = response.data.id;
+
+                this.functions.refreshView();
+            })
+            .catch(response => {
+                this.elements.uploadPreview.parentNode.style.display = "block";
+                this.elements.uploadPreview.src = "NO_PREVIEW_IMG.jpg";
+                this.elements.uploadPreview.alt = "Kunne ikke laste opp";
+                this.elements.uploadPreviewRadio.value = "";
+
+                this.functions.disableLoadingMode();
+
+                console.error(response);
+            })
+            .then(() => {
+                // this.functions.disableLoadingMode();
+            });
+    };
+
+    this.functions.deleteImage = () => {
+        const data = new FormData(this.elements.form);
+        // const selectedImage = formData.get('selected-medium');
+
+        // if (selectedImage === null) {
+        //     return;
+        // }
+
+        this.functions.enableLoadingMode();
+
+        window
+            .axios({
+                method: "delete",
+                url: this.elements.form.getAttribute("action"),
+                data: data,
+                config: { headers: { "Content-Type": "multipart/form-data" } }
+            })
+            .then(response => {
+                console.log(response);
+                // this.elements.uploadPreviewRadio.value = response.data.id;
             })
             .catch(response => {
                 console.error(response);
-                this.elements.uploadPreviewRadio.value = "";
+                // this.elements.uploadPreviewRadio.value = "";
             })
             .then(() => {
-                // Re-enable submit and upload buttons
-                this.elements.uploadButton.disabled = false;
-                this.elements.submitButton.disabled = false;
-
-                // Hide load/spinner in the submit and upload buttons
-                this.elements.submitButton.querySelector("span").style.display =
-                    "";
-                this.elements.uploadButton.querySelector("span").style.display =
-                    "";
-                this.elements.submitButton.querySelector(
-                    ".icon"
-                ).style.display = "";
-                this.elements.uploadButton.querySelector(
-                    ".icon"
-                ).style.display = "";
+                this.functions.disableLoadingMode();
             });
     };
 
