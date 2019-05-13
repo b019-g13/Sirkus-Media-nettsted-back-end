@@ -21,7 +21,7 @@ class MediaPickerController extends Controller
     public function show(Request $request)
     {
         $user = $request->user();
-        $media = Image::where('privacy', 0)->orWhere('privacy', 1)->where('user_id', $user->id)->orderByDesc('created_at')->get();
+        $media = Image::where('privacy', 0)->where('user_id', $user->id)->orWhere('privacy', 1)->orderByDesc('created_at')->get();
 
         if ($request->ajax()) {
             return view('media-picker.show-content', compact('media'));
@@ -33,7 +33,7 @@ class MediaPickerController extends Controller
     public function show_refresh(Request $request)
     {
         $user = $request->user();
-        $media = Image::where('privacy', 0)->orWhere('privacy', 1)->where('user_id', $user->id)->orderByDesc('created_at')->get();
+        $media = Image::where('privacy', 0)->where('user_id', $user->id)->orWhere('privacy', 1)->orderByDesc('created_at')->get();
 
         return view('media-picker.show-content-row', compact('media'));
     }
@@ -64,12 +64,12 @@ class MediaPickerController extends Controller
             $image = new Image;
             // $image->size_name = 'full';
             $image->user_id = $user->id;
-            $image->attribute_alt = $user->name . ' media';
+            $image->attribute_alt = '';
 
             $ext = $uploaded_file->getClientOriginalExtension();
 
             $image->url = 'media/full/' . str_random(20) . '.' . $ext;
-            $image->privacy = 0;
+            $image->privacy = 1;
             $image->image_size_id = ImageSize::first()->id;
 
             if ($ext === 'svg') {
@@ -104,7 +104,6 @@ class MediaPickerController extends Controller
             Log::error($e);
         }
 
-        dd($request->all());
         return false;
     }
 
@@ -119,5 +118,5 @@ class MediaPickerController extends Controller
 
         $image->delete();
         return 'deleted';
-}
+    }
 }
