@@ -112,7 +112,7 @@ class MediaPickerController extends Controller
         $image = Image::findOrFail($image);
         $user = $request->user();
 
-        if ($image->privacy === 1 && $image->user_id !== $user->id) {
+        if ($image->privacy === 0 && $image->user_id !== $user->id) {
             return abort(403);
         }
 
