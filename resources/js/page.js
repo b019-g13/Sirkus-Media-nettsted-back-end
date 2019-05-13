@@ -40,9 +40,14 @@ function setupMediaPickers(html) {
         cfMediaPicker.appendChild(img);
     });
 
-    let myMediaPicker = new mediaPicker();
+    if (window.pageMediaPicker == null) {
+        window.pageMediaPicker = new mediaPicker();
+        window.addEventListener("media-picker-ready", setupMediaPickerTriggers);
+    } else {
+        setupMediaPickerTriggers();
+    }
 
-    window.addEventListener("media-picker-ready", () => {
+    function setupMediaPickerTriggers() {
         cfMediaPickers.forEach(cfMediaPicker => {
             const triggerOpen = cfMediaPicker.querySelector(".mp-trigger-open");
             const triggerDelete = cfMediaPicker.querySelector(
@@ -52,9 +57,13 @@ function setupMediaPickers(html) {
             const previewElement = cfMediaPicker.querySelector("img");
 
             triggerOpen.addEventListener("click", function() {
-                myMediaPicker.functions.setOutputElement(outputElement);
-                myMediaPicker.functions.setOutputPreview(previewElement);
-                myMediaPicker.functions.show();
+                window.pageMediaPicker.functions.setOutputElement(
+                    outputElement
+                );
+                window.pageMediaPicker.functions.setOutputPreview(
+                    previewElement
+                );
+                window.pageMediaPicker.functions.show();
             });
 
             triggerDelete.addEventListener("click", function() {
@@ -63,8 +72,7 @@ function setupMediaPickers(html) {
                 previewElement.src = "";
             });
         });
-    });
-}
+    }
 
 // Link pickers
 function setupLinkPicker(form) {
