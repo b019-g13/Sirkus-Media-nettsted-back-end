@@ -40,9 +40,14 @@ function setupMediaPickers(html) {
         cfMediaPicker.appendChild(img);
     });
 
-    let myMediaPicker = new mediaPicker();
+    if (window.pageMediaPicker == null) {
+        window.pageMediaPicker = new mediaPicker();
+        window.addEventListener("media-picker-ready", setupMediaPickerTriggers);
+    } else {
+        setupMediaPickerTriggers();
+    }
 
-    window.addEventListener("media-picker-ready", () => {
+    function setupMediaPickerTriggers() {
         cfMediaPickers.forEach(cfMediaPicker => {
             const triggerOpen = cfMediaPicker.querySelector(".mp-trigger-open");
             const triggerDelete = cfMediaPicker.querySelector(
@@ -52,9 +57,13 @@ function setupMediaPickers(html) {
             const previewElement = cfMediaPicker.querySelector("img");
 
             triggerOpen.addEventListener("click", function() {
-                myMediaPicker.functions.setOutputElement(outputElement);
-                myMediaPicker.functions.setOutputPreview(previewElement);
-                myMediaPicker.functions.show();
+                window.pageMediaPicker.functions.setOutputElement(
+                    outputElement
+                );
+                window.pageMediaPicker.functions.setOutputPreview(
+                    previewElement
+                );
+                window.pageMediaPicker.functions.show();
             });
 
             triggerDelete.addEventListener("click", function() {
@@ -63,12 +72,18 @@ function setupMediaPickers(html) {
                 previewElement.src = "";
             });
         });
-    });
+    }
 }
 
 // Link pickers
 function setupLinkPicker(form) {
     const pickerModal = document.querySelector("#menu-modal-pick-link");
+
+    if (pickerModal == null) {
+        console.error("Couldn't find the link picker modal");
+        return;
+    }
+
     const pickerForm = pickerModal.querySelector("form");
 
     const editModalTriggerCheckClass = "menu-link-action-edit-is-setup";
@@ -269,6 +284,12 @@ function setupLinkPicker(form) {
 // Component picker
 function setupComponentPicker(form) {
     const pickerModal = document.querySelector("#page-modal-pick-component");
+
+    if (pickerModal == null) {
+        console.error("Couldn't find the component picker modal");
+        return;
+    }
+
     const pickerForm = pickerModal.querySelector("form");
     const componentSuperParent = document.querySelector(
         "#page-component-superparent"
@@ -516,13 +537,20 @@ function setupComponentMoverDown(html) {
 // Submit form and setup page
 (function() {
     const form = document.querySelector("#form-page");
-    const pageComponentsWrapper = document.querySelector("#drag-area-wrapper");
+
+    if (form == null) {
+        console.error("Couldn't find the form for the page");
+        return;
+    }
+
     const pageComponentsInput = document.querySelector(
         "#page-components-input"
     );
-    let pageComponentsDestination = document.querySelector(
-        "#drag-area-wrapper > .drag-area-destination"
-    );
+
+    if (pageComponentsInput == null) {
+        console.error("Couldn't find the input element for the page form");
+        return;
+    }
 
     setupComponentPicker(form);
 

@@ -2,15 +2,16 @@
     position: fixed;
     top: 0;
     right: 0;
+    padding: 0;
     margin: 0;
     width: 100%;
-    padding: 1em 1em 0;
     max-width: 24em;
     list-style-type: none;
     z-index: 11; // Nav is 10
 
     @media screen and (min-width: $size_medium) {
-        padding: 2em 2em 0 0;
+        top: 2em;
+        right: 2em;
         max-width: 32em;
     }
 

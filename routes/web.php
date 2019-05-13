@@ -26,7 +26,9 @@ Route::get('konto', 'UserController@show')->name('user.show');
 Route::post('konto', 'UserController@update')->name('user.update');
 
 Route::get('media-picker', 'MediaPickerController@show')->name('media-picker.show');
+Route::get('media-picker/refresh', 'MediaPickerController@show_refresh')->name('media-picker.show_refresh');
 Route::post('media-picker', 'MediaPickerController@store')->name('media-picker.store');
+Route::delete('media-picker/{medium}', 'MediaPickerController@destroy')->name('media-picker.destroy');
 
 Route::resource('pages', 'PageController')->except(['show']);
 Route::resource('menus', 'MenuController')->except(['show']);

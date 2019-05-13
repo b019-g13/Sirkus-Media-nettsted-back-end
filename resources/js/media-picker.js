@@ -46,7 +46,7 @@ window.mediaPicker = function() {
 
     // Loads the HTML for the media picker
     this.functions.loadViewIntoDocument = () => {
-        axios
+        window.axios
             .get("/media-picker")
             .then(response => {
                 document.body.insertAdjacentHTML("beforeend", response.data);
@@ -59,9 +59,15 @@ window.mediaPicker = function() {
             .then(() => {
                 this.elements.form = this.element.parentNode;
 
+                if (this.elements.form == null) {
+                    console.error("Couldn't find the media picker's form");
+                    return;
+                }
+
                 this.functions.setupSubmitButton();
                 this.functions.setupCloseButtons();
                 this.functions.setupUploadButton();
+                this.functions.setupDeleteButton();
                 this.functions.setupMediaChangeEvent();
 
                 this.elements.form.addEventListener(
@@ -75,8 +81,62 @@ window.mediaPicker = function() {
             });
     };
 
+    this.functions.refreshView = () => {
+        const url = this.elements.form.dataset.action_refresh;
+
+        window.axios
+            .get(url)
+            .then(response => {
+                const mediaPickerBody = this.elements.form.querySelector(
+                    ".media-picker-body"
+                );
+
+                // Remove all existing element, but keep the preview element
+                while (
+                    mediaPickerBody.lastElementChild !== null &&
+                    ![
+                        "media-picker-medium-preview-radio",
+                        "media-picker-upload-preview"
+                    ].includes(
+                        mediaPickerBody.lastElementChild.getAttribute("id")
+                    )
+                ) {
+                    mediaPickerBody.removeChild(
+                        mediaPickerBody.lastElementChild
+                    );
+                }
+
+                // Parse the HTML in the response
+                const parsedHTML = new DOMParser().parseFromString(
+                    response.data,
+                    "text/html"
+                );
+
+                // Append the parsed HTML to the media picker body
+                parsedHTML.body.childNodes.forEach(child => {
+                    mediaPickerBody.appendChild(child);
+                });
+
+                this.functions.loadMedia();
+                this.functions.setupMediaChangeEvent();
+
+                // Hide the preview
+                this.elements.uploadPreview.parentNode.style.display = "none";
+
+                // Select the newly uploaded media
+                this.elements.uploadPreview.parentNode.nextElementSibling.click();
+            })
+            .catch(error => {
+                console.log("Couldn't refresh media picker", error);
+            })
+            .then(() => {
+                this.functions.disableLoadingMode();
+            });
+    };
+
     // Triggers when user selected a different medium
     this.functions.mediaChange = evt => {
+        this.elements.deleteButton.style.display = "inline-block";
         this.activeMedium = evt.target;
     };
 
@@ -115,6 +175,11 @@ window.mediaPicker = function() {
         );
 
         this.visibility = "showing";
+        document.body.style.overflow = "hidden";
+
+        if (this.activeMedium != null) {
+            this.elements.deleteButton.style.display = "inline-block";
+        }
     };
 
     this.functions.loadMedia = () => {
@@ -147,6 +212,9 @@ window.mediaPicker = function() {
         window.removeEventListener("keyup", this.functions.hideWithEsc);
 
         this.visibility = "hidden";
+
+        document.body.style.overflow = "";
+        this.elements.deleteButton.style.display = "none";
     };
 
     // Toggle the visibility of media picker
@@ -192,6 +260,23 @@ window.mediaPicker = function() {
         this.elements.closeButtons.forEach(closeButton => {
             closeButton.addEventListener("click", this.functions.hide);
         });
+    };
+
+    // Finds the delete button
+    this.functions.setupDeleteButton = () => {
+        this.elements.deleteButton = this.element.querySelector(
+            ".media-picker-button-delete"
+        );
+
+        if (this.elements.deleteButton == null) {
+            console.error("Couldn't find the media picker's delete button");
+            return;
+        }
+
+        this.elements.deleteButton.addEventListener(
+            "click",
+            this.functions.deleteImage
+        );
     };
 
     // Finds the upload button and related elements
@@ -264,8 +349,7 @@ window.mediaPicker = function() {
         }
     };
 
-    // Upload the image
-    this.functions.uploadImage = () => {
+    this.functions.enableLoadingMode = () => {
         // Disable submit and upload buttons
         this.elements.submitButton.disabled = true;
         this.elements.uploadButton.disabled = true;
@@ -273,42 +357,109 @@ window.mediaPicker = function() {
         // Show load/spinner in the submit and upload buttons
         this.elements.submitButton.querySelector("span").style.display = "none";
         this.elements.uploadButton.querySelector("span").style.display = "none";
-        this.elements.submitButton.querySelector(".icon").style.display =
+        this.elements.submitButton.querySelectorAll(".icon").forEach(icon => {
+            icon.style.display = "none";
+        });
+        this.elements.uploadButton.querySelectorAll(".icon").forEach(icon => {
+            icon.style.display = "none";
+        });
+        this.elements.submitButton.querySelector(".spinner").style.display =
             "block";
-        this.elements.uploadButton.querySelector(".icon").style.display =
+        this.elements.uploadButton.querySelector(".spinner").style.display =
             "block";
+    };
 
+    this.functions.disableLoadingMode = () => {
+        // Re-enable submit and upload buttons
+        this.elements.uploadButton.disabled = false;
+        this.elements.submitButton.disabled = false;
+
+        // Hide load/spinner in the submit and upload buttons
+        this.elements.submitButton.querySelector("span").style.display = "";
+        this.elements.uploadButton.querySelector("span").style.display = "";
+        this.elements.submitButton.querySelector(".icon").style.display = "";
+        this.elements.uploadButton.querySelector(".icon").style.display = "";
+    };
+
+    // Upload the image
+    this.functions.uploadImage = () => {
         const data = new FormData(this.elements.form);
+        this.functions.enableLoadingMode();
 
-        axios({
-            method: this.elements.form.getAttribute("method"),
-            url: this.elements.form.getAttribute("action"),
-            data: data,
-            config: { headers: { "Content-Type": "multipart/form-data" } }
-        })
+        window
+            .axios({
+                method: this.elements.form.getAttribute("method"),
+                url: this.elements.form.getAttribute("action"),
+                data: data,
+                config: { headers: { "Content-Type": "multipart/form-data" } }
+            })
             .then(response => {
                 this.elements.uploadPreviewRadio.value = response.data.id;
+
+                this.functions.refreshView();
             })
             .catch(response => {
-                console.error(response);
+                this.elements.uploadPreview.parentNode.style.display = "block";
+                this.elements.uploadPreview.src = "NO_PREVIEW_IMG.jpg";
+                this.elements.uploadPreview.alt = "Kunne ikke laste opp";
                 this.elements.uploadPreviewRadio.value = "";
+
+                this.functions.disableLoadingMode();
+
+                console.error(response);
+            });
+    };
+
+    this.functions.deleteImage = () => {
+        const data = new FormData(this.elements.form);
+        const selectedImage = data.get("selected_medium");
+
+        if (selectedImage === null) {
+            alert("Velg et bilde");
+            return;
+        }
+
+        this.functions.enableLoadingMode();
+
+        window
+            .axios({
+                method: "delete",
+                url: this.elements.form.dataset.action_delete.replace(
+                    "MEDIUM_ID",
+                    selectedImage
+                ),
+                data: data,
+                config: { headers: { "Content-Type": "multipart/form-data" } }
             })
             .then(() => {
-                // Re-enable submit and upload buttons
-                this.elements.uploadButton.disabled = false;
-                this.elements.submitButton.disabled = false;
+                const deletedImageWrapper = this.activeMedium
+                    .nextElementSibling;
 
-                // Hide load/spinner in the submit and upload buttons
-                this.elements.submitButton.querySelector("span").style.display =
-                    "";
-                this.elements.uploadButton.querySelector("span").style.display =
-                    "";
-                this.elements.submitButton.querySelector(
-                    ".icon"
-                ).style.display = "";
-                this.elements.uploadButton.querySelector(
-                    ".icon"
-                ).style.display = "";
+                if (
+                    this.elements.outputPreview.src ===
+                    deletedImageWrapper.querySelector("img").src
+                ) {
+                    // Null output if it's the same as the deleted
+                    this.elements.outputPreview.src = "";
+                    this.elements.outputElement.value = "";
+                }
+
+                this.activeMedium.parentNode.removeChild(deletedImageWrapper);
+                this.activeMedium.parentNode.removeChild(this.activeMedium);
+                this.elements.uploadPreview.parentNode.style.display = "none";
+
+                this.elements.deleteButton.style.display = "none";
+            })
+            .catch(response => {
+                this.elements.uploadPreview.parentNode.style.display = "block";
+                this.elements.uploadPreview.src = "NO_PREVIEW_IMG.jpg";
+                this.elements.uploadPreview.alt = "Kunne ikke slette bilde";
+                this.elements.uploadPreviewRadio.value = "";
+
+                console.error(response);
+            })
+            .then(() => {
+                this.functions.disableLoadingMode();
             });
     };
 
