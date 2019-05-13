@@ -107,4 +107,17 @@ class MediaPickerController extends Controller
         dd($request->all());
         return false;
     }
+
+    public function destroy(Request $request, $image)
+    {
+        $image = Image::findOrFail($image);
+        $user = $request->user();
+
+        if ($image->privacy === 1 && $image->user_id !== $user->id) {
+            return abort(403);
+        }
+
+        $image->delete();
+        return 'deleted';
+}
 }

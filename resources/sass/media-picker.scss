@@ -74,6 +74,17 @@
         display: none;
     }
 
+    .media-picker-button-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        @media screen and (min-width: $size_medium) {
+            top: 1em;
+            right: 1em;
+        }
+    }
+
     @media screen and (min-width: $size_large) {
         p {
             display: block;
@@ -154,6 +165,10 @@
 #media-picker .media-picker-footer {
     display: flex;
     flex-direction: column;
+
+    .media-picker-button-delete {
+        display: none;
+    }
 
     .media-picker-footer-nav {
         margin: 0;

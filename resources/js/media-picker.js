@@ -67,6 +67,7 @@ window.mediaPicker = function() {
                 this.functions.setupSubmitButton();
                 this.functions.setupCloseButtons();
                 this.functions.setupUploadButton();
+                this.functions.setupDeleteButton();
                 this.functions.setupMediaChangeEvent();
 
                 this.elements.form.addEventListener(
@@ -135,7 +136,7 @@ window.mediaPicker = function() {
 
     // Triggers when user selected a different medium
     this.functions.mediaChange = evt => {
-        console.log("media change");
+        this.elements.deleteButton.style.display = "inline-block";
         this.activeMedium = evt.target;
     };
 
@@ -174,6 +175,11 @@ window.mediaPicker = function() {
         );
 
         this.visibility = "showing";
+        document.body.style.overflow = "hidden";
+
+        if (this.activeMedium != null) {
+            this.elements.deleteButton.style.display = "inline-block";
+        }
     };
 
     this.functions.loadMedia = () => {
@@ -206,6 +212,9 @@ window.mediaPicker = function() {
         window.removeEventListener("keyup", this.functions.hideWithEsc);
 
         this.visibility = "hidden";
+
+        document.body.style.overflow = "";
+        this.elements.deleteButton.style.display = "none";
     };
 
     // Toggle the visibility of media picker
@@ -251,6 +260,23 @@ window.mediaPicker = function() {
         this.elements.closeButtons.forEach(closeButton => {
             closeButton.addEventListener("click", this.functions.hide);
         });
+    };
+
+    // Finds the delete button
+    this.functions.setupDeleteButton = () => {
+        this.elements.deleteButton = this.element.querySelector(
+            ".media-picker-button-delete"
+        );
+
+        if (this.elements.deleteButton == null) {
+            console.error("Couldn't find the media picker's delete button");
+            return;
+        }
+
+        this.elements.deleteButton.addEventListener(
+            "click",
+            this.functions.deleteImage
+        );
     };
 
     // Finds the upload button and related elements
@@ -331,9 +357,15 @@ window.mediaPicker = function() {
         // Show load/spinner in the submit and upload buttons
         this.elements.submitButton.querySelector("span").style.display = "none";
         this.elements.uploadButton.querySelector("span").style.display = "none";
-        this.elements.submitButton.querySelector(".icon").style.display =
+        this.elements.submitButton.querySelectorAll(".icon").forEach(icon => {
+            icon.style.display = "none";
+        });
+        this.elements.uploadButton.querySelectorAll(".icon").forEach(icon => {
+            icon.style.display = "none";
+        });
+        this.elements.submitButton.querySelector(".spinner").style.display =
             "block";
-        this.elements.uploadButton.querySelector(".icon").style.display =
+        this.elements.uploadButton.querySelector(".spinner").style.display =
             "block";
     };
 
@@ -375,36 +407,56 @@ window.mediaPicker = function() {
                 this.functions.disableLoadingMode();
 
                 console.error(response);
-            })
-            .then(() => {
-                // this.functions.disableLoadingMode();
             });
     };
 
     this.functions.deleteImage = () => {
         const data = new FormData(this.elements.form);
-        // const selectedImage = formData.get('selected-medium');
+        const selectedImage = data.get("selected_medium");
 
-        // if (selectedImage === null) {
-        //     return;
-        // }
+        if (selectedImage === null) {
+            alert("Velg et bilde");
+            return;
+        }
 
         this.functions.enableLoadingMode();
 
         window
             .axios({
                 method: "delete",
-                url: this.elements.form.getAttribute("action"),
+                url: this.elements.form.dataset.action_delete.replace(
+                    "MEDIUM_ID",
+                    selectedImage
+                ),
                 data: data,
                 config: { headers: { "Content-Type": "multipart/form-data" } }
             })
-            .then(response => {
-                console.log(response);
-                // this.elements.uploadPreviewRadio.value = response.data.id;
+            .then(() => {
+                const deletedImageWrapper = this.activeMedium
+                    .nextElementSibling;
+
+                if (
+                    this.elements.outputPreview.src ===
+                    deletedImageWrapper.querySelector("img").src
+                ) {
+                    // Null output if it's the same as the deleted
+                    this.elements.outputPreview.src = "";
+                    this.elements.outputElement.value = "";
+                }
+
+                this.activeMedium.parentNode.removeChild(deletedImageWrapper);
+                this.activeMedium.parentNode.removeChild(this.activeMedium);
+                this.elements.uploadPreview.parentNode.style.display = "none";
+
+                this.elements.deleteButton.style.display = "none";
             })
             .catch(response => {
+                this.elements.uploadPreview.parentNode.style.display = "block";
+                this.elements.uploadPreview.src = "NO_PREVIEW_IMG.jpg";
+                this.elements.uploadPreview.alt = "Kunne ikke slette bilde";
+                this.elements.uploadPreviewRadio.value = "";
+
                 console.error(response);
-                // this.elements.uploadPreviewRadio.value = "";
             })
             .then(() => {
                 this.functions.disableLoadingMode();
