@@ -21,7 +21,7 @@ class MediaPickerController extends Controller
     public function show(Request $request)
     {
         $user = $request->user();
-        $media = Image::where('privacy', 0)->orWhere('privacy', 1)->where('user_id', $user->id)->get();
+        $media = Image::where('privacy', 0)->orWhere('privacy', 1)->where('user_id', $user->id)->orderByDesc('created_at')->get();
 
         if ($request->ajax()) {
             return view('media-picker.show-content', compact('media'));
